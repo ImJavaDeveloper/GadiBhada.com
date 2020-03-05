@@ -1,0 +1,12 @@
+@charset "ISO-8859-1";
+
+.modal-body {
+ 
+    /* 80% of window height */
+ overflow-x: auto;
+
+ 
+    background-color:#BBD6EC;
+ 
+}
+

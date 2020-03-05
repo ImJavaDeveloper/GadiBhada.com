@@ -1,0 +1,33 @@
+<div  id="itemModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="itemmodelcontent" >
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+   <div id="addItemMessage"></div>
+
+    <label for="inputName" class="col-sm-2 col-form-label">Item Name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="itemName" name="itemName" placeholder="Enter Item Name">
+    </div>
+  
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary center-block" onclick="saveItem()">Save</button>
+    </div>
+  </div>
+
+ 

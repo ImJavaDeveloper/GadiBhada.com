@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Home</title>
+</head>
+<body>
+	<p th:text="'Welcome: ' + ${username} + '.'"/>
+	<p th:text="'Last Login: ' + ${lastLogin} + '.'"/>
+	<a href=/logout>Logout</a>
+	<a href=/test>Test</a>
+	<a href=/user>user</a>
+	<a href=/admin>admin</a>
+</body>
+</html>

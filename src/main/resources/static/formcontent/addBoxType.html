@@ -1,0 +1,38 @@
+<div  id="boxTypeModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="boxTypemodelcontent" >
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="form-group row">
+    <label for="inputName" class="col-sm-2 col-form-label">Box Type</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="boxTypeName" name="boxName" placeholder="Enter Box Type">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="totalwt" class="col-sm-2 col-form-label">Total Wt</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="totalWt" name="totalWt" placeholder="Enter Total Wt">
+    </div>
+  </div>
+ 
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary center-block" onclick="saveBox()">Save</button>
+    </div>
+  </div>
