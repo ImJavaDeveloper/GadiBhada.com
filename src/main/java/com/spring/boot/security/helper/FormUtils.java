@@ -20,5 +20,12 @@ public class FormUtils {
 		String currentDate=sdf.format(dt);
 		return currentDate;
 	}
+	public static double getDouble(String s)
+	{
+		if(s!=null && s.trim().length()>0)
+	        return Double.valueOf(s);
+		else
+			return 0;
+	}
 
 }

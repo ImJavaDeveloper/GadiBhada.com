@@ -1,6 +1,7 @@
+
+
 //Calling Ajax to load the updated distribution page dynamically
 $("#fareCalcTab").on("click", function() {
-	
 	callAjaxForFareCalcHome();
 	
 	//$('#updateTable').DataTable();
@@ -16,19 +17,41 @@ function loadjs(file) {
 
 function callAjaxForFareCalcHome()
 {
+	
+	waitingDialog.show();
 	$.ajax({
 	    type : "GET",
 	    url : "/farecalchome",
 	    data : {
-	    "id" : 1
+	    "id":1
 	    },
 	    success: function(data){
+	    	
 	    	$('#menu3').html(data);
-	    	
-	    	loadjs("/js/dataTable.js");
 	    	$('#fareCalcTable').DataTable();
+	    	waitingDialog.hide();
 	    	
-	    }
+	    },
+	    error: function(XMLHttpRequest, textStatus, errorThrown)
+        {
+	    	if (XMLHttpRequest.readyState == 4) {
+	            // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+	    		 waitingDialog.hide();
+	    		alert("Error !! Server Is Not Responding Correctly-->\n"+XMLHttpRequest.responseText+"+ \nPlease contact server admin");
+	        }
+	        else if (XMLHttpRequest.readyState == 0) {
+	            // Network error (i.e. connection refused, access denied due to CORS, etc.)
+	        	 waitingDialog.hide();
+	        	 alert("Error !! Server Is Down. Please contact server admin");
+	        }
+	        else {
+	            // something weird is happening
+	        }
+           
+          //some stuff on failure
+        }
+	    
+	    
 	});
 }
 
@@ -70,7 +93,7 @@ function saveFareForSubLotId(subLotId,totFare)
 	    "totFare" : totFare
 	    },
 	    success: function(data){
-	    	alert(data);
+	    	//alert(data);
 	    	$(button).prop("disabled", true);
 	    	
 	    }

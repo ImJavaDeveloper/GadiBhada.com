@@ -345,7 +345,7 @@ function saveBox() {
 
 }
 
-function saveFare() {
+function saveFareRule() {
 
 	var source = $("#allsource").val()
 	if (source.trim().length == 0) {
@@ -353,29 +353,55 @@ function saveFare() {
 		$("#faremodelcontent").html("  Error!! Select Source ");
 		return;
 	}
-	
-	/*$.ajax({
+	var destination = $("#alldestination").val()
+	if (destination.trim().length == 0) {
+		$("#fareModal").modal('show');
+		$("#faremodelcontent").html("  Error!! Select Destination ");
+		return;
+	}
+	var item = $("#allitem").val()
+	if (item.trim().length == 0) {
+		$("#fareModal").modal('show');
+		$("#faremodelcontent").html("  Error!! Select Item ");
+		return;
+	}
+	var boxType = $("#boxType").val()
+	if (boxType.trim().length == 0) {
+		$("#fareModal").modal('show');
+		$("#faremodelcontent").html("  Error!! Select Box Type ");
+		return;
+	}
+	var fare = jQuery('input[name="fare"]').val()
+	if (fare.trim().length == 0) {
+		$("#fareModal").modal('show');
+		$("#faremodelcontent").html("  Error!! Select Fare ");
+		return;
+	}
+	$.ajax({
 		type : "GET",
-		url : "/management/addnew/savebox",
+		url : "/management/addnew/saveaddfare",
 		data : {
-			"boxName" : boxName,
-			"totalWt" : totalWt
+			"source" : source,
+			"destination" : destination,
+			"item" : item,
+			"boxType" : boxType,
+			"fare" : fare
 		},
 		success : function(data) {
 			// alert(data)
 			if (data === "Success !! Record Is Saved successfully") {
 				$("input:text").val("");
-				$("#boxTypeModal").modal('show');
-				$('#boxTypemodelcontent').html(
+				$("#fareModal").modal('show');
+				$('#faremodelcontent').html(
 						"<div  class=\"alert alert-success\" <strong>" + data
 								+ "!</strong> " + " </div>");
 			} else {
-				$("#boxTypeModal").modal('show');
-				$('#boxTypemodelcontent').html(
+				$("#fareModal").modal('show');
+				$('#faremodelcontent').html(
 						"<strong>Failure!</strong> Operation failed !! Exception Occured :"
 								+ data);
 			}
 		}
-	});*/
+	});
 
 }

@@ -52,4 +52,22 @@ public class TableQuery {
 				+ "left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=adest.agent_destination_id and fareRule.box_id=box.box_id and fareRule.item_id=item.item_id"
 				+ " left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null";
 	}
+	
+	public static String getCollectionDataQuery()
+	{
+		return "select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt\r\n" + 
+				"FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id \r\n" + 
+				"left join\r\n" + 
+				"(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal\r\n" + 
+				"on fareBal.sub_lot_id=fareBook.sub_lot_id) collections\r\n" + 
+				"where collections.totalBalAmt !=0";
+	}
+	
+	public static String getCollectionDataQuery(int subLotId)
+	{
+		return getCollectionDataQuery()+" and collections.sub_lot_id="+subLotId;
+	}
+	
+	
+	
 }

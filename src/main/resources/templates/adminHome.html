@@ -7,15 +7,25 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico"/>
+    <link rel="shortcut icon" type="image/png" th:href="@{/images/gaadi.png}"/>
 
     <title>Admin Page</title>
    
    <link href="/webjars/bootstrap/css/bootstrap.css" rel="stylesheet" ></link>
-   
+  <style type="text/css">
+
+body {
+  background-color: linen;
+  background-image: url("/images/adminbg.JPG");
+  background-size: cover;
+
+}
+	
+</style> 
     
 </head>
 <body>
+
 <div class="container">
     <!-- Static navbar -->
     <nav class="navbar navbar-inverse">
@@ -75,6 +85,7 @@
         <p> is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work.
             It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
         <p>
+        
             <a class="btn btn-lg btn-primary" href="#" role="button">View navbar docs &raquo;</a>
         </p>
     </div>
@@ -84,6 +95,7 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/helper.js"></script>
 
 
 <!-- 

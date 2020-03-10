@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.boot.security.mapper.DistributionUpdateRowMapper;
 import com.spring.boot.security.mapper.FareCalcMapper;
 import com.spring.boot.security.dto.SubLotBookData;
-import com.spring.boot.security.entity.FairBook;
+import com.spring.boot.security.entity.FareBook;
 import com.spring.boot.security.entity.SubLotBook;
 import com.spring.boot.security.exception.DataBaseException;
 import com.spring.boot.security.forms.data.DistributionUpdateVO;
@@ -52,7 +52,9 @@ private static final Logger LOGGER=LoggerFactory.getLogger(DistributionDataContr
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
 		List<FareCalcVO> list =jdbcTemplate.query(sql, new FareCalcMapper());
 		
-StringBuilder htmlHeader=new StringBuilder(" <h3>Fare Calculation </h3> <table id=\"fareCalcTable\" class=\"table table-striped table-bordered\" style=\"width:100%\">\r\n" + 
+StringBuilder htmlHeader=new StringBuilder(
+		" <h3>Fare Calculation </h3> "
+		+ "<table id=\"fareCalcTable\" class=\"table table-striped table-bordered\" style=\"width:100%;background-color: #E2E2E2\">\r\n" + 
 		"        <thead>\r\n" + 
 		"            <tr>\r\n" + 
 		"                <th>Recieved Date</th>\r\n" + 
@@ -138,13 +140,13 @@ modalContent.append(
 		HttpSession session=request.getSession(false);
 		String sessionId=session.getId();
 		String createTimeStamp=FormUtils.getCurrentTimeStamp();
-		FairBook fairBook=new FairBook();
+		FareBook fairBook=new FareBook();
 		fairBook.setSubLotId(subLotId);
 		fairBook.setTotFare(totFare);
 		fairBook.setCreateTimeStamp(createTimeStamp);
 		fairBook.setSessionId(sessionId);
 		
-		FairBook saveFairBook=fareBookRespository.save(fairBook);
+		FareBook saveFairBook=fareBookRespository.save(fairBook);
 		
 		if(saveFairBook==null) {
 			

@@ -43,5 +43,12 @@ public class DataValidator {
 		return isValidMobile;
 		
 	}
+	
+	public static boolean  isNumber(String s)
+	{
+		String regex="[0-9.]*";
+		return s.matches(regex);
+		
+	}
 
 }

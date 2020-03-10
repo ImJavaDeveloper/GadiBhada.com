@@ -5,8 +5,17 @@
     /* 80% of window height */
  overflow-x: auto;
 
+    background-color:#FFEFD5;
  
-    background-color:#BBD6EC;
- 
+}
+
+#updateDistributionModal label
+{
+	font-weight: normal;
+}
+
+#collectionsModal label
+{
+font-weight: normal;	
 }
 

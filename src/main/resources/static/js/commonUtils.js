@@ -1,19 +1,28 @@
+//wait for loading the all JavaScript and then call the other function
+$(window).on('load', function() {
+   
+    var activeTab = localStorage.getItem('activeTab');
+
+  //alert(activeTab !== "#menu2")
+  //Since menu2 is dynamic page it should be loaded runtime
+  if(activeTab /*&& activeTab !== "#menu2"*/){
+      $('#menuTab a[href="' + activeTab + '"]').tab('show');
+     // alert(activeTab)
+      if(activeTab=="#menu2")
+      	callAjaxForUpdateDistribution();
+      if(activeTab=="#menu3")
+      	callAjaxForFareCalcHome();
+      
+      if(activeTab=="#menu4")
+    	  callAjaxForCollectionPage();
+  }
+
+});
 //For redirecting same tab when page is refreshed  
 $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
     localStorage.setItem('activeTab', $(e.target).attr('href'));
 });
 
-var activeTab = localStorage.getItem('activeTab');
-//alert(activeTab !== "#menu2")
-//Since menu2 is dynamic page it should be loaded runtime
-if(activeTab /*&& activeTab !== "#menu2"*/){
-    $('#menuTab a[href="' + activeTab + '"]').tab('show');
-   // alert(activeTab)
-    if(activeTab=="#menu2")
-    	callAjaxForUpdateDistribution();
-    if(activeTab=="#menu3")
-    	callAjaxForFareCalcHome();
-}
 
 function loadjs(file) {
     var script = document.createElement("script");

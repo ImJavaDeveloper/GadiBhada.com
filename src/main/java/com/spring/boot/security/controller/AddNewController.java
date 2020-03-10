@@ -12,6 +12,7 @@ import com.spring.boot.security.dto.AgentDestinationData;
 import com.spring.boot.security.dto.AgentDetailsData;
 import com.spring.boot.security.dto.BoxDetailsData;
 import com.spring.boot.security.dto.DestinationDetailsData;
+import com.spring.boot.security.dto.FareRuleData;
 import com.spring.boot.security.dto.ItemDetailsData;
 import com.spring.boot.security.dto.SourceDetailsData;
 import com.spring.boot.security.dto.TraderDetailsData;
@@ -19,6 +20,7 @@ import com.spring.boot.security.entity.AgentDestination;
 import com.spring.boot.security.entity.AgentDetails;
 import com.spring.boot.security.entity.BoxDetails;
 import com.spring.boot.security.entity.DestinationDetails;
+import com.spring.boot.security.entity.FareRule;
 import com.spring.boot.security.entity.ItemDetails;
 import com.spring.boot.security.entity.SourceDetails;
 import com.spring.boot.security.entity.TraderDetails;
@@ -48,6 +50,9 @@ public class AddNewController {
 	
 	@Autowired
 	BoxDetailsData boxDetailsData;
+	
+	@Autowired
+	FareRuleData fareRuleData;
 	
 	boolean isSourcePresent;
 
@@ -254,6 +259,45 @@ public class AddNewController {
 			if (savedBoxDetails == null) {
 				message = "Exception found while saving Box details Table";
 				throw new DataBaseException("Exception found while saving Box details Table ", "");
+
+			} else
+				message = "Success !! Record Is Saved successfully";
+		}
+		else {
+			message = "Record Is Already Found";
+		}
+
+		return message;
+
+	}
+	
+	@RequestMapping(value = "/management/addnew/saveaddfare", method = RequestMethod.GET)
+	@ResponseBody
+	public String addFareRule(@RequestParam int source,@RequestParam int destination,@RequestParam int item,
+			@RequestParam int boxType,@RequestParam String fare ) throws DataBaseException {
+		String message = null;
+        double fareVal=0;
+		if (!DataValidator.isNumber(fare)) {
+			message = fare + " Fare Enter Is Not Correct";
+			return message;
+		}
+		else
+			fareVal=Double.valueOf(fare);
+		
+		FareRule isFareRuleAvl = fareRuleData.findDuplicateFareRule(source, destination, boxType, item);
+		if (isFareRuleAvl == null)
+
+		{
+			FareRule fareRule = new FareRule();
+			fareRule.setSourceId(source);
+			fareRule.setAgentDestinationId(destination);
+			fareRule.setBoxId(boxType);
+			fareRule.setItemId(item);
+			fareRule.setFare(fareVal);
+			FareRule savedFareRule = fareRuleData.saveBoxDetails(fareRule);
+			if (savedFareRule == null) {
+				message = "Exception found while saving Fare Rule  Table";
+				throw new DataBaseException("Exception found while saving Fare Rule  Table", "");
 
 			} else
 				message = "Success !! Record Is Saved successfully";
