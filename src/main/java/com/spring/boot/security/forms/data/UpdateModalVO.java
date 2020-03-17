@@ -2,10 +2,19 @@ package com.spring.boot.security.forms.data;
 
 public class UpdateModalVO {
 	
+	private int challanId;
 	private int lotId;
 	private int tot_qty;
 	private int tot_avl;
 	private String receiver;
+	
+	
+	public int getChallanId() {
+		return challanId;
+	}
+	public void setChallanId(int challanId) {
+		this.challanId = challanId;
+	}
 	public int getLotId() {
 		return lotId;
 	}

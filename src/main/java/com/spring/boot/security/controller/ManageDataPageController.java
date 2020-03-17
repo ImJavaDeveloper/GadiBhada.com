@@ -74,8 +74,18 @@ public class ManageDataPageController {
 	public String viewChallanById(@RequestParam int challanId)
 	{
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
-		List<LotBooksByChallanIdVO> lotBooksByChallanIdVO=jdbcTemplate.query(TableQuery.getLotBooksByChallanIdQuery(challanId), new LotBooksByChallanIdMapper());
+		List<LotBooksByChallanIdVO> lotBooksByChallanIdVO=jdbcTemplate.query(TableQuery.getLotBooksByChallanIdQuery(challanId), new LotBooksByChallanIdMapper());	
+		 String lotBooksJsonArray = JSONArray.toJSONString(lotBooksByChallanIdVO);		
+		 return lotBooksJsonArray;
 		
+	}
+	
+	@RequestMapping(value="/managedata/alldistribution",method=RequestMethod.POST)
+	@ResponseBody
+	public String allDistributionData(@RequestParam int challanId)
+	{
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+		List<LotBooksByChallanIdVO> lotBooksByChallanIdVO=jdbcTemplate.query(TableQuery.getLotBooksByChallanIdQuery(challanId), new LotBooksByChallanIdMapper());	
 		 String lotBooksJsonArray = JSONArray.toJSONString(lotBooksByChallanIdVO);		
 		 return lotBooksJsonArray;
 		

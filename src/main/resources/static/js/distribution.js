@@ -44,14 +44,24 @@ $("#distributionTab").on("click", function() {
 
 });
 
-function loadUpdateModal(lotId) {
+function loadUpdateModal(lotId,challanDate,truckNo,sourceName,destination,traderName,traderMark,itemName,boxName,boxWt) {
 	//alert("Coming from modal");
 	//alert(lotId);
 	$.ajax({
 		type : "GET",
 		url : "/loadUpdateModal",
 		data : {
-			"id" : lotId
+			"lotId" : lotId,
+			"challanDate" : challanDate,
+			"truckNo" : truckNo,
+			"sourceName" : sourceName,
+			"destination" : destination,
+			"traderName" : traderName,
+			"traderMark" : traderMark,
+			"itemName" : itemName,
+			"boxName" : boxName,
+			"boxWt" : boxWt
+			
 		},
 		success : function(data) {
 			//alert(data)

@@ -15,6 +15,7 @@ public class UpdateModalMapper implements RowMapper<UpdateModalVO> {
 		// TODO Auto-generated method stub
 		int i=0;
 		UpdateModalVO updateModalVO=new UpdateModalVO();
+		updateModalVO.setChallanId(rs.getInt(++i));
 		updateModalVO.setLotId(rs.getInt(++i));
 		updateModalVO.setTot_qty(rs.getInt(++i));
 		updateModalVO.setTot_avl(rs.getInt(++i));

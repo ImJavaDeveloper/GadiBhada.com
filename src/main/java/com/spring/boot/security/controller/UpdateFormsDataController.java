@@ -1,11 +1,16 @@
 package com.spring.boot.security.controller;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +24,7 @@ import com.spring.boot.security.exception.CustomGenericException;
 import com.spring.boot.security.exception.DataBaseException;
 import com.spring.boot.security.helper.DataHelper;
 import com.spring.boot.security.helper.DataValidator;
+import com.spring.boot.security.repository.SubLotBookRepository;
 
 @Controller
 @RequestMapping("/gadibhada")
@@ -28,6 +34,8 @@ public class UpdateFormsDataController {
 	
 	@Autowired
 	DataSource datasource;
+	@Autowired
+	SubLotBookRepository subLotBookRepository;
 	
 	@RequestMapping(value="/managedata/updateChallanDate",method=RequestMethod.POST)
 	@ResponseBody
@@ -75,8 +83,9 @@ public class UpdateFormsDataController {
 					+ " from fare_book where sub_lot_id in(select sub_lot_id "
 					+ "from sub_lot_book where lot_id in(select lot_id from lot_book where challan_id="+pk+")))";
 			int noOfRowsUpdated=jdbcTemplate.update(updateChallanBooksql);
-			int noOfRowsDeleted1=jdbcTemplate.update(deleteSubLotFromFareBook);
 			int noOfRowsDeleted2=jdbcTemplate.update(deleteSubLotFromCollectionBook);
+			int noOfRowsDeleted1=jdbcTemplate.update(deleteSubLotFromFareBook);
+			
 			System.out.println("noOfRowsUpdated:"+noOfRowsUpdated);
 			System.out.println("noOfRowsDeleted1:"+noOfRowsDeleted1);
 			System.out.println("noOfRowsDeleted2:"+noOfRowsDeleted2);
@@ -102,7 +111,7 @@ public class UpdateFormsDataController {
 	@ResponseBody
 	public int updateChallanDriverName(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
-		int noOfRowsUpdate= updateTable(TableConstant.CHALLAN_BOOK_TABLE,name,value,TableConstant.CHALLAN_BOOK_PK_Column,pk);				
+		int noOfRowsUpdate= updateTable2(TableConstant.CHALLAN_BOOK_TABLE,name,value,TableConstant.CHALLAN_BOOK_PK_Column,pk);				
 		return noOfRowsUpdate;
 	}
 	
@@ -125,20 +134,22 @@ public class UpdateFormsDataController {
 		return updateTable(TableConstant.LOT_BOOK_TABLE,name,value,TableConstant.LOT_BOOK_PK_Column,pk);			
 		
 	}
-	@RequestMapping(value="/managedata/updateChallanLotTotQty",method=RequestMethod.POST)
-	@ResponseBody
-	public int updateChallanLotTotQty(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
-	{
-			int noOfRowsUpdated=updateTable(TableConstant.LOT_BOOK_TABLE,name,value,TableConstant.LOT_BOOK_PK_Column,pk);			
-			return noOfRowsUpdated;
-		
-	}
-	
 	@RequestMapping(value="/managedata/updateChallanLotItem",method=RequestMethod.POST)
 	@ResponseBody
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
 	public int updateChallanLotItem(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
 			int noOfRowsUpdated=updateTable(TableConstant.LOT_BOOK_TABLE,name,value,TableConstant.LOT_BOOK_PK_Column,pk);			
+			
+			String deleteSubLotFromFareBook="delete from fare_book where sub_lot_id in(select sub_lot_id "
+					+ "from sub_lot_book where lot_id ="+pk+")";
+			String deleteSubLotFromCollectionBook="delete from fare_collection where fare_id in(select fare_id "
+					+ " from fare_book where sub_lot_id in(select sub_lot_id "
+					+ "from sub_lot_book where lot_id="+pk+"))";
+			
+			int noOfRowsDeleted2=deleteTableRecords(deleteSubLotFromCollectionBook);
+			int noOfRowsDeleted1=deleteTableRecords(deleteSubLotFromFareBook);
+			
 			return noOfRowsUpdated;
 		
 	}
@@ -148,13 +159,76 @@ public class UpdateFormsDataController {
 	public int updateChallanLotBox(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
 			int noOfRowsUpdated=updateTable(TableConstant.LOT_BOOK_TABLE,name,value,TableConstant.LOT_BOOK_PK_Column,pk);			
+			
+			String deleteSubLotFromFareBook="delete from fare_book where sub_lot_id in(select sub_lot_id "
+					+ "from sub_lot_book where lot_id ="+pk+")";
+			String deleteSubLotFromCollectionBook="delete from fare_collection where fare_id in(select fare_id "
+					+ " from fare_book where sub_lot_id in(select sub_lot_id "
+					+ "from sub_lot_book where lot_id="+pk+"))";
+			
+			int noOfRowsDeleted2=deleteTableRecords(deleteSubLotFromCollectionBook);
+			int noOfRowsDeleted1=deleteTableRecords(deleteSubLotFromFareBook);
+			
 			return noOfRowsUpdated;
 		
 	}
+	@RequestMapping(value="/managedata/updateChallanLotTotQty",method=RequestMethod.POST)
+	@ResponseBody
+	public int updateChallanLotTotQty(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
+	{
+			
+			
+			
+			Integer total_qty=subLotBookRepository.getTotalQtyForLotId(pk);
+			
+			if(total_qty !=null && total_qty>Integer.parseInt(value))
+			{
+				String deleteSubLotFromLotBook="delete from sub_lot_book where lot_id="+pk;
+				String deleteSubLotFromFareBook="delete from fare_book where sub_lot_id in(select sub_lot_id "
+						+ "from sub_lot_book where lot_id ="+pk+")";
+				String deleteSubLotFromCollectionBook="delete from fare_collection where fare_id in(select fare_id "
+						+ " from fare_book where sub_lot_id in(select sub_lot_id "
+						+ "from sub_lot_book where lot_id="+pk+"))";
+				
+				int noOfRowsDeleted3=deleteTableRecords(deleteSubLotFromCollectionBook);
+				int noOfRowsDeleted2=deleteTableRecords(deleteSubLotFromFareBook);
+				int noOfRowsDeleted1=deleteTableRecords(deleteSubLotFromLotBook);
+					
+			}
+			
+			int noOfRowsUpdated=updateTable(TableConstant.LOT_BOOK_TABLE,name,value,TableConstant.LOT_BOOK_PK_Column,pk);			
+			
+			return noOfRowsUpdated;
+		
+	}
+	
+	@RequestMapping(value="/managedata/updateChallanLotReceiver",method=RequestMethod.POST)
+	@ResponseBody
+	public int updateChallanLotReceiver(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
+	{
+			int noOfRowsUpdated=updateTable2(TableConstant.LOT_BOOK_TABLE,name,value,TableConstant.LOT_BOOK_PK_Column,pk);			
+			
+			return noOfRowsUpdated;
+		
+	}
+	
 	public int updateTable(String table,String columnName,String value,String primaryKey,int primaryKeyVal)
 	{
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
 		String sql="update "+table+" set "+columnName+"="+value+" where "+primaryKey+"="+primaryKeyVal;
+		return jdbcTemplate.update(sql);
+	}
+	
+	public int updateTable2(String table,String columnName,String value,String primaryKey,int primaryKeyVal)
+	{
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+		String sql="update "+table+" set "+columnName+"='"+value+"' where "+primaryKey+"="+primaryKeyVal;
+		return jdbcTemplate.update(sql);
+	}
+	
+	public int deleteTableRecords(String sql)
+	{
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
 		return jdbcTemplate.update(sql);
 	}
 	

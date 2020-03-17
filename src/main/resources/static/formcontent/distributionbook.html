@@ -1,0 +1,76 @@
+<div id="allDistributionModal" class="modal fade" role="dialog">
+	
+	<div class="modal-dialog modal-lg" id="modalChallan">
+	
+
+		<!-- Modal content-->
+	
+		<div class="modal-content">
+	
+			<div class="modal-header">
+			
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				
+				<h4 class="modal-title">Distribution Entry</h4>
+				
+			</div>
+			
+			<div class="modal-body" id="allDistributionModalContent">
+				
+				<p>Some text in the modal.</p>
+				
+			</div>
+			
+			<div class="modal-footer">
+			
+				
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="reloadPageDistribution()">Close</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<h3>Distribution Book</h3>
+<table id="allDistributionTable" class="table table-striped table-bordered"
+	style="width: 100%; background-color: #E2E2E2">
+	<thead>
+		<tr>
+			<th>Challan Id</th>
+			<th>Date</th>
+			<th>Truck No</th>
+			<th>From-To-Where</th>
+			<th>Sender</th>
+			<th>Lot Id</th>
+			<th>Item Code</th>
+			<th>Distribute To</th>
+			<th>distribution Id </th>
+			<th>Delivered At</th>
+			<th>Tot Qty</th>
+			<th>Delivered Date</th>
+
+
+		</tr>
+	</thead>
+	<tbody id="tableBodyDistribution">
+
+	</tbody>
+	<tfoot>
+		<tr>
+			<tr>
+		<th>Challan Id</th>
+			<th>Date</th>
+			<th>Truck No</th>
+			<th>From-To-Where</th>
+			<th>Sender</th>
+			<th>Lot Id</th>
+			<th>Item Code</th>
+			<th>Distribute To</th>
+			<th>distribution Id </th>
+			<th>Delivered At</th>
+			<th>Tot Qty</th>
+			<th>Delivered Date</th>
+		</tr>
+
+	</tfoot>
+</table>

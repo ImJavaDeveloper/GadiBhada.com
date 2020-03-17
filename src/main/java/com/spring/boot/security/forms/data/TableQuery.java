@@ -31,7 +31,7 @@ public class TableQuery {
 	}
 	public static String getUpdateModalQuery()
 	{
-		return "SELECT lotBook.lot_id,lotBook.total_qty,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as qtyAvl,lotBook.receiver FROM lot_book lotBook left join  \r\n" + 
+		return "SELECT lotBook.challan_id,lotBook.lot_id,lotBook.total_qty,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as qtyAvl,lotBook.receiver FROM lot_book lotBook left join  \r\n" + 
 				"(\r\n" + 
 				"SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1\r\n" + 
 				") sub_lot on sub_lot.lot_id=lotBook.lot_id where lotBook.lot_id=?";

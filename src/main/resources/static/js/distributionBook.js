@@ -33,18 +33,17 @@ function reloadPageChallan(){
 	 
 }
 //Calling Ajax to load the updated distribution page dynamically
-$("#challanBook").on("click", function() {
+$("#distributionBook").on("click", function() {
 
-	
-	$('#allchallan').load('/formcontent/allchallan.html',function()
+	$('#alldistribution').load('/formcontent/distributionbook.html',function()
 			{
 	
-		callAjaxForAllChallan();
+		//callAjaxForAllDistribution();
 			});
 
 });
 
-function callAjaxForAllChallan() {
+function callAjaxForAllDistribution() {
 	
 	var tableBody="";
 	waitingDialog.show();

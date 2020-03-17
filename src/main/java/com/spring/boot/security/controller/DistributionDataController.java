@@ -64,6 +64,7 @@ public class DistributionDataController {
 				"            <tr>\r\n" + 
 				"                <th>Challan Id</th>\r\n" + 
 				"                <th>Date</th>\r\n" + 
+				"                <th>Lot Id</th>\r\n" + 
 				"                <th>Truck No</th>\r\n" + 
 				"                <th>From-To-Where</th>\r\n" + 
 				"                <th>Sender</th>\r\n" + 
@@ -83,6 +84,7 @@ public class DistributionDataController {
 					"            <tr>\r\n" + 
 							"                <td>"+distributionUpdateVO.getChallan_id()+"</td>\r\n" + 
 							"                <td>"+distributionUpdateVO.getChallan_date()+"</td>\r\n" + 
+							"                <td>"+distributionUpdateVO.getLot_id()+"</td>\r\n" + 
 							"                <td>"+distributionUpdateVO.getTruck_no()+"</td>\r\n" + 
 							"                <td>"+distributionUpdateVO.getSource_name()+"-"+distributionUpdateVO.getDestination()+"</td>\r\n" + 
 							"                <td>"+distributionUpdateVO.getTrader_name()+"("+distributionUpdateVO.getTrader_mark()+")</td>\r\n" +
@@ -90,7 +92,10 @@ public class DistributionDataController {
 							"                <td>"+distributionUpdateVO.getBox_name()+"-"+distributionUpdateVO.getTotal_wt()+"(Kg)</td>\r\n" +
 							"                <td>"+distributionUpdateVO.getTotal_qty()+"</td>\r\n" + 
 							"                <td>"+distributionUpdateVO.getTotBal()+"</td>\r\n" +
-							"                <td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#updateDistributionModal\" onclick=\"loadUpdateModal("+distributionUpdateVO.getLot_id()+")\">Distribute</button></td>"+
+							"                <td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#updateDistributionModal\" "+
+							"                 onclick=\"loadUpdateModal("+distributionUpdateVO.getLot_id()+",'"+distributionUpdateVO.getChallan_date()+"','"+distributionUpdateVO.getTruck_no()+"','"+distributionUpdateVO.getSource_name()+"','"+
+							                  distributionUpdateVO.getDestination()+"','"+distributionUpdateVO.getTrader_name()+"','"+distributionUpdateVO.getTrader_mark()+"','"+distributionUpdateVO.getItem_name()+"','"+
+							                  distributionUpdateVO.getBox_name()+"',"+distributionUpdateVO.getTotal_wt()+")\">Distribute</button></td>"+
 					"            </tr>\r\n" );
 		}
 		StringBuilder htmlFooter=new StringBuilder(		"        </tbody>\r\n" + 
@@ -117,7 +122,7 @@ public class DistributionDataController {
 		    +"<div class=\"modal-content\">"
 		    +"<div class=\"modal-header\">"
 		    +"<button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>"
-		    +"<h4 class=\"modal-title\">Update Distribution</h4>"
+		    +"<h4 class=\"modal-title\">Distribution</h4>"
 		    +" </div>"
 		    +"<div class=\"modal-body\" id=\"modalContent\">"
 		    +"<p>Some text in the modal.</p>"
@@ -136,7 +141,8 @@ public class DistributionDataController {
 
 	@RequestMapping(value="/loadUpdateModal" ,method=RequestMethod.GET)
 	@ResponseBody
-	public String loadUpdateModalData(@RequestParam Integer id) {
+	public String loadUpdateModalData(@RequestParam Integer lotId,@RequestParam String challanDate,@RequestParam String truckNo,@RequestParam String sourceName,@RequestParam String destination,
+			@RequestParam String traderName,@RequestParam String traderMark,@RequestParam String itemName,@RequestParam String boxName,@RequestParam String boxWt) {
 
 
 		List<AgentDetails> traderAgents =traderAgentRespository.findAll();
@@ -144,32 +150,49 @@ public class DistributionDataController {
 		List<AgentDestination> agentDestinations=agentDestinationRepository.findAll();
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
 		LOGGER.debug(TableQuery.getUpdateModalQuery());
-		UpdateModalVO updateModalVO=jdbcTemplate.queryForObject(TableQuery.getUpdateModalQuery(),new Object[] {id}, new UpdateModalMapper());
+		UpdateModalVO updateModalVO=jdbcTemplate.queryForObject(TableQuery.getUpdateModalQuery(),new Object[] {lotId}, new UpdateModalMapper());
 
 		StringBuilder updatemodalForm=new StringBuilder(
 
-				"<form class=\"form-inline\"  action=\"#\" method=\"post\" name=\"updateModalForm\" data-toggle=\"validator\">"
+				"<font size=\"2\"><form class=\"form-inline\"  action=\"#\" method=\"post\" name=\"updateModalForm\" data-toggle=\"validator\">"
 
 				+"<div class=\"row clearfix\">"
 				+"<div class=\"col-md-12 column\">"
 				+"<table class=\"table table-bordered table-hover\" id=\"updateModalFormTab1\">"
-				+"	<thead >\r\n" 
+				+"	<thead style=\"background-color: #E2E2E2\" >\r\n" 
 				+"		<tr>\r\n"
-				+"			<th>Total Lot Qty</th>\r\n"  
-				+"			<th>Total Available</th>\r\n" 
-				+"			<th>Receiver</th>\r\n"   
+				+"			<th>Challan Id</th>\r\n"  
+				+"			<th>Date</th>\r\n"  
+				+"			<th>Lot Id</th>\r\n"  
+				+"			<th>Truck No</th>\r\n"  
+				+"			<th>From-Where</th>\r\n" 
+				+"			<th>Sender</th>\r\n"   
+				+"			<th>Item Id </th>\r\n"   
+				+"			<th>Lot Qty </th>\r\n"  
+				+"			<th>Total Balance </th>\r\n" 
+				+"			<th>Reciever </th>\r\n" 
 				+"		</tr>\r\n" 
 				+"	</thead>\r\n" 
 				+"<tbody>"
 				+"<tr >"
 
-						+ "<input type=\"hidden\" name=\"modalLotId\" value="+updateModalVO.getLotId()+"></td>"
-						+"<td><label for=\"totalQtyVal\">"+updateModalVO.getTot_qty()+"</label>"
-						+ "<input type=\"hidden\" name=\"modalTotQty\" value="+updateModalVO.getTot_qty()+"></td>"
-						+"<td><label for=\"qtyAvlVal\">"+updateModalVO.getTot_avl()+"</label>"
-						+ "<input type=\"hidden\" name=\"modalqtyAvl\" value="+updateModalVO.getTot_avl()+"></td>"
-						+"<td><label for=\"recieverVal\">"+FormUtils.nullToEmpty(updateModalVO.getReceiver())+"</label>"
-						+ "<input type=\"hidden\" name=\"modalReciever\" value="+FormUtils.nullToEmpty(updateModalVO.getReceiver())+"></td>"
+						
+						+"<td><label for=\"challandId\">"+updateModalVO.getChallanId()+"</label></td>"
+						+"<td><label for=\"challnDate\">"+challanDate+"</label></td>"
+						+"<td><label for=\"lotId\">"+updateModalVO.getLotId()+"</label></td>"
+						+"<td><label for=\"truckNo\">"+truckNo+"</label></td>"
+						+"<td><label for=\"FromWhere\">"+sourceName+"-"+destination+"</label></td>"
+						+"<td><label for=\"trader\">"+traderName+"-"+traderMark+"</label></td>"
+						+"<td><label for=\"itemCode\">"+itemName+"("+boxName+"-"+boxWt+")</label></td>"
+						
+						+"<td><label for=\"totQty\">"+updateModalVO.getTot_qty()+"</label></td>"
+						+"<td><label for=\"qtyAvlVal\">"+updateModalVO.getTot_avl()+"</label></td>"
+						+"<td><label for=\"reciever\">"+FormUtils.nullToEmpty(updateModalVO.getReceiver())+"</label></td>"
+						
+						+ "<input type=\"hidden\" name=\"modalLotId\" value="+updateModalVO.getLotId()+">"
+						+ "<input type=\"hidden\" name=\"modalTotQty\" value="+updateModalVO.getTot_qty()+">"
+						+ "<input type=\"hidden\" name=\"modalqtyAvl\" value="+updateModalVO.getTot_avl()+">"
+						+ "<input type=\"hidden\" name=\"modalReciever\" value="+FormUtils.nullToEmpty(updateModalVO.getReceiver())+">"
 
 				+"</tr>"
 				+"</tbody>"
@@ -181,7 +204,7 @@ public class DistributionDataController {
 						+"<div class=\"col-md-12 column\">"
 						+"<table class=\"table table-bordered table-hover\" id=\"updateModalFormTab2\">"
 
-						+"<thead>"
+						+"<thead style=\"background-color: #E2E2E2\" >"
 						+"<tr>"
 						+"<th>Distribute To</th>"
 						+"<th>Delivered At</th>"
@@ -214,7 +237,7 @@ public class DistributionDataController {
 						 +"</table>"
 						 +"</div>"
 						 +"</div>"
-						 +"</form>"
+						 +"</form></font>"
 
 				);
 
