@@ -58,7 +58,7 @@ public class DistributionDataController {
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
 		List<DistributionUpdateVO> list =jdbcTemplate.query(sql, new DistributionUpdateRowMapper());
 
-		StringBuilder htmlHeader=new StringBuilder(" <h3>Distribute Goods </h3> "
+		StringBuilder htmlHeader=new StringBuilder(" <h3>Distribution Page </h3> "
 				+ "<table id=\"distributionTable\" class=\"table table-striped table-bordered\" style=\"width:100%;background-color: #E2E2E2\">\r\n" + 
 				"        <thead>\r\n" + 
 				"            <tr>\r\n" + 
@@ -90,7 +90,7 @@ public class DistributionDataController {
 							"                <td>"+distributionUpdateVO.getBox_name()+"-"+distributionUpdateVO.getTotal_wt()+"(Kg)</td>\r\n" +
 							"                <td>"+distributionUpdateVO.getTotal_qty()+"</td>\r\n" + 
 							"                <td>"+distributionUpdateVO.getTotBal()+"</td>\r\n" +
-							"                <td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#updateDistributionModal\" onclick=\"loadUpdateModal("+distributionUpdateVO.getLot_id()+")\">Update Distribution</button></td>"+
+							"                <td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#updateDistributionModal\" onclick=\"loadUpdateModal("+distributionUpdateVO.getLot_id()+")\">Distribute</button></td>"+
 					"            </tr>\r\n" );
 		}
 		StringBuilder htmlFooter=new StringBuilder(		"        </tbody>\r\n" + 

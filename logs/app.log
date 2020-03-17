@@ -1,94 +1,39 @@
-2020-03-10 00:03:10,454 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-2] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=20
-2020-03-10 00:04:37,944 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-1] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=20
-2020-03-10 00:07:11,706 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-8] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=20
-2020-03-10 00:07:37,304 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-7] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=20
-2020-03-10 00:08:36,616 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-7] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=17
-2020-03-10 00:09:14,616 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-5] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=17
-2020-03-10 00:10:35,942 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-1] select 
-challanBook.challan_id,challanBook.challan_date,challanBook.truck_no,sourceDetails.source_name,destinationDetails.destination,traderDetails.trader_name,trader_mark,item.item_name,boxDetails.box_name,boxDetails.total_wt,lotBook.total_qty,lotBook.lot_id,subQuery.tot_bal
-from challan_book challanBook
-inner join source_details sourceDetails
-on sourceDetails.source_id=challanBook.source_id
-inner join
-destination_details destinationDetails
-on destinationDetails.destination_id=challanBook.destination_id
-inner join
-lot_book lotBook
-on lotBook.challan_id=challanBook.challan_id
-inner join trader_details traderDetails
-on traderDetails.trader_id=lotBook.trader_id
-inner join item_details item
-on item.item_id=lotBook.item_id
-inner join box_details boxDetails
-on boxDetails.box_id=lotBook.box_id inner join  (SELECT lotBook.lot_id,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as tot_bal FROM lot_book lotBook left join( SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1) sub_lot on sub_lot.lot_id=lotBook.lot_id ) subQuery on subQuery.lot_id=lotBook.lot_id where subQuery.tot_bal !=0 
-2020-03-10 00:20:32,857 ERROR org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet] [http-nio-8080-exec-8] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.transaction.CannotCreateTransactionException: Could not open JPA EntityManager for transaction; nested exception is org.hibernate.TransactionException: JDBC begin transaction failed: ] with root cause
-java.io.IOException: Stream closed.
-	at java.net.AbstractPlainSocketImpl.available(Unknown Source)
-	at java.net.SocketInputStream.available(Unknown Source)
-	at com.mysql.jdbc.util.ReadAheadInputStream.available(ReadAheadInputStream.java:231)
-	at com.mysql.jdbc.MysqlIO.clearInputStream(MysqlIO.java:920)
-	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1773)
+2020-03-17 00:24:30,743 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Starting SpringSecurityJpaApplication on Saheb with PID 6104 (C:\Users\Rahat\Desktop\GitProjects\GaadiBhada\bin started by Rahat in C:\Users\Rahat\Desktop\GitProjects\GaadiBhada)
+2020-03-17 00:24:30,815 DEBUG com.spring.boot.security.SpringSecurityJpaApplication [main] Running with Spring Boot v2.1.9.RELEASE, Spring v5.1.10.RELEASE
+2020-03-17 00:24:30,815 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] No active profile set, falling back to default profiles: default
+2020-03-17 00:24:44,561 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Started SpringSecurityJpaApplication in 15.026 seconds (JVM running for 19.196)
+2020-03-17 00:24:55,467 ERROR org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet] [http-nio-8080-exec-7] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.dao.RecoverableDataAccessException: StatementCallback; SQL [select cBook.challan_id,cBook.challan_date,cBook.truck_no,source.source_id,source.source_name,destination.destination_id,destination.destination,cBook.driver_name,cBook.driver_mobile from challan_book cBook inner join destination_details destination on cBook.destination_id=destination.destination_id
+inner join source_details source on  source.source_id=cBook.source_id order by cBook.challan_id]; Communications link failure
+
+Last packet sent to the server was 9 ms ago.; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+Last packet sent to the server was 9 ms ago.] with root cause
+java.net.SocketException: Socket closed
+	at java.net.SocketInputStream.socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at com.mysql.jdbc.util.ReadAheadInputStream.fill(ReadAheadInputStream.java:113)
+	at com.mysql.jdbc.util.ReadAheadInputStream.readFromUnderlyingStreamIfNecessary(ReadAheadInputStream.java:160)
+	at com.mysql.jdbc.util.ReadAheadInputStream.read(ReadAheadInputStream.java:188)
+	at com.mysql.jdbc.MysqlIO.readFully(MysqlIO.java:2329)
+	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:2774)
+	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:2763)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3299)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1837)
 	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1961)
 	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2537)
-	at com.mysql.jdbc.ConnectionImpl.setAutoCommit(ConnectionImpl.java:4836)
-	at com.zaxxer.hikari.pool.ProxyConnection.setAutoCommit(ProxyConnection.java:388)
-	at com.zaxxer.hikari.pool.HikariProxyConnection.setAutoCommit(HikariProxyConnection.java)
-	at org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor.begin(AbstractLogicalConnectionImplementor.java:67)
-	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.begin(LogicalConnectionManagedImpl.java:263)
-	at org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl.begin(JdbcResourceLocalTransactionCoordinatorImpl.java:236)
-	at org.hibernate.engine.transaction.internal.TransactionImpl.begin(TransactionImpl.java:86)
-	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.beginTransaction(HibernateJpaDialect.java:184)
-	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:402)
-	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:378)
-	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:475)
-	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:289)
-	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:98)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:144)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$ExposeRepositoryInvocationInterceptor.invoke(CrudMethodMetadataPostProcessor.java:364)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:93)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.data.repository.core.support.SurroundingTransactionDetectorMethodInterceptor.invoke(SurroundingTransactionDetectorMethodInterceptor.java:61)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
-	at com.sun.proxy.$Proxy105.findAll(Unknown Source)
-	at com.spring.boot.security.dto.BoxDetailsData.getAllBoxType(BoxDetailsData.java:21)
-	at com.spring.boot.security.controller.ManagementPageController.managementPage(ManagementPageController.java:44)
-	at sun.reflect.GeneratedMethodAccessor123.invoke(Unknown Source)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2466)
+	at com.mysql.jdbc.StatementImpl.executeQuery(StatementImpl.java:1383)
+	at com.zaxxer.hikari.pool.ProxyStatement.executeQuery(ProxyStatement.java:111)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.executeQuery(HikariProxyStatement.java)
+	at org.springframework.jdbc.core.JdbcTemplate$1QueryStatementCallback.doInStatement(JdbcTemplate.java:439)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:376)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:452)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:462)
+	at com.spring.boot.security.controller.ManageDataPageController.allChallanData(ManageDataPageController.java:66)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
 	at java.lang.reflect.Method.invoke(Unknown Source)
 	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190)
@@ -100,8 +45,8 @@ java.io.IOException: Stream closed.
 	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040)
 	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943)
 	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
 	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
 	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
 	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
@@ -176,7 +121,9 @@ java.io.IOException: Stream closed.
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.lang.Thread.run(Unknown Source)
-2020-03-10 00:21:07,132 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-7] select 
+2020-03-17 00:25:09,075 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-7] Select subLotBook.sub_lot_id,subLotBook.receiving_date,cBook.truck_no,source.source_name,adest.agent_destination_name,agent.agent_name,agent.agent_mark,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,fareRule.fare FROM challan_book cBook inner join lot_book lotBook on cBook.challan_id=lotBook.challan_id inner join sub_lot_book subLotBook on lotBook.lot_id=subLotBook.lot_id inner join agent_destination adest on subLotBook.agent_destination_id=adest.agent_destination_id inner join box_details box on box.box_id=lotBook.box_id inner join item_details item on item.item_id=lotBook.item_id inner join source_details source on source.source_id=cBook.source_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null
+2020-03-17 00:25:30,629 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-5] Select subLotBook.sub_lot_id,subLotBook.receiving_date,cBook.truck_no,source.source_name,adest.agent_destination_name,agent.agent_name,agent.agent_mark,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,fareRule.fare FROM challan_book cBook inner join lot_book lotBook on cBook.challan_id=lotBook.challan_id inner join sub_lot_book subLotBook on lotBook.lot_id=subLotBook.lot_id inner join agent_destination adest on subLotBook.agent_destination_id=adest.agent_destination_id inner join box_details box on box.box_id=lotBook.box_id inner join item_details item on item.item_id=lotBook.item_id inner join source_details source on source.source_id=cBook.source_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null
+2020-03-17 00:25:37,021 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-4] select 
 challanBook.challan_id,challanBook.challan_date,challanBook.truck_no,sourceDetails.source_name,destinationDetails.destination,traderDetails.trader_name,trader_mark,item.item_name,boxDetails.box_name,boxDetails.total_wt,lotBook.total_qty,lotBook.lot_id,subQuery.tot_bal
 from challan_book challanBook
 inner join source_details sourceDetails
@@ -193,12 +140,7 @@ inner join item_details item
 on item.item_id=lotBook.item_id
 inner join box_details boxDetails
 on boxDetails.box_id=lotBook.box_id inner join  (SELECT lotBook.lot_id,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as tot_bal FROM lot_book lotBook left join( SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1) sub_lot on sub_lot.lot_id=lotBook.lot_id ) subQuery on subQuery.lot_id=lotBook.lot_id where subQuery.tot_bal !=0 
-2020-03-10 00:21:08,311 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-10] Select subLotBook.sub_lot_id,subLotBook.receiving_date,cBook.truck_no,source.source_name,adest.agent_destination_name,agent.agent_name,agent.agent_mark,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,fareRule.fare FROM challan_book cBook inner join lot_book lotBook on cBook.challan_id=lotBook.challan_id inner join sub_lot_book subLotBook on lotBook.lot_id=subLotBook.lot_id inner join agent_destination adest on subLotBook.agent_destination_id=adest.agent_destination_id inner join box_details box on box.box_id=lotBook.box_id inner join item_details item on item.item_id=lotBook.item_id inner join source_details source on source.source_id=cBook.source_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=adest.agent_destination_id and fareRule.box_id=box.box_id and fareRule.item_id=item.item_id left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null
-2020-03-10 11:04:28,753 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Starting SpringSecurityJpaApplication on Saheb with PID 3748 (C:\Users\Rahat\Desktop\GitProjects\GaadiBhada\bin started by Rahat in C:\Users\Rahat\Desktop\GitProjects\GaadiBhada)
-2020-03-10 11:04:28,772 DEBUG com.spring.boot.security.SpringSecurityJpaApplication [main] Running with Spring Boot v2.1.9.RELEASE, Spring v5.1.10.RELEASE
-2020-03-10 11:04:28,782 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] No active profile set, falling back to default profiles: default
-2020-03-10 11:04:41,410 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Started SpringSecurityJpaApplication in 13.937 seconds (JVM running for 15.723)
-2020-03-10 11:17:07,667 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-9] select 
+2020-03-17 00:26:05,599 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-2] select 
 challanBook.challan_id,challanBook.challan_date,challanBook.truck_no,sourceDetails.source_name,destinationDetails.destination,traderDetails.trader_name,trader_mark,item.item_name,boxDetails.box_name,boxDetails.total_wt,lotBook.total_qty,lotBook.lot_id,subQuery.tot_bal
 from challan_book challanBook
 inner join source_details sourceDetails
@@ -215,46 +157,248 @@ inner join item_details item
 on item.item_id=lotBook.item_id
 inner join box_details boxDetails
 on boxDetails.box_id=lotBook.box_id inner join  (SELECT lotBook.lot_id,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as tot_bal FROM lot_book lotBook left join( SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1) sub_lot on sub_lot.lot_id=lotBook.lot_id ) subQuery on subQuery.lot_id=lotBook.lot_id where subQuery.tot_bal !=0 
-2020-03-10 11:17:11,019 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-7] Select subLotBook.sub_lot_id,subLotBook.receiving_date,cBook.truck_no,source.source_name,adest.agent_destination_name,agent.agent_name,agent.agent_mark,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,fareRule.fare FROM challan_book cBook inner join lot_book lotBook on cBook.challan_id=lotBook.challan_id inner join sub_lot_book subLotBook on lotBook.lot_id=subLotBook.lot_id inner join agent_destination adest on subLotBook.agent_destination_id=adest.agent_destination_id inner join box_details box on box.box_id=lotBook.box_id inner join item_details item on item.item_id=lotBook.item_id inner join source_details source on source.source_id=cBook.source_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=adest.agent_destination_id and fareRule.box_id=box.box_id and fareRule.item_id=item.item_id left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null
-2020-03-10 11:17:17,575 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-8] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=18
-2020-03-10 11:36:46,289 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-4] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=18
-2020-03-10 11:37:18,496 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-9] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=18
-2020-03-10 11:37:58,071 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-3] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=18
-2020-03-10 11:39:24,088 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-8] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=18
-2020-03-10 11:40:03,880 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-4] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=18
-2020-03-10 11:40:56,362 INFO com.spring.boot.security.controller.CollectionsController [http-nio-8080-exec-3] select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt
-FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id 
-left join
-(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal
-on fareBal.sub_lot_id=fareBook.sub_lot_id) collections
-where collections.totalBalAmt !=0 and collections.sub_lot_id=18
+2020-03-17 00:26:07,064 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-5] Select subLotBook.sub_lot_id,subLotBook.receiving_date,cBook.truck_no,source.source_name,adest.agent_destination_name,agent.agent_name,agent.agent_mark,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,fareRule.fare FROM challan_book cBook inner join lot_book lotBook on cBook.challan_id=lotBook.challan_id inner join sub_lot_book subLotBook on lotBook.lot_id=subLotBook.lot_id inner join agent_destination adest on subLotBook.agent_destination_id=adest.agent_destination_id inner join box_details box on box.box_id=lotBook.box_id inner join item_details item on item.item_id=lotBook.item_id inner join source_details source on source.source_id=cBook.source_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null
+2020-03-17 00:26:26,651 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-2] Select subLotBook.sub_lot_id,subLotBook.receiving_date,cBook.truck_no,source.source_name,adest.agent_destination_name,agent.agent_name,agent.agent_mark,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,fareRule.fare FROM challan_book cBook inner join lot_book lotBook on cBook.challan_id=lotBook.challan_id inner join sub_lot_book subLotBook on lotBook.lot_id=subLotBook.lot_id inner join agent_destination adest on subLotBook.agent_destination_id=adest.agent_destination_id inner join box_details box on box.box_id=lotBook.box_id inner join item_details item on item.item_id=lotBook.item_id inner join source_details source on source.source_id=cBook.source_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null
+2020-03-17 00:26:49,227 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-5] Select subLotBook.sub_lot_id,subLotBook.receiving_date,cBook.truck_no,source.source_name,adest.agent_destination_name,agent.agent_name,agent.agent_mark,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,fareRule.fare FROM challan_book cBook inner join lot_book lotBook on cBook.challan_id=lotBook.challan_id inner join sub_lot_book subLotBook on lotBook.lot_id=subLotBook.lot_id inner join agent_destination adest on subLotBook.agent_destination_id=adest.agent_destination_id inner join box_details box on box.box_id=lotBook.box_id inner join item_details item on item.item_id=lotBook.item_id inner join source_details source on source.source_id=cBook.source_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null
+2020-03-17 00:29:37,508 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-1] Select subLotBook.sub_lot_id,subLotBook.receiving_date,cBook.truck_no,source.source_name,adest.agent_destination_name,agent.agent_name,agent.agent_mark,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,fareRule.fare FROM challan_book cBook inner join lot_book lotBook on cBook.challan_id=lotBook.challan_id inner join sub_lot_book subLotBook on lotBook.lot_id=subLotBook.lot_id inner join agent_destination adest on subLotBook.agent_destination_id=adest.agent_destination_id inner join box_details box on box.box_id=lotBook.box_id inner join item_details item on item.item_id=lotBook.item_id inner join source_details source on source.source_id=cBook.source_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null
+2020-03-17 11:07:33,038 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-2] Select subLotBook.sub_lot_id,subLotBook.receiving_date,cBook.truck_no,source.source_name,adest.agent_destination_name,agent.agent_name,agent.agent_mark,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,fareRule.fare FROM challan_book cBook inner join lot_book lotBook on cBook.challan_id=lotBook.challan_id inner join sub_lot_book subLotBook on lotBook.lot_id=subLotBook.lot_id inner join agent_destination adest on subLotBook.agent_destination_id=adest.agent_destination_id inner join box_details box on box.box_id=lotBook.box_id inner join item_details item on item.item_id=lotBook.item_id inner join source_details source on source.source_id=cBook.source_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null
+2020-03-17 11:07:39,718 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-5] select 
+challanBook.challan_id,challanBook.challan_date,challanBook.truck_no,sourceDetails.source_name,destinationDetails.destination,traderDetails.trader_name,trader_mark,item.item_name,boxDetails.box_name,boxDetails.total_wt,lotBook.total_qty,lotBook.lot_id,subQuery.tot_bal
+from challan_book challanBook
+inner join source_details sourceDetails
+on sourceDetails.source_id=challanBook.source_id
+inner join
+destination_details destinationDetails
+on destinationDetails.destination_id=challanBook.destination_id
+inner join
+lot_book lotBook
+on lotBook.challan_id=challanBook.challan_id
+inner join trader_details traderDetails
+on traderDetails.trader_id=lotBook.trader_id
+inner join item_details item
+on item.item_id=lotBook.item_id
+inner join box_details boxDetails
+on boxDetails.box_id=lotBook.box_id inner join  (SELECT lotBook.lot_id,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as tot_bal FROM lot_book lotBook left join( SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1) sub_lot on sub_lot.lot_id=lotBook.lot_id ) subQuery on subQuery.lot_id=lotBook.lot_id where subQuery.tot_bal !=0 
+2020-03-17 12:13:32,804 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-6] select 
+challanBook.challan_id,challanBook.challan_date,challanBook.truck_no,sourceDetails.source_name,destinationDetails.destination,traderDetails.trader_name,trader_mark,item.item_name,boxDetails.box_name,boxDetails.total_wt,lotBook.total_qty,lotBook.lot_id,subQuery.tot_bal
+from challan_book challanBook
+inner join source_details sourceDetails
+on sourceDetails.source_id=challanBook.source_id
+inner join
+destination_details destinationDetails
+on destinationDetails.destination_id=challanBook.destination_id
+inner join
+lot_book lotBook
+on lotBook.challan_id=challanBook.challan_id
+inner join trader_details traderDetails
+on traderDetails.trader_id=lotBook.trader_id
+inner join item_details item
+on item.item_id=lotBook.item_id
+inner join box_details boxDetails
+on boxDetails.box_id=lotBook.box_id inner join  (SELECT lotBook.lot_id,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as tot_bal FROM lot_book lotBook left join( SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1) sub_lot on sub_lot.lot_id=lotBook.lot_id ) subQuery on subQuery.lot_id=lotBook.lot_id where subQuery.tot_bal !=0 
+2020-03-17 12:15:01,282 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-5] SELECT lotBook.lot_id,lotBook.total_qty,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as qtyAvl,lotBook.receiver FROM lot_book lotBook left join  
+(
+SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1
+) sub_lot on sub_lot.lot_id=lotBook.lot_id where lotBook.lot_id=?
+2020-03-17 12:49:43,275 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Starting SpringSecurityJpaApplication on Saheb with PID 4164 (C:\Users\Rahat\Desktop\GitProjects\GaadiBhada\bin started by Rahat in C:\Users\Rahat\Desktop\GitProjects\GaadiBhada)
+2020-03-17 12:49:43,279 DEBUG com.spring.boot.security.SpringSecurityJpaApplication [main] Running with Spring Boot v2.1.9.RELEASE, Spring v5.1.10.RELEASE
+2020-03-17 12:49:43,280 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] No active profile set, falling back to default profiles: default
+2020-03-17 12:49:55,146 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Started SpringSecurityJpaApplication in 13.223 seconds (JVM running for 14.658)
+2020-03-17 12:55:10,669 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-1] select 
+challanBook.challan_id,challanBook.challan_date,challanBook.truck_no,sourceDetails.source_name,destinationDetails.destination,traderDetails.trader_name,trader_mark,item.item_name,boxDetails.box_name,boxDetails.total_wt,lotBook.total_qty,lotBook.lot_id,subQuery.tot_bal
+from challan_book challanBook
+inner join source_details sourceDetails
+on sourceDetails.source_id=challanBook.source_id
+inner join
+destination_details destinationDetails
+on destinationDetails.destination_id=challanBook.destination_id
+inner join
+lot_book lotBook
+on lotBook.challan_id=challanBook.challan_id
+inner join trader_details traderDetails
+on traderDetails.trader_id=lotBook.trader_id
+inner join item_details item
+on item.item_id=lotBook.item_id
+inner join box_details boxDetails
+on boxDetails.box_id=lotBook.box_id inner join  (SELECT lotBook.lot_id,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as tot_bal FROM lot_book lotBook left join( SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1) sub_lot on sub_lot.lot_id=lotBook.lot_id ) subQuery on subQuery.lot_id=lotBook.lot_id where subQuery.tot_bal !=0 
+2020-03-17 12:55:20,698 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-3] select 
+challanBook.challan_id,challanBook.challan_date,challanBook.truck_no,sourceDetails.source_name,destinationDetails.destination,traderDetails.trader_name,trader_mark,item.item_name,boxDetails.box_name,boxDetails.total_wt,lotBook.total_qty,lotBook.lot_id,subQuery.tot_bal
+from challan_book challanBook
+inner join source_details sourceDetails
+on sourceDetails.source_id=challanBook.source_id
+inner join
+destination_details destinationDetails
+on destinationDetails.destination_id=challanBook.destination_id
+inner join
+lot_book lotBook
+on lotBook.challan_id=challanBook.challan_id
+inner join trader_details traderDetails
+on traderDetails.trader_id=lotBook.trader_id
+inner join item_details item
+on item.item_id=lotBook.item_id
+inner join box_details boxDetails
+on boxDetails.box_id=lotBook.box_id inner join  (SELECT lotBook.lot_id,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as tot_bal FROM lot_book lotBook left join( SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1) sub_lot on sub_lot.lot_id=lotBook.lot_id ) subQuery on subQuery.lot_id=lotBook.lot_id where subQuery.tot_bal !=0 
+2020-03-17 12:55:30,957 ERROR org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet] [http-nio-8080-exec-7] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [update lot_book set trader_id=3 wherelot_id=45]; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'wherelot_id=45' at line 1] with root cause
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'wherelot_id=45' at line 1
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:406)
+	at com.mysql.jdbc.Util.getInstance(Util.java:381)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1031)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:957)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3376)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3308)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1837)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1961)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2537)
+	at com.mysql.jdbc.StatementImpl.executeUpdate(StatementImpl.java:1564)
+	at com.mysql.jdbc.StatementImpl.executeUpdate(StatementImpl.java:1485)
+	at com.zaxxer.hikari.pool.ProxyStatement.executeUpdate(ProxyStatement.java:120)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.executeUpdate(HikariProxyStatement.java)
+	at org.springframework.jdbc.core.JdbcTemplate$1UpdateStatementCallback.doInStatement(JdbcTemplate.java:511)
+	at org.springframework.jdbc.core.JdbcTemplate$1UpdateStatementCallback.doInStatement(JdbcTemplate.java:508)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:376)
+	at org.springframework.jdbc.core.JdbcTemplate.update(JdbcTemplate.java:523)
+	at com.spring.boot.security.controller.UpdateFormsDataController.updateTable(UpdateFormsDataController.java:141)
+	at com.spring.boot.security.controller.UpdateFormsDataController.updateChallanTrader(UpdateFormsDataController.java:125)
+	at com.spring.boot.security.controller.UpdateFormsDataController$$FastClassBySpringCGLIB$$3d39f0c0.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685)
+	at com.spring.boot.security.controller.UpdateFormsDataController$$EnhancerBySpringCGLIB$$6e56fe7e.updateChallanTrader(<generated>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:105)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:893)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:798)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.servlet.resource.ResourceUrlEncodingFilter.doFilter(ResourceUrlEncodingFilter.java:64)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:320)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:127)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:91)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:137)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:111)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:170)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:200)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:74)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:358)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:271)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:94)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:860)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1589)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+2020-03-17 12:56:10,352 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Starting SpringSecurityJpaApplication on Saheb with PID 1264 (C:\Users\Rahat\Desktop\GitProjects\GaadiBhada\bin started by Rahat in C:\Users\Rahat\Desktop\GitProjects\GaadiBhada)
+2020-03-17 12:56:10,356 DEBUG com.spring.boot.security.SpringSecurityJpaApplication [main] Running with Spring Boot v2.1.9.RELEASE, Spring v5.1.10.RELEASE
+2020-03-17 12:56:10,356 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] No active profile set, falling back to default profiles: default
+2020-03-17 12:56:21,842 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Started SpringSecurityJpaApplication in 13.118 seconds (JVM running for 14.829)
+2020-03-17 12:57:12,813 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-3] select 
+challanBook.challan_id,challanBook.challan_date,challanBook.truck_no,sourceDetails.source_name,destinationDetails.destination,traderDetails.trader_name,trader_mark,item.item_name,boxDetails.box_name,boxDetails.total_wt,lotBook.total_qty,lotBook.lot_id,subQuery.tot_bal
+from challan_book challanBook
+inner join source_details sourceDetails
+on sourceDetails.source_id=challanBook.source_id
+inner join
+destination_details destinationDetails
+on destinationDetails.destination_id=challanBook.destination_id
+inner join
+lot_book lotBook
+on lotBook.challan_id=challanBook.challan_id
+inner join trader_details traderDetails
+on traderDetails.trader_id=lotBook.trader_id
+inner join item_details item
+on item.item_id=lotBook.item_id
+inner join box_details boxDetails
+on boxDetails.box_id=lotBook.box_id inner join  (SELECT lotBook.lot_id,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as tot_bal FROM lot_book lotBook left join( SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1) sub_lot on sub_lot.lot_id=lotBook.lot_id ) subQuery on subQuery.lot_id=lotBook.lot_id where subQuery.tot_bal !=0 
+2020-03-17 13:09:33,469 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Starting SpringSecurityJpaApplication on Saheb with PID 1536 (C:\Users\Rahat\Desktop\GitProjects\GaadiBhada\bin started by Rahat in C:\Users\Rahat\Desktop\GitProjects\GaadiBhada)
+2020-03-17 13:09:33,474 DEBUG com.spring.boot.security.SpringSecurityJpaApplication [main] Running with Spring Boot v2.1.9.RELEASE, Spring v5.1.10.RELEASE
+2020-03-17 13:09:33,475 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] No active profile set, falling back to default profiles: default
+2020-03-17 13:09:47,395 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Started SpringSecurityJpaApplication in 16.077 seconds (JVM running for 17.874)
+2020-03-17 13:55:08,427 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Starting SpringSecurityJpaApplication on Saheb with PID 5904 (C:\Users\Rahat\Desktop\GitProjects\GaadiBhada\bin started by Rahat in C:\Users\Rahat\Desktop\GitProjects\GaadiBhada)
+2020-03-17 13:55:08,457 DEBUG com.spring.boot.security.SpringSecurityJpaApplication [main] Running with Spring Boot v2.1.9.RELEASE, Spring v5.1.10.RELEASE
+2020-03-17 13:55:08,458 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] No active profile set, falling back to default profiles: default
+2020-03-17 13:57:02,547 INFO com.spring.boot.security.SpringSecurityJpaApplication [main] Started SpringSecurityJpaApplication in 115.567 seconds (JVM running for 117.805)
+2020-03-17 13:59:24,830 DEBUG com.spring.boot.security.controller.DistributionDataController [http-nio-8080-exec-6] select 
+challanBook.challan_id,challanBook.challan_date,challanBook.truck_no,sourceDetails.source_name,destinationDetails.destination,traderDetails.trader_name,trader_mark,item.item_name,boxDetails.box_name,boxDetails.total_wt,lotBook.total_qty,lotBook.lot_id,subQuery.tot_bal
+from challan_book challanBook
+inner join source_details sourceDetails
+on sourceDetails.source_id=challanBook.source_id
+inner join
+destination_details destinationDetails
+on destinationDetails.destination_id=challanBook.destination_id
+inner join
+lot_book lotBook
+on lotBook.challan_id=challanBook.challan_id
+inner join trader_details traderDetails
+on traderDetails.trader_id=lotBook.trader_id
+inner join item_details item
+on item.item_id=lotBook.item_id
+inner join box_details boxDetails
+on boxDetails.box_id=lotBook.box_id inner join  (SELECT lotBook.lot_id,case when totDistributed is null then lotBook.total_qty-0 else lotBook.total_qty-sub_lot.totDistributed end as tot_bal FROM lot_book lotBook left join( SELECT lot_id,sum(total_qty) as totDistributed FROM sub_lot_book group by 1) sub_lot on sub_lot.lot_id=lotBook.lot_id ) subQuery on subQuery.lot_id=lotBook.lot_id where subQuery.tot_bal !=0 

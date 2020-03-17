@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.boot.security.repository.UserRepository;
 import com.spring.boot.security.userdata.MyUserDetails;
-import com.spring.boot.security.userdata.UserVO;
+import com.spring.boot.security.userdata.UserCredential;
 
 @Service
 public class MyUserDetailService implements UserDetailsService {
@@ -24,7 +24,7 @@ public class MyUserDetailService implements UserDetailsService {
 		//user.setUsername("rahat");
 		//user.setPassword("$2a$04$TkM6AJ1.78c1bu4dgEGhSuja1s5vlOW/hkVKiPXWojaH4YJPMQCA6");
 		
-		UserVO user=userRepository.findByUsername(username);
+		UserCredential user=userRepository.findByUsername(username);
 		if(user==null)
 	    	throw new UsernameNotFoundException("User Not Found:404");
 		return new MyUserDetails(user);

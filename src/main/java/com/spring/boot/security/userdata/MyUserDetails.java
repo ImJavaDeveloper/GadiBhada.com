@@ -11,15 +11,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-public class MyUserDetails extends UserVO implements UserDetails {
+public class MyUserDetails extends UserCredential implements UserDetails {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8377828918964975774L;
-	private UserVO user;
+	private UserCredential user;
 	
-	public MyUserDetails(UserVO user) {
+	public MyUserDetails(UserCredential user) {
 		super(user);
 		this.user = user;
 	}

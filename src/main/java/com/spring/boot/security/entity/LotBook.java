@@ -34,7 +34,7 @@ public class LotBook {
 	@Column(name="is_Distributed")
 	private String isDistributed;
 	private String receiver;
-	
+
 	
 	public int getLotId() {
 		return lotId;
@@ -120,8 +120,6 @@ public class LotBook {
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
-	
-	
-	
+
 	
 }

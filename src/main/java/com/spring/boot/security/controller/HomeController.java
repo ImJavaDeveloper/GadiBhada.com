@@ -1,18 +1,12 @@
 package com.spring.boot.security.controller;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +16,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.spring.boot.security.utils.SecurityUtils;
 
 @Controller
-@SessionAttributes("username")
+@RequestMapping(value="/gadibhada/home")
+@SessionAttributes("firstName")
 public class HomeController {
 	
 	@Autowired

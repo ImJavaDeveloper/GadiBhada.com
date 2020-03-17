@@ -20,7 +20,7 @@ function callAjaxForCollectionPage() {
 		},
 		success : function(data) {
 			$('#menu4').html(data);
-			loadjs("/js/dataTable.js");
+			//loadjs("/js/dataTable.js");
 			$('#collectionTable').DataTable();
 			waitingDialog.hide();
 
@@ -57,7 +57,25 @@ function loadCollectionsModal(subLotId) {
 
 			$('#collectionModelContent').html(data);
 
-		}
+		},
+		 error: function(XMLHttpRequest, textStatus, errorThrown)
+	        {
+		    	if (XMLHttpRequest.readyState == 4) {
+		            // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+		    		
+		    		$('#collectionModelContent').html("Error !! Server Is Not Responding Correctly-->\n"+XMLHttpRequest.responseText+"+ \nPlease contact server admin");
+		        }
+		        else if (XMLHttpRequest.readyState == 0) {
+		            // Network error (i.e. connection refused, access denied due to CORS, etc.)
+		        	 $('#collectionModelContent').html("Error !! Server Is Down. Please contact server admin");
+		        }
+		        else {
+		            // something weird is happening
+		        }
+	           
+	          //some stuff on failure
+	        }
+		    
 	});
 }
 
@@ -127,7 +145,25 @@ function saveCollectionsData() {
 					//callAjaxForUpdateDistribution();
 				} else
 					$('#collectionModelmMessage').html("<strong style=\"color:red\">Failure!</strong> Record is not saved !! Error:"+data);
-			}
+			},
+			 error: function(XMLHttpRequest, textStatus, errorThrown)
+		        {
+			    	if (XMLHttpRequest.readyState == 4) {
+			            // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+			    		$('#collectionModelmMessage').html("Error !! Server Is Not Responding Correctly-->\n"+XMLHttpRequest.responseText+"+ \nPlease contact server admin");
+			        }
+			        else if (XMLHttpRequest.readyState == 0) {
+			            // Network error (i.e. connection refused, access denied due to CORS, etc.)
+			        	
+			        	$('#collectionModelmMessage').html("Error !! Server Is Down. Please contact server admin");
+			        }
+			        else {
+			        	$('#collectionModelmMessage').html("Unknown Error !!")
+			        }
+		           
+		          //some stuff on failure
+		        }
+			    
 		});
 	}
 	//alert("Called save");	

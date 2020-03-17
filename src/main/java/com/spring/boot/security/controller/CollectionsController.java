@@ -16,18 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.boot.security.dto.FareCollectionData;
-import com.spring.boot.security.entity.AgentDestination;
-import com.spring.boot.security.entity.AgentDetails;
 import com.spring.boot.security.entity.FareCollection;
 import com.spring.boot.security.exception.DataBaseException;
 import com.spring.boot.security.forms.data.CollectionFareVO;
-import com.spring.boot.security.forms.data.DistributionUpdateVO;
 import com.spring.boot.security.forms.data.TableQuery;
-import com.spring.boot.security.forms.data.UpdateModalVO;
 import com.spring.boot.security.helper.DataValidator;
 import com.spring.boot.security.helper.FormUtils;
 import com.spring.boot.security.mapper.CollectionsDataMapper;
-import com.spring.boot.security.mapper.UpdateModalMapper;
 
 @Controller
 public class CollectionsController {
@@ -220,7 +215,7 @@ public class CollectionsController {
 		else
 		{
 			FareCollection fareCollection=new FareCollection();
-			fareCollection.setFairId(fareIdC);
+			fareCollection.setFareId(fareIdC);
 			fareCollection.setSubLotId(subLotId);
 			fareCollection.setTotPayment(FormUtils.getDouble(totalPymt));
 			fareCollection.setExtraFare(FormUtils.getDouble(extraFare));

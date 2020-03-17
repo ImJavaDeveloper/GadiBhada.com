@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" type="image/png"
+	th:href="@{/images/gaadi.png}" />
+
+<title>Manage Data</title>
+
+<link href="/webjars/bootstrap/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/css/dataTable.css" rel="stylesheet"></link>
+<link href="/css/modal.css" rel="stylesheet"></link>
+<link href="/css/bootstrap-editable.css" rel="stylesheet"></link>
+
+<style type="text/css">
+body {
+	background-color: linen;
+	background-image: url("/images/adminbg.JPG");
+  background-size: cover;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.nav-tabs > li.active > a {
+  color: #3c5a78;
+  font-size: 14px;
+}
+.nav-tabs > li > a {
+  color: #800000;
+}
+.navbar-nav-custom> li.active > a {
+  color: #3c5a78;
+  font-size: 14px;
+}
+
+
+</style>
+<script th:inline="javascript">
+
+</script>
+
+</head>
+<body>
+	<div class="container">
+		<!-- Static navbar -->
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+						aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<img src="/images/img_avatar.png" alt="Avatar" class="avatar">
+					
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="/gadibhada/home/">Home</a></li>
+						<li><a href="/gadibhada/dataentry">Data Entry</a></li>
+						<li><a href="#">Manage Data</a></li>
+						<li><a href="#">Reports </a></li>
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown" role="button" aria-haspopup="true"
+							aria-expanded="false">Settings <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Add User</a></li>
+								<li><a href="#">Delete User</a></li>
+								<li><a href="#">Grant Access</a></li>
+								<li role="separator" class="divider"></li>
+								<li class="dropdown-header">Nav header</li>
+								<li><a href="#">Separated link</a></li>
+								<li><a href="#">One more separated link</a></li>
+							</ul></li>
+					</ul>
+					<form class="navbar-form navbar-left" action="/action_page.php">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search">
+							<div class="input-group-btn">
+								<button class="btn btn-default" type="submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active"><a class="navbar-brand" href="#" th:text="${firstName}">User
+						Name</a></li>
+						<li><a href="#">Profile</a></li>
+						<li><a href="/logout">Sign Out<span
+								class="glyphicon glyphicon-log-out"></span></a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+			<!--/.container-fluid -->
+		</nav>
+		<!-- Main component for a primary marketing message or call to action -->
+
+		<!-- Main component for a Tab-->
+		
+
+		<ul class="nav nav-tabs" id="manageDataMenuTab" style="width: 100%;background-color: #F0E68C;color:black">
+			<li class="active"><a data-toggle="tab" href="#allchallan" id="challanBook">Challan Book</a></li>
+			<li><a data-toggle="tab" href="#menu1">Distribution Book</a></li>
+			<li><a data-toggle="tab" href="#menu2" id="">Fare Book</a></li>
+			<li><a data-toggle="tab" href="#menu3" id="">Fare Collection Book</a></li>
+			<li><a data-toggle="tab" href="#menu4" id="">Master Book</a></li>
+		</ul>
+
+		<div class="tab-content">
+
+			<div id="allchallan" class="tab-pane fade in active">
+				<h3>All Challan</h3>
+				<!-- This section is dynamically loaded via ajax -->
+			</div>
+
+			<div id="menu1" class="tab-pane fade" >
+				
+			</div>
+			<div id="menu2" class="tab-pane fade">
+				<h3>Distribution</h3>
+				<!-- This section is dynamically loaded via ajax -->
+			</div>
+			<div id="menu3" class="tab-pane fade">
+				<!-- This section is dynamically loaded via ajax -->
+			</div>
+			<div id="menu4" class="tab-pane fade">
+				<!-- This section is dynamically loaded via ajax -->
+
+			</div>
+			<div id="menu5" class="tab-pane fade">
+				
+			</div>
+			
+	
+      
+		</div>
+		<!-- End Main component for a Tab-->
+
+	</div>
+	<!-- Bootstrap core JavaScript
+================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+	<script src="/js/dataTable.js"></script>
+	<script src="/js/helper.js"></script>
+	<script src="/js/challanBook.js"></script>
+	<script src="/js/bootstrap-editable.js"></script>
+	
+
+
+	<!-- 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
+ -->
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+</body>
+</html>

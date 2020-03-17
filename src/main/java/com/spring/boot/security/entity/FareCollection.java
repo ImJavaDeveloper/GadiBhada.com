@@ -17,8 +17,8 @@ public class FareCollection {
 	@Id
 	@Column(name="collection_id")
 	private int collectionId;
-	@Column(name="fair_id")
-	private int fairId;
+	@Column(name="fare_id")
+	private int fareId;
 	@Column(name="sub_lot_id")
 	private int subLotId;
 	@Column(name="tot_payment")
@@ -31,18 +31,19 @@ public class FareCollection {
 	private double extraFare;
 	
 	
+	public int getFareId() {
+		return fareId;
+	}
+	public void setFareId(int fareId) {
+		this.fareId = fareId;
+	}
 	public int getCollectionId() {
 		return collectionId;
 	}
 	public void setCollectionId(int collectionId) {
 		this.collectionId = collectionId;
 	}
-	public int getFairId() {
-		return fairId;
-	}
-	public void setFairId(int fairId) {
-		this.fairId = fairId;
-	}
+	
 	public int getSubLotId() {
 		return subLotId;
 	}

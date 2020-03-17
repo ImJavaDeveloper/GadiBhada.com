@@ -4,6 +4,11 @@ import javax.servlet.ServletException;
 
 public class AppHttpException extends ServletException {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public AppHttpException()
 	{
 		

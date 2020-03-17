@@ -49,7 +49,7 @@ public class TableQuery {
 				+ "inner join item_details item on item.item_id=lotBook.item_id " 
 				+ "inner join source_details source on source.source_id=cBook.source_id " 
 				+ "inner join agent_details agent on agent.agent_id=subLotBook.agent_id " 
-				+ "left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=adest.agent_destination_id and fareRule.box_id=box.box_id and fareRule.item_id=item.item_id"
+				+ "left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id"
 				+ " left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null";
 	}
 	
@@ -68,6 +68,38 @@ public class TableQuery {
 		return getCollectionDataQuery()+" and collections.sub_lot_id="+subLotId;
 	}
 	
+	public static String getAllChallansQuery()
+	{
+		return "select cBook.challan_id,cBook.challan_date,cBook.truck_no,source.source_id,source.source_name,destination.destination_id,destination.destination,cBook.driver_name,cBook.driver_mobile from challan_book cBook inner join destination_details destination on cBook.destination_id=destination.destination_id\r\n" + 
+				"inner join source_details source on  source.source_id=cBook.source_id order by cBook.challan_id";
 	
+	}
+	public static String getLotBooksByChallanIdQuery(int challanId)
+	{
+	return "SELECT lotBook.lot_id,trader.trader_id,trader.trader_name,trader.trader_mark,item.item_id,item.item_name,box.box_id,box.box_name,box.total_wt,lotBook.total_qty,lotBook.total_wt,lotBook.receiver FROM lot_book lotBook inner join trader_details trader on trader.trader_id=lotBook.trader_id" +
+			" inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id where lotBook.challan_id="+challanId;
+	}	
 	
+	public static String getAllTraderListQuery()
+	{
+	return "SELECT trader_id as value,concat(trader_name,\"(\",trader_mark,\")\") as text from trader_details";
+	}
+	
+	public static String getAllSourceListQuery()
+	{
+	return "SELECT source_id as value,source_name as text from source_details";
+	}
+	public static String getAllDestinationListQuery()
+	{
+	return "SELECT destination_id as value,destination as text from destination_details";
+	}
+	
+	public static String getAllItemsListQuery()
+	{
+	return "SELECT item_id as value,item_name as text from item_details";
+	}
+	public static String getAllBoxListQuery()
+	{
+	return "SELECT box_id as value,concat(box_name,\"-\",total_wt,\"Kg\") as text from box_details";
+	}
 }

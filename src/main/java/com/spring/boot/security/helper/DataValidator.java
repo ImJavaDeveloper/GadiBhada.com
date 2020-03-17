@@ -19,6 +19,13 @@ public class DataValidator {
 		
 	}
 	
+	public static int  strinCharLen(String s)
+	{
+		char charArray[]=s.trim().toCharArray();
+		return charArray.length;
+		
+	}
+	
 	
 	public static int  checkStringLenght(String s)
 	{
@@ -28,19 +35,7 @@ public class DataValidator {
 	}
 	public static boolean  isValidMobileNumer(String s)
 	{
-		boolean isValidMobile=false;
-		
-		try {
-			int val=Integer.parseInt(s);
-			isValidMobile=true;
-			
-		}
-		catch(NumberFormatException e)
-		{
-			return isValidMobile;
-		}
-		
-		return isValidMobile;
+		return isNumber(s) && strinCharLen(s)==10;
 		
 	}
 	

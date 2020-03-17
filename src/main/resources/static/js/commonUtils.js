@@ -11,8 +11,7 @@ $(window).on('load', function() {
       if(activeTab=="#menu2")
       	callAjaxForUpdateDistribution();
       if(activeTab=="#menu3")
-      	callAjaxForFareCalcHome();
-      
+      	callAjaxForFareCalcHome();      
       if(activeTab=="#menu4")
     	  callAjaxForCollectionPage();
   }

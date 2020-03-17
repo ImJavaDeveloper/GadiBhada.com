@@ -1,39 +1,60 @@
 $(document).ready(function(){
 	
-	
-	
-	var i=1;
-     
+	var i=1;     
      $("#add_row").click(function(){
-    	 var j;
-    	 var trader = "[[${traders}]]";
-    	 
-    	 // var a=[[${traders}]] "Test";
-    	// alert(traderss[i].trader_name);
-    	// alert(traderss[i].trader_id);
+    	
     	 var traderList="";
     	 var itemList="";
     	 var boxTypesList="";
     	 
-    	 for(j=0;j<traders.length;j++){
+    	 
+    	var call1= $.ajax({
+				type : "GET",
+				url : '/management/getAllTrader',
+				success : function(data) {
+					// alert(data);
+					 result=jQuery.parseJSON(data);
+					
+					 $.each(result, function(k, v) {
+						
+					 traderList=traderList+"<option value=\""+ v.trader_id +"\">"+v.trader_name+"("+v.trader_mark+")</option>";
+				
+					 });
+					 }
+			});
+    	
+    	var call2= $.ajax({
+				type : "GET",
+				url : '/management/getAllItems',
+				success : function(data) {
+					// alert(data);
+					 result=jQuery.parseJSON(data);
+					
+					 $.each(result, function(k, v) {
     		 
     		 
-    		 traderList=traderList+"<option value=\""+ traders[j].trader_id +"\">"+traders[j].trader_name+"("+traders[j].trader_mark+")</option>";
+        	  itemList=itemList+"<option value=\""+ v.item_id +"\">"+v.item_name+"</option>";
  			
-       		}
-          for(j=0;j<items.length;j++){
-    		 
-    		 
-        	  itemList=itemList+"<option value=\""+ items[j].item_id +"\">"+items[j].item_name+"</option>";
+					 });
+				 }
+		});
+    	 var call3=$.ajax({
+				type : "GET",
+				url : '/management/getAllBoxType',
+				success : function(data) {
+					// alert(data);
+					 result=jQuery.parseJSON(data);
+					
+					 $.each(result, function(k, v) {
+ 		          	  boxTypesList=boxTypesList+"<option value=\""+ v.box_id +"\">"+v.box_name+"-"+v.total_wt+"</option>";
  			
-       		}
-          for(j=0;j<boxTypes.length;j++){
-     		 
-     		 
-        	  boxTypesList=boxTypesList+"<option value=\""+ boxTypes[j].box_id +"\">"+boxTypes[j].box_name+"-"+boxTypes[j].total_wt+"</option>";
- 			
-       		}
+					 });
+				 }
+		});
     	 //alert(list);
+     // $(document).ajaxStop(function () {
+    	 $.when(call1,call2,call3).done(function(o1, o2, o3) {
+    	
       $('#addr'+i).html("<td>"+ (i+1) +"</td>" +
       		"<td><select class='form-control' id='traders' name='traderId' required><option value=''>Select Trader</option>"+
       		traderList
@@ -49,8 +70,11 @@ $(document).ready(function(){
     		"<td><input  name='receiver' type='text' placeholder='Receiver'  class='form-control input-md' ></td>"
     		);
 
-      $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
+  $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
       i++; 
+          
+          });   
+      
   });
      $("#delete_row").click(function(){
     	 if(i>1){

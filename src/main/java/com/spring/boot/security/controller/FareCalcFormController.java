@@ -140,15 +140,15 @@ modalContent.append(
 		HttpSession session=request.getSession(false);
 		String sessionId=session.getId();
 		String createTimeStamp=FormUtils.getCurrentTimeStamp();
-		FareBook fairBook=new FareBook();
-		fairBook.setSubLotId(subLotId);
-		fairBook.setTotFare(totFare);
-		fairBook.setCreateTimeStamp(createTimeStamp);
-		fairBook.setSessionId(sessionId);
+		FareBook fareBook=new FareBook();
+		fareBook.setSubLotId(subLotId);
+		fareBook.setTotFare(totFare);
+		fareBook.setCreateTimeStamp(createTimeStamp);
+		fareBook.setSessionId(sessionId);
 		
-		FareBook saveFairBook=fareBookRespository.save(fairBook);
+		FareBook saveFareBook=fareBookRespository.save(fareBook);
 		
-		if(saveFairBook==null) {
+		if(saveFareBook==null) {
 			
 			throw new DataBaseException("Exception found while saving data into Challan Book ","management");
 		

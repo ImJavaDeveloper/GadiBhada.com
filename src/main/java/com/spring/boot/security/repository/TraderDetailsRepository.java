@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.boot.security.entity.AgentDestination;
 import com.spring.boot.security.entity.TraderDetails;
-import com.spring.boot.security.userdata.UserVO;
+import com.spring.boot.security.userdata.UserCredential;
 
 @Repository
 public interface TraderDetailsRepository extends JpaRepository<TraderDetails, Integer> {
