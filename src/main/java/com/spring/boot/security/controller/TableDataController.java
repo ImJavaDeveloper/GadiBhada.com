@@ -23,7 +23,9 @@ import com.spring.boot.security.entity.BoxDetails;
 import com.spring.boot.security.entity.ItemDetails;
 import com.spring.boot.security.entity.SourceDetails;
 import com.spring.boot.security.entity.TraderDetails;
+import com.spring.boot.security.forms.data.AgentListVO;
 import com.spring.boot.security.forms.data.BoxListVO;
+import com.spring.boot.security.forms.data.ComboListVO;
 import com.spring.boot.security.forms.data.DestinationListVO;
 import com.spring.boot.security.forms.data.ItemListVO;
 import com.spring.boot.security.forms.data.SourceListVO;
@@ -208,6 +210,52 @@ public class TableDataController {
 		});
 				
 		 String jsonStr = JSONArray.toJSONString(boxListVOs);
+		 return jsonStr;
+		
+	}
+	
+	@RequestMapping(value="/management/getAgentList")
+	@ResponseBody
+	public String getAgentList()
+	{
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+		List<AgentListVO> boxListVOs=jdbcTemplate.query(TableQuery.getAllAgentListQuery(), new RowMapper<AgentListVO>() {
+
+			@Override
+			public AgentListVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				// TODO Auto-generated method stub
+				int i=0;
+				AgentListVO agentListVO=new AgentListVO();
+				agentListVO.setValue(rs.getInt(++i));
+				agentListVO.setText(rs.getString(++i));
+				return agentListVO;
+			}
+		});
+				
+		 String jsonStr = JSONArray.toJSONString(boxListVOs);
+		 return jsonStr;
+		
+	}
+	
+	@RequestMapping(value="/management/getAgentDestList")
+	@ResponseBody
+	public String getAgentDestList()
+	{
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+		List<ComboListVO> comboListVOs=jdbcTemplate.query(TableQuery.getAllAgentDestListQuery(), new RowMapper<ComboListVO>() {
+
+			@Override
+			public ComboListVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				// TODO Auto-generated method stub
+				int i=0;
+				ComboListVO comboListVO=new ComboListVO();
+				comboListVO.setValue(rs.getInt(++i));
+				comboListVO.setText(rs.getString(++i));
+				return comboListVO;
+			}
+		});
+				
+		 String jsonStr = JSONArray.toJSONString(comboListVOs);
 		 return jsonStr;
 		
 	}

@@ -5,21 +5,19 @@ public class AllDistributionData {
 	private int challanId;
 	private String challanDate;
 	private String truckNo;
-	private int sourceId;
+	private int lotId;
 	private String sourceName;
 	private String destination;
-	private int destinationId;
-	private int senderId;
 	private String senderName;
-	private int itemId;
 	private String itemCode;
+	private int agentId;
 	private String distrubteTo;
 	private int subLotId;
 	private int agentDestinationId;
 	private String agentDestination;
 	private int totQty;
 	private String receivedDate;
-
+	
 	public int getChallanId() {
 		return challanId;
 	}
@@ -38,12 +36,6 @@ public class AllDistributionData {
 	public void setTruckNo(String truckNo) {
 		this.truckNo = truckNo;
 	}
-	public int getSourceId() {
-		return sourceId;
-	}
-	public void setSourceId(int sourceId) {
-		this.sourceId = sourceId;
-	}
 	public String getSourceName() {
 		return sourceName;
 	}
@@ -56,35 +48,23 @@ public class AllDistributionData {
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	public int getDestinationId() {
-		return destinationId;
-	}
-	public void setDestinationId(int destinationId) {
-		this.destinationId = destinationId;
-	}
-	public int getSenderId() {
-		return senderId;
-	}
-	public void setSenderId(int senderId) {
-		this.senderId = senderId;
-	}
 	public String getSenderName() {
 		return senderName;
 	}
 	public void setSenderName(String senderName) {
 		this.senderName = senderName;
 	}
-	public int getItemId() {
-		return itemId;
-	}
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
-	}
 	public String getItemCode() {
 		return itemCode;
 	}
 	public void setItemCode(String itemCode) {
 		this.itemCode = itemCode;
+	}
+	public int getAgentId() {
+		return agentId;
+	}
+	public void setAgentId(int agentId) {
+		this.agentId = agentId;
 	}
 	public String getDistrubteTo() {
 		return distrubteTo;
@@ -122,5 +102,12 @@ public class AllDistributionData {
 	public void setReceivedDate(String receivedDate) {
 		this.receivedDate = receivedDate;
 	}
+	public int getLotId() {
+		return lotId;
+	}
+	public void setLotId(int lotId) {
+		this.lotId = lotId;
+	}
 
+	
 }

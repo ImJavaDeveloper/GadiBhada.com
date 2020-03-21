@@ -69,7 +69,7 @@ function callAjaxForAllChallan() {
 				"</tr>"	
 			});
 			
-			$('#tableBody').html(tableBody);
+			$('#allChallnTableBody').html(tableBody);
 			//loadjs("/js/dataTable.js");
 			$('#allChallanTable').DataTable();
 			waitingDialog.hide();

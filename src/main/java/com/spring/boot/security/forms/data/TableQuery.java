@@ -102,4 +102,30 @@ public class TableQuery {
 	{
 	return "SELECT box_id as value,concat(box_name,\"-\",total_wt,\"Kg\") as text from box_details";
 	}
+	
+	public static String getAllAgentListQuery()
+	{
+	return "SELECT agent_id as value,concat(agent_name,\"-\",agent_mark) as text from agent_details";
+	}
+	
+	public static String getAllAgentDestListQuery()
+	{
+	return "SELECT agent_destination_id as value,agent_destination_name as text from agent_destination";
+	}
+	
+	public static String getAllDistributionDataQuery()
+	{
+		return "select cBook.challan_id,cBook.challan_date,cBook.truck_no,lotBook.lot_id,source.source_name,destination.destination,trader.trader_name,concat(\r\n" + 
+				"item.item_name,\"-\",box.box_name,\"-\",box.total_wt) as item_code,agent.agent_id,agent.agent_name,subLotBook.sub_lot_id,aDest.agent_destination_id,aDest.agent_destination_name,subLotBook.total_qty,subLotBook.receiving_date\r\n" + 
+				"from challan_book cBook \r\n" + 
+				"inner join lot_book lotBook on lotBook.challan_id=cBook.challan_id\r\n" + 
+				"inner join sub_lot_book subLotBook on subLotBook.lot_id=lotBook.lot_id\r\n" + 
+				"inner join trader_details trader on trader.trader_id=lotBook.trader_id\r\n" + 
+				"inner join destination_details destination on cBook.destination_id=destination.destination_id\r\n" + 
+				"inner join source_details source on  source.source_id=cBook.source_id\r\n" + 
+				"inner join item_details item on item.item_id=lotBook.item_id\r\n" + 
+				"inner join box_details box on box.box_id=lotBook.box_id\r\n" + 
+				"inner join agent_details agent on agent.agent_id=subLotBook.agent_id\r\n" + 
+				"inner join agent_destination aDest on aDest.agent_destination_id=subLotBook.agent_destination_id";
+	}
 }

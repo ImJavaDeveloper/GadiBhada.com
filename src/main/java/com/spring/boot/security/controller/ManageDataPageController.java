@@ -18,10 +18,12 @@ import com.spring.boot.security.entity.LotBook;
 import com.spring.boot.security.entity.SourceDetails;
 import com.spring.boot.security.entity.UserDetails;
 import com.spring.boot.security.forms.data.AllChallanData;
+import com.spring.boot.security.forms.data.AllDistributionData;
 import com.spring.boot.security.forms.data.LotBooksByChallanIdVO;
 import com.spring.boot.security.forms.data.TableQuery;
 import com.spring.boot.security.helper.DataHelper;
 import com.spring.boot.security.mapper.AllChallanDataMapper;
+import com.spring.boot.security.mapper.AllDistributionDataMapper;
 import com.spring.boot.security.mapper.LotBooksByChallanIdMapper;
 import com.spring.boot.security.repository.ChallanBookRepository;
 import com.spring.boot.security.repository.LotBookRepository;
@@ -82,12 +84,12 @@ public class ManageDataPageController {
 	
 	@RequestMapping(value="/managedata/alldistribution",method=RequestMethod.POST)
 	@ResponseBody
-	public String allDistributionData(@RequestParam int challanId)
+	public String allDistributionData()
 	{
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
-		List<LotBooksByChallanIdVO> lotBooksByChallanIdVO=jdbcTemplate.query(TableQuery.getLotBooksByChallanIdQuery(challanId), new LotBooksByChallanIdMapper());	
-		 String lotBooksJsonArray = JSONArray.toJSONString(lotBooksByChallanIdVO);		
-		 return lotBooksJsonArray;
+		List<AllDistributionData> allDistributionData=jdbcTemplate.query(TableQuery.getAllDistributionDataQuery(), new AllDistributionDataMapper());	
+		 String allDistribzutionDataArray = JSONArray.toJSONString(allDistributionData);		
+		 return allDistribzutionDataArray;
 		
 	}
 	
