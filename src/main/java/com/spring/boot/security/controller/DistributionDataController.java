@@ -178,7 +178,7 @@ public class DistributionDataController {
 
 						
 						+"<td><label for=\"challandId\">"+updateModalVO.getChallanId()+"</label></td>"
-						+"<td><label for=\"challnDate\">"+challanDate+"</label></td>"
+						+"<td id=\"modalChallnDate\"><label for=\"challnDate\">"+challanDate+"</label></td>"
 						+"<td><label for=\"lotId\">"+updateModalVO.getLotId()+"</label></td>"
 						+"<td><label for=\"truckNo\">"+truckNo+"</label></td>"
 						+"<td><label for=\"FromWhere\">"+sourceName+"-"+destination+"</label></td>"
@@ -215,22 +215,19 @@ public class DistributionDataController {
 
 						+"<tbody>"
 						+"<tr>"
-						+"<td><select class=\"form-control\" id=\"agentId\" name=\"agentId\" required >"
+						+"<td onchange=\"fetchAgentDestination()\"><select class=\"form-control\" id=\"agentId\" name=\"agentId\" required >"
 						+"<option value=\"\">Agent</option>"
 				);
 
 		for(AgentDetails traderAgent:traderAgents)
 			updatemodalForm.append("<option value=\""+traderAgent.getAgentId()+"\">"+traderAgent.getAgentName()+"("+traderAgent.getAgentMark()+")</option>");
 
-		updatemodalForm.append("</select></td>"
-				+"<td><select class=\"form-control\" id=\"agentDestination\" name=\"agentDestination\" required >"
-				+"<option value=\"\">Destination</option>");
-
-		for(AgentDestination agentDestination:agentDestinations)
-			updatemodalForm.append("<option value=\""+agentDestination.getAgentDestinationId()+"\">"+agentDestination.getAgentDestinationName()+"</option>");
+		
 		updatemodalForm.append( " </select></td> "
+				+"<td id=\"agentDestination\"></td>"
 				+"<td><input type=\"text\" name=\"totQtyDistributed\" placeholder='Distribute Qty' class=\"form-control\" required></td>"
 				+"<td> <input type=\"date\" id=\"receivingDate\" name=\"receivingDate\" class=\"form-control\" required></td>"
+				+" <input type=\"hidden\" id=\"aDestId\" name=\"aDestId\">"
 				+"</tr>"
 
 						 +"</tbody>"
@@ -250,7 +247,7 @@ public class DistributionDataController {
 	@ResponseBody
 	public String saveUpdateModalData(@RequestParam int modalLotId,@RequestParam int modalTotQty,
 			@RequestParam int modalqtyAvl,@RequestParam(required = false) String modalReciever,@RequestParam int agentId
-			,@RequestParam int agentDestination,@RequestParam int totQtyDistributed, @RequestParam Date receivingDate ,HttpServletRequest request ) throws DataBaseException {
+			,@RequestParam int aDestId,@RequestParam int totQtyDistributed, @RequestParam Date receivingDate ,HttpServletRequest request ) throws DataBaseException {
 
 		HttpSession session=request.getSession(false);
 		String sessionId=session.getId();

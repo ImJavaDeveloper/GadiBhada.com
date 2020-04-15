@@ -26,6 +26,15 @@ $("#addTrader").on("click", function() {
 $("#addAgent").on("click", function() {
 
 	$('#panelBody').load('/formcontent/addAgent.html')
+	$.ajax({
+		type : "GET",
+		url : '/management/getAllDestination',
+		success : function(data) {
+			// alert(data);
+			Dest.buildDestDropdown(jQuery.parseJSON(data),
+					$('#agentdestination'), 'Select an option');
+		}
+	});
 
 });
 
@@ -214,7 +223,8 @@ function saveTrader() {
 function saveAgent() {
 	var agentName = jQuery('input[name="agentName"]').val()
 	var agentMark = jQuery('input[name="agentMark"]').val()
-	var agentAdd = jQuery('input[name="agentAdd"]').val()
+	//var agentAdd = $("#agentdestination").val().text()
+	var agentAdd=$("#agentdestination option:selected").text();
 	var agentMob = jQuery('input[name="agentMob"]').val()
 
 	if (agentName.trim().length == 0) {
@@ -228,9 +238,11 @@ function saveAgent() {
 		$('#agentmodelcontent').html("  Error!! Enter Agent Mark ");
 		return;
 	}
+	
+	
 	if (agentAdd.trim().length == 0) {
 		$("#agentModal").modal('show');
-		$('#agentmodelcontent').html("  Error!! Enter Agent Address ");
+		$("#agentmodelcontent").html("  Error!! Select Source ");
 		return;
 	}
 	if (agentMob.trim().length == 0) {
@@ -238,7 +250,7 @@ function saveAgent() {
 		$('#agentmodelcontent').html("  Error!! Enter Agent Mobile ");
 		return;
 	}
-
+	
 	$.ajax({
 		type : "GET",
 		url : "/management/addnew/saveagent",

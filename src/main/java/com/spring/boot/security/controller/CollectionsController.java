@@ -43,7 +43,13 @@ public class CollectionsController {
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
 		List<CollectionFareVO> collectionFareVOList=jdbcTemplate.query(TableQuery.getCollectionDataQuery(), new CollectionsDataMapper());
 		
-		StringBuilder htmlHeader=new StringBuilder(" <h3>Fare Collection</h3>\r\n" + 
+		StringBuilder htmlHeader=new StringBuilder(
+				"<style>"+
+						"table thead tr th {font-size: 11px;}"+
+						"table tfoot tr th {font-size: 11px;}"+
+						"table tbody tr td { font-size: 12px;}"+
+						"</style>"+
+				" <h3>Fare Collection</h3>\r\n" + 
 				"<table id=\"collectionTable\" class=\"table table-striped table-bordered\" style=\"width: 100%;background-color: #E2E2E2\">\r\n" + 
 				"	<thead>\r\n" + 
 				"		<tr>\r\n" + 
@@ -52,9 +58,12 @@ public class CollectionsController {
 				"			<th>Item Code</th>\r\n" + 
 				"			<th>Agent Name</th>\r\n" + 
 				"			<th>Delivered To</th>\r\n" + 
-				"			<th>Total Qty</th>\r\n" + 
+				"			<th>Qty</th>\r\n" + 
 				"			<th>Total Fare</th>\r\n" + 
-				"			<th>Total Balance</th>\r\n" + 
+				"			<th>Extra Fare</th>\r\n" + 
+				"			<th>Total Payment</th>\r\n" + 
+				"			<th>Total Debit</th>\r\n" + 
+				"			<th>Balance</th>\r\n" + 
 				"            <th>Action</th>\r\n" + 
 				"		</tr>\r\n" + 
 				"	</thead>\r\n" + 
@@ -73,6 +82,9 @@ public class CollectionsController {
 							"                <td>"+collectionFareVO.getAgentDestName()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotQty()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotFare()+"</td>\r\n" +
+							"                <td>"+collectionFareVO.getExtraFare()+"</td>\r\n" +
+							"                <td>"+collectionFareVO.getTotPymt()+"</td>\r\n" +
+							"                <td>"+collectionFareVO.getTotDebit()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotBal()+"</td>\r\n" + 
 							"                <td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#collectionsModal\" onclick=\"loadCollectionsModal("+collectionFareVO.getSubLotId()+")\">Collect</button></td>"+
 					"            </tr>\r\n" );
@@ -85,9 +97,12 @@ public class CollectionsController {
 				"			<th>Item Code</th>\r\n" + 
 				"			<th>Agent Name</th>\r\n" + 
 				"			<th>Delivered To</th>\r\n" + 
-				"			<th>Total Qty</th>\r\n" + 
+				"			<th>Qty</th>\r\n" + 
 				"			<th>Total Fare</th>\r\n" + 
-				"			<th>Total Balance</th>\r\n" + 
+				"			<th>Extra Fare</th>\r\n" + 
+				"			<th>Total Payment</th>\r\n" + 
+				"			<th>Total Debit</th>\r\n" + 
+				"			<th>Balance</th>\r\n" + 
 				"            <th>Action</th>\r\n" + 
 				"		</tr>\r\n" +
 				"        </tfoot>\r\n" + 
@@ -142,8 +157,10 @@ public class CollectionsController {
 						+"			<th>Item Code</th>\r\n"  
 						+"			<th>Agent Name</th>\r\n"  
 						+"			<th>Delivered To</th>\r\n"  
-						+"			<th>Total Qty</th>\r\n"  
+						+"			<th>Qty</th>\r\n"  
 						+"			<th>Total Fare</th>\r\n"  
+						+"			<th>Extra Fare</th>\r\n" 
+						+"			<th>Total Bal</th>\r\n" 
 						+"		</tr>\r\n" 
 						+"	</thead>\r\n" 
 						+"<tbody>"
@@ -158,7 +175,10 @@ public class CollectionsController {
 				+"<td><label for=\"deliveryLoc\">"+collectionVO.getAgentDestName()+"</td>"
 				+"<td><label for=\"totQty\">"+collectionVO.getTotQty()+"</label></td>"
 				+"<td><label for=\"totFare\">"+collectionVO.getTotFare()+"</label></td>"
-				+ "<input type=\"hidden\" name=\"totFare\" value=\""+collectionVO.getTotFare()+"\">"
+				+"<td><label for=\"totFare\">"+collectionVO.getExtraFare()+"</label></td>"
+				+"<td><label for=\"totFare\">"+collectionVO.getTotBal()+"</label></td>"
+				
+				+ "<input type=\"hidden\" name=\"totPayable\" value=\""+collectionVO.getTotBal()+"\">"
 				+"</tr>"
 				+"</tbody>"
 				+"</table>"
@@ -170,8 +190,9 @@ public class CollectionsController {
 
 						+"<thead style=\"background-color: #E2E2E2\">"
 						+"<tr>"
-						+"<td><label for=\"totFare\">Payment Amount</label></td>"
-						+"<td><label for=\"extraFare\">Extra Fare</label></td>"
+						+"<td><label for=\"extraFareAmt\">Tot Payment</label></td>"
+						+"<td><label for=\"extraFareAmt\">Tot Debit</label></td>"
+						+"<td><label for=\"totaPymt\">Payable Amt</label></td>"
 						+"<td><label for=\"totDebit\">Total Debit</label></td>"
 						+"<td><label for=\"pymtDt\">Payment Date</label></td>"
 						+ "</tr>"
@@ -180,8 +201,9 @@ public class CollectionsController {
 						+"<tbody>"
 						+"<tr>"
 
+                        +"<td><label for=\"totFare\">"+collectionVO.getTotPymt()+"</label></td>"
+                        +"<td><label for=\"totFare\">"+collectionVO.getTotDebit()+"</label></td>"
 						+ "<td><input type=\"text\" name=\"totalPymt\" placeholder='Payment Amount(Rs)' class=\"form-control\" required  ></td>"
-						+"<td><input type=\"text\" name=\"extraFare\" placeholder='Extra Fare' class=\"form-control\" required></td>"
 						+"<td><input type=\"text\" name=\"totalDebit\" placeholder='Total Debit' class=\"form-control\" required></td>"
 						+"<td> <input type=\"date\" id=\"paymentDate\" name=\"paymentDate\" class=\"form-control\" required></td>"
 						+"</tr>"
@@ -202,14 +224,12 @@ public class CollectionsController {
 
 	@RequestMapping(value="/management/savecollection" ,method=RequestMethod.GET)
 	@ResponseBody
-	public String saveCollection(@RequestParam Integer subLotId,@RequestParam Integer fareIdC,@RequestParam String totalPymt,@RequestParam(required=false) String extraFare
+	public String saveCollection(@RequestParam Integer subLotId,@RequestParam Integer fareIdC,@RequestParam String totalPymt
 			,@RequestParam(required=false) String totalDebit,@RequestParam Date paymentDate) throws DataBaseException {
 
 		String message=null; 
 		if(totalPymt!=null && !DataValidator.isNumber(totalPymt))
 			return "Please Enter Correct Payment";
-		if(totalDebit.trim().length()>0 && !DataValidator.isNumber(extraFare))
-			return "Please Enter Correct Extra Fare";
 		if(totalDebit.trim().length()>0 && !DataValidator.isNumber(totalDebit))
 			return "Please Enter Correct Total Debit";
 		else
@@ -218,7 +238,6 @@ public class CollectionsController {
 			fareCollection.setFareId(fareIdC);
 			fareCollection.setSubLotId(subLotId);
 			fareCollection.setTotPayment(FormUtils.getDouble(totalPymt));
-			fareCollection.setExtraFare(FormUtils.getDouble(extraFare));
 			fareCollection.setDebitAmt(FormUtils.getDouble(totalDebit));
 			fareCollection.setPymtDt(paymentDate);
 			FareCollection savedFareCollection=fareCollectionData.saveFareCollectionData(fareCollection);

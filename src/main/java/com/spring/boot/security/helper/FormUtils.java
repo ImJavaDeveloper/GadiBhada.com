@@ -7,7 +7,7 @@ public class FormUtils {
 	public static String nullToEmpty(String s)
 	{
 		
-		if(s==null)
+		if(s==null || s.trim().length()==0)
 			return "";
 		else return s;
 		

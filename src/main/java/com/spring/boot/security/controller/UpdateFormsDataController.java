@@ -179,7 +179,7 @@ public class UpdateFormsDataController {
 			
 			
 			
-			Integer total_qty=subLotBookRepository.getTotalQtyForLotId(pk);
+			Integer total_qty=subLotBookRepository.getSumOfTotalQtyForLotId(pk);
 			
 			if(total_qty !=null && total_qty>Integer.parseInt(value))
 			{
@@ -190,6 +190,11 @@ public class UpdateFormsDataController {
 						+ " from fare_book where sub_lot_id in(select sub_lot_id "
 						+ "from sub_lot_book where lot_id="+pk+"))";
 				
+				String deleteSubLotFromDebitBook="delete from fare_debit where collection_id in(select collection_id from fare_collection where fare_id in(select fare_id "
+						+ " from fare_book where sub_lot_id in(select sub_lot_id "
+						+ "from sub_lot_book where lot_id="+pk+")))";
+				
+				int noOfRowsDeleted4=deleteTableRecords(deleteSubLotFromDebitBook);
 				int noOfRowsDeleted3=deleteTableRecords(deleteSubLotFromCollectionBook);
 				int noOfRowsDeleted2=deleteTableRecords(deleteSubLotFromFareBook);
 				int noOfRowsDeleted1=deleteTableRecords(deleteSubLotFromLotBook);
@@ -212,10 +217,112 @@ public class UpdateFormsDataController {
 		
 	}
 	
+	@RequestMapping(value="/managedata/updateSubLotReceiver",method=RequestMethod.POST)
+	@ResponseBody
+	public int updateSubLotReceiver(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
+	{
+			int noOfRowsUpdated=updateTable2(TableConstant.SUB_LOT_BOOK_TABLE,name,value,TableConstant.SUB_LOT_BOOK_PK_Column,pk);			
+			
+			String deleteRecordsFromFareBook="delete from "+TableConstant.FARE_BOOK_TABLE+" where sub_lot_id="+pk;
+			String deleteRecordsFromCollection="delete from "+TableConstant.COLLECTION_BOOK_TABLE+" where sub_lot_id="+pk;
+			
+			String deleteRecordsFromDebit="delete from "+TableConstant.FARE_DEBIT_TABLE+" where collection_id in(select collection_id from "+TableConstant.COLLECTION_BOOK_TABLE+" where sub_lot_id="+pk+")";
+			
+			int noOfRowsDeleted4=deleteTableRecords(deleteRecordsFromDebit);
+			int noOfRowsDeleted3=deleteTableRecords(deleteRecordsFromCollection);
+			int noOfRowsDeleted2=deleteTableRecords(deleteRecordsFromFareBook);
+			
+			return noOfRowsUpdated;
+		
+	}
+	
+	@RequestMapping(value="/managedata/updateSubLotQty",method=RequestMethod.POST)
+	@ResponseBody
+	public int updateSubLotQty(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
+	{
+		int noOfRowsUpdated=0;
+		Integer qty=subLotBookRepository.extractTotalQtyValForLotId(pk);
+			if(qty<Integer.parseInt(value))	
+				throw new CustomGenericException("Exception !! Updated Value Is Greater Than Actual\n Need to update Tot Qty less than actual associated with same Lot");
+			else
+		         noOfRowsUpdated=updateTable2(TableConstant.SUB_LOT_BOOK_TABLE,name,value,TableConstant.SUB_LOT_BOOK_PK_Column,pk);			
+			if(noOfRowsUpdated==0)
+				throw new CustomGenericException("Exception !! Value Is Not Updated\n");
+			
+			return noOfRowsUpdated;
+		
+	}
+	
+	@RequestMapping(value="/managedata/updateSubLotRecievedDate",method=RequestMethod.POST)
+	@ResponseBody
+	public int updateSubLotRecievedDate(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
+	{
+		int noOfRowsUpdated=0;
+			if(!DataHelper.isValidDateFormat(value, "dd/MM/yyyy"))
+		           throw new Exception("Date format is not correct !!");
+			
+			String challanDtSql="select challan_date from challan_book where challan_id ="
+					+ "(select distinct challan_id from lot_book where lot_id="
+							+ "(select distinct lot_id from sub_lot_book where sub_lot_id="+pk+"))";
+			String existinChallanDt=fetchSingleColumnVal(challanDtSql);
+			
+			long noOfDays= DataHelper.noOfDaysBetweenTwoDate(value,DataHelper.formatDate(existinChallanDt, "yyyy-MM-dd", "dd/MM/yyyy"),"dd/MM/yyy");
+			System.out.println("noOfDays:"+noOfDays);
+			if(noOfDays<0 )
+				throw new Exception("Date entered is past than challan date !!");
+			value=DataHelper.formatDate(value, "dd/MM/yyyy", "yyyy-MM-dd");
+			noOfRowsUpdated=updateTable2(TableConstant.SUB_LOT_BOOK_TABLE,name,value,TableConstant.SUB_LOT_BOOK_PK_Column,pk);	
+			
+			if(noOfRowsUpdated==0)
+				throw new CustomGenericException("Exception !! Value Is Not Updated\n");
+			
+			return noOfRowsUpdated;
+		
+	}
+	
+	
+	@RequestMapping(value="/managedata/updateFarePerBox",method=RequestMethod.POST)
+	@ResponseBody
+	public int updateFarePerBox(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
+	{
+			int noOfRowsUpdated=updateTable(TableConstant.FARE_BOOK_TABLE,name,value,TableConstant.SUB_LOT_BOOK_PK_Column,pk);			
+			
+			return noOfRowsUpdated;
+		
+	}
+	
+	@RequestMapping(value="/managedata/updateFareBookTotFare",method=RequestMethod.POST)
+	@ResponseBody
+	public int updateFareBookTotFare(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
+	{
+			int noOfRowsUpdated=updateTable(TableConstant.FARE_BOOK_TABLE,name,value,TableConstant.SUB_LOT_BOOK_PK_Column,pk);			
+			
+			return noOfRowsUpdated;
+		
+	}
+	
+	@RequestMapping(value="/managedata/updateFareExtraFare",method=RequestMethod.POST)
+	@ResponseBody
+	public int updateFareCollExtraFare(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
+	{
+			int noOfRowsUpdated=updateTable(TableConstant.FARE_BOOK_TABLE,name,value,TableConstant.SUB_LOT_BOOK_PK_Column,pk);			
+			
+			return noOfRowsUpdated;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	public int updateTable(String table,String columnName,String value,String primaryKey,int primaryKeyVal)
 	{
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
 		String sql="update "+table+" set "+columnName+"="+value+" where "+primaryKey+"="+primaryKeyVal;
+		System.out.println(sql);
 		return jdbcTemplate.update(sql);
 	}
 	
@@ -224,6 +331,13 @@ public class UpdateFormsDataController {
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
 		String sql="update "+table+" set "+columnName+"='"+value+"' where "+primaryKey+"="+primaryKeyVal;
 		return jdbcTemplate.update(sql);
+	}
+	
+	public String fetchSingleColumnVal(String sql)
+	{
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+		String result=jdbcTemplate.queryForObject(sql, String.class);
+		return result;
 	}
 	
 	public int deleteTableRecords(String sql)

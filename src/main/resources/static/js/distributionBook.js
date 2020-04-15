@@ -1,37 +1,4 @@
-$(document).ready(function() {
-  
-});
 
-function warning()
-{
-alert("Warining !! Changing source will delete the fare book as well as collection book for all lot distributed for this challan\n"+"You have to re-enter fare and collection data under data entry section manullay ");
-return;
-}
-
-function warningForItemChange()
-{
-	alert("Warining !! Changing Item will delete the fare book as well as collection book for all lot distributed for this lot\n"+"You have to re-enter fare and collection data under data entry section manullay ");
-
-}
-
-function warningForBoxChange()
-{
-	alert("Warining !! Changing Box will delete the fare book as well as collection book for all lot distributed for this lot\n"+"You have to re-enter fare and collection data under data entry section manullay ");
-
-}
-
-function warningForQtyChange()
-{
-	alert("Warining !! Changing Qty less than earlier will delete the distribution book,fare book as well as collection book for all lot distributed for this lot\n"+"You have to re-enter fare and collection data under data entry section manullay ");
-
-}
-
-
-function reloadPageChallan(){
-
-	 callAjaxForAllChallan();
-	 
-}
 //Calling Ajax to load the updated distribution page dynamically
 $("#distributionBook").on("click", function() {
 
@@ -66,15 +33,15 @@ function callAjaxForAllDistribution() {
 				
 				tableBody=tableBody+"<tr>"+
 				"<td>"+v.challanId+"</td>"+
-				"<td>"+v.challanDate+"</td>"+
+				"<td id=\"lotChallanDt"+v.subLotId+"\">"+v.challanDate+"</td>"+
 				"<td>"+v.truckNo+"</td>"+
 				"<td>"+v.sourceName+"-"+v.destination+"</td>"+
 				"<td>"+v.senderName+"</td>"+
 				"<td>"+v.lotId+"</td>"+
 				"<td>"+v.itemCode+"</td>"+
-				"<td><a href=\"#\" id=\"subLotreceiver"+v.subLotId+"\" data-type=\"select\" data-placement=\"right\" >"+v.distrubteTo+"</a></td>"+
 				"<td>"+v.subLotId+"</td>"+
-				"<td><a href=\"#\" id=\"subLotAgentDest"+v.subLotId+"\" data-type=\"select\" data-placement=\"right\" >"+v.agentDestination+"</a></td>"+
+				"<td><a href=\"#\" id=\"subLotreceiver"+v.subLotId+"\" data-type=\"select\" data-placement=\"right\" >"+v.distrubteTo+"-"+v.agentMark+"</a></td>"+
+				"<td><a href=\"#\" id=\"subLotAgentDest"+v.subLotId+"\" data-type=\"text\" data-placement=\"right\" >"+v.agentDestination+"</a></td>"+
 				"<td><a href=\"#\" id=\"subLotTotQty"+v.subLotId+"\" data-type=\"text\" data-placement=\"right\" data-pk=\""+v.subLotId+"\" data-name=\"total_qty\">"+v.totQty+"</a></td>"+
 				"<td><a href=\"#\" id=\"subLotReceivedeDt"+v.subLotId+"\" data-type=\"text\" data-placement=\"right\" data-pk=\""+v.subLotId+"\" data-name=\"receiving_date\">"+v.receivedDate+"</a></td>"+
 				"</tr>"	
@@ -83,10 +50,10 @@ function callAjaxForAllDistribution() {
 			
 			 $('#tableBodyDistribution').html(tableBody);
 				
-				$('#allDistributionTable').DataTable();
+				
 				
 			$.fn.editable.defaults.mode = 'popup'; 
-			console.log("subLOtArrayLenght:"+subLotIdArray.length)
+			
 			for(i=0;i<subLotIdArray.length;i++)
 			{
 			
@@ -97,49 +64,61 @@ function callAjaxForAllDistribution() {
 		        value: agentIdArray[i],
 		        source: '/management/getAgentList'
 		        ,pk: subLotIdArray[i] 
-		        ,url: '/gadibhada/managedata/updateAgent'
+		        ,url: '/gadibhada/managedata/updateSubLotReceiver'
 		        ,name:'agent_id'
 		       
 		    });
+            $('#subLotreceiver'+subLotIdArray[i]).on('save', function(e, params) {
+            	 var id=$(this).attr('id');	
+            	 
+            	 $.ajax({
+            			type : "GET",
+            			url : "/management/getAgentAddr",
+            			data : {
+            				"agentId" : params.newValue
+            			},
+            			success : function(data) {
+            				var subLot=id.substring(14);
+            				//alert(subLot)
+            	            $('#subLotAgentDest'+subLot).text(data)
+            	            //$('#aDestId').val(agentId)
+            	      
+            			}
+            	});
+			});
 			
 			}
-			for(i=0;i<subLotIdArray.length;i++)
-			{
-			$('#subLotAgentDest'+subLotIdArray[i]).editable({
-		        type: 'select',
-		        title: 'Delivery Location ',
-		        placement: 'right',
-		        value: agentDestIdArray[i],
-		        source: '/management/getAgentDestList'
-		        ,pk: subLotIdArray[i] 
-		        ,url: '/gadibhada/managedata/updateAgentDestination'
-		        ,name:'agent_destination_id'
-		       
-		    });
-			}
+			
+		
 			for(i=0;i<subLotIdArray.length;i++)
 			{
 			$('#subLotTotQty'+subLotIdArray[i]).editable(	   
 	        		   {
-	                	  //url:'/gadibhada/managedata/updateChallanDate'
+	        			   
+	        			   url:'/gadibhada/managedata/updateSubLotQty'
+	        			  /* validate: function() {
+	        	               var id=$(this).attr('id');	
+	        				   var subLot=id.substring(14);
+	        				  
+				        	    if($.trim(subLot) != '') {
+				        	    	 alert(subLot)
+			        				   alert($('#lotChallanDt'+subLot).val())
+				        	    }
+				        	}*/
 	                   });
+			
 			
 			}
 			for(i=0;i<subLotIdArray.length;i++)
 			{
 			$('#subLotReceivedeDt'+subLotIdArray[i]).editable(	   
 	        		   {
-	                	  //url:'/gadibhada/managedata/updateChallanDate'
+	                	  url:'/gadibhada/managedata/updateSubLotRecievedDate'
 	                   });
 			
 			}
-			
-			
-			
-			
-           
-			
-			
+					
+			$('#allDistributionTable').DataTable();
 			waitingDialog.hide();
 
 		},

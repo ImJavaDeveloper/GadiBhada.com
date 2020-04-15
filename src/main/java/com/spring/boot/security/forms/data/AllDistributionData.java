@@ -12,6 +12,7 @@ public class AllDistributionData {
 	private String itemCode;
 	private int agentId;
 	private String distrubteTo;
+	private String agentMark;
 	private int subLotId;
 	private int agentDestinationId;
 	private String agentDestination;
@@ -107,6 +108,12 @@ public class AllDistributionData {
 	}
 	public void setLotId(int lotId) {
 		this.lotId = lotId;
+	}
+	public String getAgentMark() {
+		return agentMark;
+	}
+	public void setAgentMark(String agentMark) {
+		this.agentMark = agentMark;
 	}
 
 	

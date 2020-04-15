@@ -31,6 +31,7 @@ public class AllDistributionDataMapper implements RowMapper<AllDistributionData>
 		allDistributionData.setItemCode(rs.getString(++i));
 		allDistributionData.setAgentId(rs.getInt(++i));
 		allDistributionData.setDistrubteTo(rs.getString(++i));
+		allDistributionData.setAgentMark(rs.getString(++i));
 		allDistributionData.setSubLotId(rs.getInt(++i));
 		allDistributionData.setAgentDestinationId(rs.getInt(++i));
 		allDistributionData.setAgentDestination(rs.getString(++i));

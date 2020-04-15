@@ -49,16 +49,16 @@ public class TableQuery {
 				+ "inner join item_details item on item.item_id=lotBook.item_id " 
 				+ "inner join source_details source on source.source_id=cBook.source_id " 
 				+ "inner join agent_details agent on agent.agent_id=subLotBook.agent_id " 
-				+ "left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id"
-				+ " left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null";
+				+ "left join fare_rule fareRule on cBook.source_id=fareRule.source_id and  fareRule.agent_destination_id=subLotBook.agent_destination_id and fareRule.box_id=lotBook.box_id and fareRule.item_id=lotBook.item_id "
+				+ "left join fare_book fareBook on fareBook.sub_lot_id =subLotBook.sub_lot_id where fareBook.sub_lot_id is null";
 	}
 	
 	public static String getCollectionDataQuery()
 	{
-		return "select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare ,(fareBook.total_fare+(case when fareBal.totextra is null then 0 else fareBal.totextra end)-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt\r\n" + 
+		return "select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,subLotBook.receiving_date,item.item_name,box.box_name,box.total_wt,subLotBook.total_qty,agent.agent_name,agent.agent_mark,agentDest.agent_destination_name,fareBook.total_fare,fareBook.extra_fare ,fareBal.totPymt,fareBal.totDebit,(fareBook.total_fare+fareBook.extra_fare-(case when fareBal.totPymt is null then 0 else fareBal.totPymt end) -( case when fareBal.totDebit is null then 0 else fareBal.totDebit end)) as totalBalAmt\r\n" + 
 				"FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id \r\n" + 
 				"left join\r\n" + 
-				"(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit,sum(fareCollection.extra_fare) as totextra from fare_collection fareCollection   group by 1 order by 1) fareBal\r\n" + 
+				"(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit from fare_collection fareCollection   group by 1 order by 1) fareBal\r\n" + 
 				"on fareBal.sub_lot_id=fareBook.sub_lot_id) collections\r\n" + 
 				"where collections.totalBalAmt !=0";
 	}
@@ -116,7 +116,7 @@ public class TableQuery {
 	public static String getAllDistributionDataQuery()
 	{
 		return "select cBook.challan_id,cBook.challan_date,cBook.truck_no,lotBook.lot_id,source.source_name,destination.destination,trader.trader_name,concat(\r\n" + 
-				"item.item_name,\"-\",box.box_name,\"-\",box.total_wt) as item_code,agent.agent_id,agent.agent_name,subLotBook.sub_lot_id,aDest.agent_destination_id,aDest.agent_destination_name,subLotBook.total_qty,subLotBook.receiving_date\r\n" + 
+				"item.item_name,\"-\",box.box_name,\"-\",box.total_wt) as item_code,agent.agent_id,agent.agent_name,agent.agent_mark,subLotBook.sub_lot_id,aDest.agent_destination_id,aDest.agent_destination_name,subLotBook.total_qty,subLotBook.receiving_date\r\n" + 
 				"from challan_book cBook \r\n" + 
 				"inner join lot_book lotBook on lotBook.challan_id=cBook.challan_id\r\n" + 
 				"inner join sub_lot_book subLotBook on subLotBook.lot_id=lotBook.lot_id\r\n" + 
@@ -128,4 +128,63 @@ public class TableQuery {
 				"inner join agent_details agent on agent.agent_id=subLotBook.agent_id\r\n" + 
 				"inner join agent_destination aDest on aDest.agent_destination_id=subLotBook.agent_destination_id";
 	}
+	
+	public static String getAllFareBookQuery()
+	{
+		return "select cBook.challan_id,cBook.truck_no,lotBook.lot_id,concat(source.source_name,\"-\",destination.destination)\r\n" + 
+				"as FromeToWhere,concat(item.item_name,\"-\",box.box_name,\"-\",box.total_wt) as item_code,\r\n" + 
+				"subLotBook.sub_lot_id,agent.agent_id,concat(agent.agent_name,\"(\",agent.agent_mark,\")\") as agent\r\n" + 
+				",aDest.agent_destination_id,aDest.agent_destination_name,subLotBook.receiving_date,subLotBook.total_qty,fareBook.fare_per_box as farePerBox,\r\n" + 
+				"fareBook.total_fare,fareBook.extra_fare\r\n" + 
+				"from challan_book cBook\r\n" + 
+				"inner join lot_book lotBook on lotBook.challan_id=cBook.challan_id\r\n" + 
+				"inner join sub_lot_book subLotBook on subLotBook.lot_id=lotBook.lot_id\r\n" + 
+				"inner join trader_details trader on trader.trader_id=lotBook.trader_id\r\n" + 
+				"inner join destination_details destination on cBook.destination_id=destination.destination_id\r\n" + 
+				"inner join source_details source on  source.source_id=cBook.source_id\r\n" + 
+				"inner join item_details item on item.item_id=lotBook.item_id\r\n" + 
+				"inner join box_details box on box.box_id=lotBook.box_id\r\n" + 
+				"inner join agent_details agent on agent.agent_id=subLotBook.agent_id\r\n" + 
+				"inner join agent_destination aDest on aDest.agent_destination_id=subLotBook.agent_destination_id\r\n" + 
+				"inner join fare_book fareBook on fareBook.sub_lot_id=subLotBook.sub_lot_id\r\n" + 
+				"order by cBook.challan_id,subLotBook.lot_id desc";
+	}
+	
+	public static String getCollectionBookDataQuery()
+	{
+		return "select * from (SELECT fareBook.fare_id,fareBook.sub_lot_id,cBook.truck_no,concat(item.item_name,\"-\",box.box_name,\"-\",box.total_wt) as item_code,concat(agent.agent_name,\"-\",agent.agent_mark) as agent_name,agentDest.agent_destination_name as adest_name,"+
+				"subLotBook.receiving_date,subLotBook.total_qty,fareBook.fare_per_box,fareBook.total_fare,case when fareBook.extra_fare is null then 0 else fareBook.extra_fare end as extra_fare ,(fareBook.total_fare+(case when fareBook.extra_fare is null then 0 else fareBook.extra_fare end)) as tot_fare,fareBal.totPymt,"+
+				"fareBal.totDebit,(fareBook.total_fare+(case when fareBook.extra_fare is null then 0 else fareBook.extra_fare end )-fareBal.totPymt-fareBal.totDebit ) as totalBalAmt\r\n" + 
+				"FROM fare_book fareBook inner join  sub_lot_book subLotBook on fareBook.sub_lot_id=subLotBook.sub_lot_id inner join lot_book lotBook on lotBook.lot_id=subLotBook.lot_id inner join challan_book  cBook on cBook.challan_id=lotBook.challan_id inner join item_details item on item.item_id=lotBook.item_id "+
+				"inner join box_details box on box.box_id=lotBook.box_id inner join agent_details agent on agent.agent_id=subLotBook.agent_id inner join agent_destination  agentDest on agentDest.agent_destination_id=subLotBook.agent_destination_id\r\n" + 
+				"inner join\r\n" + 
+				"(select fareCollection.sub_lot_id,sum(fareCollection.tot_payment) as totPymt,sum(fareCollection.debit_amt) as totDebit from fare_collection fareCollection   group by 1 order by 1) fareBal\r\n" + 
+				"on fareBal.sub_lot_id=fareBook.sub_lot_id and fareBal.totPymt>0) collections" 
+				;
+	}
+	/*public static String getAllFareBookQuery()
+	{
+		return "select cBook.challan_id,cBook.truck_no,lotBook.lot_id,concat(source.source_name,\"-\",destination.destination)\r\n" + 
+				"as FromeToWhere,concat(item.item_name,\"-\",box.box_name,\"-\",box.total_wt) as item_code,\r\n" + 
+				"subLotBook.sub_lot_id,agent.agent_id,concat(agent.agent_name,\"(\",agent.agent_mark,\")\") as agent\r\n" + 
+				",aDest.agent_destination_id,aDest.agent_destination_name,subLotBook.receiving_date,subLotBook.total_qty,fareBook.fare_per_box as farePerBox,\r\n" + 
+				"fareBook.total_fare,sum(fareCollection.tot_payment) as tot_payment,sum(fareCollection.debit_amt) as debit_amt,sum(fareCollection.extra_fare) as extra_fare,\r\n" + 
+				"GROUP_CONCAT(fareCollection.pymt_dt) as pymt_dt\r\n" + 
+				"from challan_book cBook\r\n" + 
+				"inner join lot_book lotBook on lotBook.challan_id=cBook.challan_id\r\n" + 
+				"inner join sub_lot_book subLotBook on subLotBook.lot_id=lotBook.lot_id\r\n" + 
+				"inner join trader_details trader on trader.trader_id=lotBook.trader_id\r\n" + 
+				"inner join destination_details destination on cBook.destination_id=destination.destination_id\r\n" + 
+				"inner join source_details source on  source.source_id=cBook.source_id\r\n" + 
+				"inner join item_details item on item.item_id=lotBook.item_id\r\n" + 
+				"inner join box_details box on box.box_id=lotBook.box_id\r\n" + 
+				"inner join agent_details agent on agent.agent_id=subLotBook.agent_id\r\n" + 
+				"inner join agent_destination aDest on aDest.agent_destination_id=subLotBook.agent_destination_id\r\n" + 
+				
+				"inner join fare_book fareBook on fareBook.sub_lot_id=subLotBook.sub_lot_id\r\n" + 
+				"Left Join fare_collection fareCollection on fareCollection.sub_lot_id=subLotBook.sub_lot_id\r\n" + 
+				"Group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14 order by cBook.challan_id,subLotBook.lot_id desc";
+	}*/
+	
+	
 }

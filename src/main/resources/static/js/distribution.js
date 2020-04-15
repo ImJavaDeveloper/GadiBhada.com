@@ -1,3 +1,24 @@
+
+
+function fetchAgentDestination()
+{
+	
+var agentId = $("#agentId").val()
+
+$.ajax({
+		type : "GET",
+		url : "/management/getAgentAddr",
+		data : {
+			"agentId" : agentId
+		},
+		success : function(data) {
+			
+            $('#agentDestination').text(data)
+            $('#aDestId').val(agentId)
+      
+		}
+});
+}
 //below function required to load js functions after page is dynamically loaded
 
 function callAjaxForUpdateDistribution() {
@@ -80,9 +101,35 @@ function saveUpdateModal() {
 	var modalqtyAvl = jQuery('input[name="modalqtyAvl"]').val()
 	var totQtyDistributed = jQuery('input[name="totQtyDistributed"]').val()
 	var agentId = $("#agentId").val()
-	var agentDestination = $("#agentDestination").val()
+	var agentDestination = $('#agentDestination').text()
+	var challanDate = $('#modalChallnDate').text()
+	
 	var receivingDate = jQuery('input[name="receivingDate"]').val()
-
+	
+	var cdt=new Date(challanDate)
+	var rdt=new Date(receivingDate)
+	var miliSecPerDay=1000*60*60*24
+	if(cdt.getTime()>rdt.getTime())
+		{
+		alert("Receving Date Is Back Date Than Challan Date")
+		rerun;
+		}
+	delay=(rdt.getTime()-cdt.getTime())/miliSecPerDay
+	//alert("delay:"+delay)
+	if(delay>4)
+		{
+		var confirmation=confirm("Warning !! Was Truck Late ?? Total Duration="+delay+" Days. Do You Want To Proceed")
+		if(confirmation==false)
+			return;
+		}
+	if(delay==0 )
+	{
+	var confirmation=confirm("Warning !! Challan Date Is Same As Receiving Date. \n  Do You Want To Proceed")
+	if(confirmation==false)
+		return;
+	}
+	alert("At THe End")
+    
 	//alert(documnet.getElementById("totQty"))
 	//alert(d)
 

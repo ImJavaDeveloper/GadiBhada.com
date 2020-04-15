@@ -15,4 +15,6 @@ public interface TraderDetailsRepository extends JpaRepository<TraderDetails, In
 	public TraderDetails findByTraderName(String trader_name,String trader_mark);
 	
 	
+	
+	
 }

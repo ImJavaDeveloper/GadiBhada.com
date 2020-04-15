@@ -19,11 +19,17 @@ import com.spring.boot.security.entity.SourceDetails;
 import com.spring.boot.security.entity.UserDetails;
 import com.spring.boot.security.forms.data.AllChallanData;
 import com.spring.boot.security.forms.data.AllDistributionData;
+import com.spring.boot.security.forms.data.CollectionFareVO;
+import com.spring.boot.security.forms.data.CollectionsBook;
+import com.spring.boot.security.forms.data.FareBook;
 import com.spring.boot.security.forms.data.LotBooksByChallanIdVO;
 import com.spring.boot.security.forms.data.TableQuery;
 import com.spring.boot.security.helper.DataHelper;
 import com.spring.boot.security.mapper.AllChallanDataMapper;
 import com.spring.boot.security.mapper.AllDistributionDataMapper;
+import com.spring.boot.security.mapper.CollectionsBookDataMapper;
+import com.spring.boot.security.mapper.CollectionsDataMapper;
+import com.spring.boot.security.mapper.FareBookMapper;
 import com.spring.boot.security.mapper.LotBooksByChallanIdMapper;
 import com.spring.boot.security.repository.ChallanBookRepository;
 import com.spring.boot.security.repository.LotBookRepository;
@@ -90,6 +96,30 @@ public class ManageDataPageController {
 		List<AllDistributionData> allDistributionData=jdbcTemplate.query(TableQuery.getAllDistributionDataQuery(), new AllDistributionDataMapper());	
 		 String allDistribzutionDataArray = JSONArray.toJSONString(allDistributionData);		
 		 return allDistribzutionDataArray;
+		
+	}
+	
+	@RequestMapping(value="/managedata/allfares",method=RequestMethod.POST)
+	@ResponseBody
+	public String fareBook()
+	{
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+		List<FareBook> fareBook=jdbcTemplate.query(TableQuery.getAllFareBookQuery(), new FareBookMapper());	
+		String allFareDataArray = JSONArray.toJSONString(fareBook);		
+		return allFareDataArray;
+		
+	}
+	
+	@RequestMapping(value="/managedata/allcollections",method=RequestMethod.POST)
+	@ResponseBody
+	public String collectionBook()
+	{
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+		List<CollectionsBook> collectionBook=jdbcTemplate.query(TableQuery.getCollectionBookDataQuery(), new CollectionsBookDataMapper());	
+		String collectionBookArray = JSONArray.toJSONString(collectionBook);		
+		System.out.println(TableQuery.getCollectionBookDataQuery());
+		System.out.println(collectionBookArray);
+		return collectionBookArray;
 		
 	}
 	

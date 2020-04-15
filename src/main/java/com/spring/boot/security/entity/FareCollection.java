@@ -27,8 +27,7 @@ public class FareCollection {
 	private Date pymtDt;
 	@Column(name="debit_amt")
 	private double debitAmt;
-	@Column(name="extra_fare")
-	private double extraFare;
+	
 	
 	
 	public int getFareId() {
@@ -68,13 +67,6 @@ public class FareCollection {
 	public void setDebitAmt(double debitAmt) {
 		this.debitAmt = debitAmt;
 	}
-	public double getExtraFare() {
-		return extraFare;
-	}
-	public void setExtraFare(double extraFare) {
-		this.extraFare = extraFare;
-	}
-	
 	
 	
 }

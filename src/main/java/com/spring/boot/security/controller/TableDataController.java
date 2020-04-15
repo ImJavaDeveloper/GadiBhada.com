@@ -11,14 +11,17 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.boot.security.dto.AgentDestinationData;
+import com.spring.boot.security.dto.AgentDetailsData;
 import com.spring.boot.security.dto.BoxDetailsData;
 import com.spring.boot.security.dto.ItemDetailsData;
 import com.spring.boot.security.dto.SourceDetailsData;
 import com.spring.boot.security.dto.TraderDetailsData;
 import com.spring.boot.security.entity.AgentDestination;
+import com.spring.boot.security.entity.AgentDetails;
 import com.spring.boot.security.entity.BoxDetails;
 import com.spring.boot.security.entity.ItemDetails;
 import com.spring.boot.security.entity.SourceDetails;
@@ -49,6 +52,8 @@ public class TableDataController {
 	BoxDetailsData boxDetailsData;
 	@Autowired
 	TraderDetailsData traderDetailsData;
+	@Autowired
+	AgentDetailsData agentDetailsData;
 	
 	@RequestMapping(value="/management/getAllSource")
 	@ResponseBody
@@ -260,5 +265,14 @@ public class TableDataController {
 		
 	}
 
+	@RequestMapping(value="/management/getAgentAddr")
+	@ResponseBody
+	public String getTraderById(@RequestParam int agentId)
+	{
+		AgentDetails agentDetails=agentDetailsData.getAgentById(agentId);
+		 
+		 return agentDetails.getAgentAddress();
+		
+	}
 
 }

@@ -83,9 +83,8 @@ function saveCollectionsData() {
 	
 	var subLotId = jQuery('input[name="subLotId"]').val()
 	var fareIdC = jQuery('input[name="fareIdC"]').val()
-	var totFare = jQuery('input[name="totFare"]').val()
+	var totPayable = jQuery('input[name="totPayable"]').val()
 	var totalPymt = jQuery('input[name="totalPymt"]').val()
-	var extraFare = jQuery('input[name="extraFare"]').val()
 	var totalDebit = jQuery('input[name="totalDebit"]').val()
     var paymentDate = jQuery('input[name="paymentDate"]').val()
     
@@ -102,8 +101,6 @@ function saveCollectionsData() {
 	} 
 	else {
 		
-         if(extraFare.trim().length<=0)
-        	 extraFare=0;
          if(totalDebit.trim().length<=0)
         	 totalDebit=0;
          
@@ -112,13 +109,13 @@ function saveCollectionsData() {
          alert(parseFloat(totalPymt)+parseFloat(totalDebit))
          */
          
-         if(parseFloat(totFare) <parseFloat(totalPymt))
+         if(parseFloat(totPayable) <parseFloat(totalPymt))
         	 {
         	 $('#collectionModelmMessage').html("<strong style=\"color:red\">Failure!</strong> Total Payment Is Greater Than Actual Fare:");
         	return;
         	 }
         
-         if((parseFloat(totFare)+parseFloat(extraFare))<(parseFloat(totalPymt)+parseFloat(totalDebit)))
+         if(parseFloat(totPayable)<(parseFloat(totalPymt)+parseFloat(totalDebit)))
         	 {
         	 $('#collectionModelmMessage').html("<strong style=\"color:red\">Failure!</strong> Sum of total payment and debit is greater than actual fare:");
          	 return;
@@ -131,7 +128,6 @@ function saveCollectionsData() {
 				"subLotId":subLotId,
 				"fareIdC":fareIdC,
 				"totalPymt":totalPymt,
-				"extraFare":extraFare,
 				"totalDebit":totalDebit,
 				"paymentDate":paymentDate
 				

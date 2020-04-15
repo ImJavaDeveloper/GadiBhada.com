@@ -1,79 +1,57 @@
-$(document).ready(function() {
-  
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();   
 });
+//Calling Ajax to load the page dynamically
+$("#collectionBook").on("click", function() {
 
-function warning()
-{
-alert("Warining !! Changing source will delete the fare book as well as collection book for all lot distributed for this challan\n"+"You have to re-enter fare and collection data under data entry section manullay ");
-return;
-}
-
-function warningForItemChange()
-{
-	alert("Warining !! Changing Item will delete the fare book as well as collection book for all lot distributed for this lot\n"+"You have to re-enter fare and collection data under data entry section manullay ");
-
-}
-
-function warningForBoxChange()
-{
-	alert("Warining !! Changing Box will delete the fare book as well as collection book for all lot distributed for this lot\n"+"You have to re-enter fare and collection data under data entry section manullay ");
-
-}
-
-function warningForQtyChange()
-{
-	alert("Warining !! Changing Qty less than earlier will delete the distribution book,fare book as well as collection book for all lot distributed for this lot\n"+"You have to re-enter fare and collection data under data entry section manullay ");
-
-}
-
-
-function reloadPageChallan(){
-
-	 callAjaxForAllChallan();
-	 
-}
-//Calling Ajax to load the updated distribution page dynamically
-$("#challanBook").on("click", function() {
-
-	
-	$('#allchallan').load('/formcontent/allchallan.html',function()
+	$('#allcollectionbook').load('/formcontent/collectionBook.html',function()
 			{
 	
-		callAjaxForAllChallan();
+		callAjaxForCollectionBook();
 			});
 
 });
 
-function callAjaxForAllChallan() {
+function callAjaxForCollectionBook() {
 	
 	var tableBody="";
+	var subLotIdArray=[];
 	waitingDialog.show();
 	$.ajax({
 		type : "POST",
-		url : "/gadibhada/managedata/allchallan",
+		url : "/gadibhada/managedata/allcollections",
 		
 		success : function(data) {
+			var i=0;
 			var result=jQuery.parseJSON(data);
+			
 			$.each( result,function(k,v){
+				subLotIdArray[i]=v.subLotId;
+
+				tableBody=tableBody+"<tr>"+		
+				"<td><a href=\"#\">"+v.truck_no+"</a></td>"+
+				"<td><a href=\"#\">"+v.item_code+"</a></td>"+
+				"<td><a href=\"#\">"+v.agent_name+"</a></td>"+
+				"<td><a href=\"#\">"+v.adest_name+"</a></td>"+
+				"<td><a href=\"#\">"+v.receiving_date+"</a></td>"+
+				"<td><a href=\"#\">"+v.total_qty+"</a></td>"+
+				"<td><a href=\"#\">"+v.fare_per_box+"</a></td>"+
+				"<td><a href=\"#\">"+v.tot_fare+"</a></td>"+
+				"<td><a href=\"#\">"+v.totPymt+"</a></td>"+
+				"<td><a href=\"#\">"+v.tot_bal_amt+"</a></td>"+
+				"<td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#allCollectionsModal\"" +
+				" onclick=\"updateCollection("+v.subLotId+")\">Update</button></td>"+
 				
-				tableBody=tableBody+"<tr>"+
-				"<td>"+v.challanId+"</td>"+
-				"<td>"+v.challanDate+"</td>"+
-				"<td>"+v.truckNo+"</td>"+
-				"<td>"+v.sourceName+"</td>"+
-				"<td>"+v.destination+"</td>"+
-				"<td>"+v.driverName+"</td>"+
-				"<td>"+v.driverMobile+"</td>"+
-				"<td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#allChallansModal\"" +
-				" onclick=\"viewChallanEntry("+v.challanId+",'"+v.challanDate+"','"+v.truckNo+"',"+v.sourceId+",'"+v.sourceName+"',"+v.destinationId+",'"+v.destination+"','"+v.driverName+"','"+v.driverMobile+"')\">View</button></td>"+
 				"</tr>"	
+				
+				i++;
 			});
 			
-			$('#allChallnTableBody').html(tableBody);
-			//loadjs("/js/dataTable.js");
-			$('#allChallanTable').DataTable();
+			 $('#tableBodyCollectionBook').html(tableBody);
+			
+			$('#collectionBookTable').DataTable();
 			waitingDialog.hide();
-
+			
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			if (XMLHttpRequest.readyState == 4) {
@@ -95,18 +73,19 @@ function callAjaxForAllChallan() {
 	});
 }
 
-function viewChallanEntry(challanId,challanDate,truckNo,sourceId,sourceName,destinationId,destination,driverName,driverMobile)
+function updateCollection(subLotId)
 {
 
-$('#allChallansModalContent').load('/formcontent/models/viewChallanModal.html',function()
+$('#allCollectionsModalContent').load('/formcontent/models/viewCollectionsModal.html',function()
 		{
-	      callAjaxForViewChallanById(challanId,challanDate,truckNo,sourceId,sourceName,destinationId,destination,driverName,driverMobile);
+	     // callAjaxForCollectionsDataBySubLotId(subLotId);
 		});
 }
 
-function callAjaxForViewChallanById(challanId,challanDate,truckNo,sourceId,sourceName,destinationId,destination,driverName,driverMobile) {
+function callAjaxForFareCollectionBySubLotId(truckNo,itemCode,agentName,aDestName,receiveDt,subLotId,totQty,farePerBox,totPymt,debitAmt,totFare,extraFare,pymtDt) {
 	
-	var viewChallanModalFormTable2="";
+	var FareCollectionFormTable1=""
+	var FareCollectionFormTable2=""
 	var lotIdArray=[];
 	var traderIdArray=[];
 	var itemIdArray=[];
@@ -114,19 +93,82 @@ function callAjaxForViewChallanById(challanId,challanDate,truckNo,sourceId,sourc
 	var boxWtArray=[];
 	var traderList="";
 	
-	var viewChallanModalFormTable1="<tr>"+
-	"<td>"+challanId+"</td>"+
-	"<td><a href=\"#\" id=\"challanDate\" data-type=\"text\" data-placement=\"right\" data-pk=\""+challanId+"\" data-name=\"challan_date\">"+challanDate+"</a></td>"+
-	"<td><a href=\"#\" id=\"truckNo\" data-type=\"text\" data-placement=\"right\" data-pk=\""+challanId+"\" data-name=\"truck_no\">"+truckNo+"</a></td>"+
-	"<td onchange=\"warning()\"><a href=\"#\" id=\"sourceName\" data-type=\"select\" data-placement=\"right\" data-pk=\""+challanId+"\" data-name=\"source_id\">"+sourceName+"</a></td>"+
-	"<td><a href=\"#\" id=\"destination\" data-type=\"select\" data-placement=\"right\" data-pk=\""+challanId+"\" data-name=\"destination_id\">"+destination+"</a></td>"+
-	"<td><a href=\"#\" id=\"driverName\" data-type=\"text\" data-placement=\"right\" data-pk=\""+challanId+"\" data-name=\"driver_name\">"+driverName+"</a></td>"+
-	"<td><a href=\"#\" id=\"driverMobile\" data-type=\"text\" data-placement=\"right\" data-pk=\""+challanId+"\" data-name=\"driver_mobile\">"+driverMobile+"</a></td>"+
+	 FareCollectionFormTable1="<tr>"+
+	
+	"<td><a href=\"#\" id=\"truckNo\" >"+truckNo+"</a></td>"+
+	"<td><a href=\"#\" id=\"itemCode\" >"+itemCode+"</a></td>"+
+	"<td><a href=\"#\" id=\"agentName\" >"+agentName+"</a></td>"+
+	"<td><a href=\"#\" id=\"aDestName\" >"+aDestName+"</a></td>"+
+	"<td><a href=\"#\" id=\"receiveDt\" >"+receiveDt+"</a></td>"+
+	"<td><a href=\"#\" id=\"totQty\" >"+totQty+"</a></td>"+
 	"</tr>"	
 	
-	$('#viewChallanModalTab1').html(viewChallanModalFormTable1);
+	$('#FareCollectionModalTab1').html(FareCollectionFormTable1);
 	
-	waitingDialog.show();
+	FareCollectionModalTab2="<tr>"+
+	"<input type=\"hidden\" name=\"subLotId\" id=\"subLotId\" value=\""+subLotId+"\" >"+
+	"<td><a href=\"#\" id=\"farePerBox\" data-type=\"text\" data-placement=\"right\" data-pk=\""+subLotId+"\" data-name=\"fare_per_box\">"+farePerBox+"</a></td>"+
+	"<td><a href=\"#\" id=\"totFare\" data-type=\"text\" data-placement=\"right\" data-pk=\""+subLotId+"\" data-name=\"farePerBox\">"+totFare+"</a></td>"+
+	"<td><a href=\"#\" id=\"extraFare\" data-type=\"text\" data-placement=\"right\" data-pk=\""+subLotId+"\" data-name=\"extra_fare\">"+extraFare+"</a></td>"+
+	"<td><a href=\"#\" id=\"totPymt\" data-type=\"text\" data-placement=\"right\" data-pk=\""+subLotId+"\" data-name=\"tot_payment\">"+totPymt+"</a></td>"+
+	"<td><a href=\"#\" id=\"totDebit\" data-type=\"text\" data-placement=\"right\" data-pk=\""+subLotId+"\" data-name=\"debit_amt\">"+debitAmt+"</a></td>"+
+	"<td><a href=\"#\" id=\"totBal\" data-type=\"text\" data-placement=\"right\" data-pk=\""+subLotId+"\" data-name=\"totBal\">"+(totFare+extraFare-totPymt-debitAmt)+"</a></td>"+
+	"<td><a href=\"#\" id=\"pymtDt\" data-type=\"text\" data-placement=\"right\" data-pk=\""+pymtDt+"\" data-name=\"totPymt\">"+pymtDt+"</a></td>"+
+	"</tr>"	
+	
+	$('#FareCollectionModalTab2').html(FareCollectionModalTab2);
+	
+	$.fn.editable.defaults.mode = 'popup'; 
+	
+    $('#farePerBox').editable(	   
+ 		   {
+         	  url:'/gadibhada/managedata/updateFarePerBox'
+            });
+    $('#farePerBox').on('save', function(e, params) {
+	    
+        var subLotId=$('#subLotId').val();
+        //alert("subLotId:"+subLotId)
+	    var totQty=$('#totQty').text();
+    	var farePerBox=params.newValue;
+    	$('#totFare').text(farePerBox*totQty)
+    	
+    	var extraFare=$('#extraFare').text();
+    	var totPymt=$('#totPymt').text();
+    	var debitAmt=$('#debitAmt').text();
+    	var updatedTotFare=farePerBox*totQty
+    	$('#totBal').text((farePerBox*totQty)+(extraFare-totPymt-debitAmt))
+    	$.ajax({
+    		type : "POST",
+    		url : "/gadibhada/managedata/updateFareBookTotFare",
+    		data : {
+    			"name" : 'total_fare',
+    			"value" : updatedTotFare,
+    			"pk" : subLotId
+    		},
+    		success : function(data) {
+    			
+    		}
+    });
+       
+	});
+   
+    $('#extraFare').editable(	   
+  		   {
+          	 // url:'/gadibhada/managedata/updateFareCollExtraFare'
+             });
+    $('#totPymt').editable(	   
+  		   {
+          	 // url:'/gadibhada/managedata/updateChallanTruck'
+             });
+    $('#totDebit').editable(	   
+  		   {
+          	 // url:'/gadibhada/managedata/updateChallanTruck'
+             });
+    $('#pymtDt').editable(	   
+   		   {
+           	 // url:'/gadibhada/managedata/updateChallanTruck'
+              });
+	/*waitingDialog.show();
 	$.ajax({
 		type : "POST",
 		url : "/gadibhada/managedata/viewchallan",
@@ -318,6 +360,6 @@ function callAjaxForViewChallanById(challanId,challanDate,truckNo,sourceId,sourc
 			//some stuff on failure
 		}
 	});
-		
+		*/
 }
 

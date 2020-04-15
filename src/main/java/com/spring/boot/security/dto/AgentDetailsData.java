@@ -29,4 +29,9 @@ public class AgentDetailsData {
 	{
 		return  agentDetailsRespository.save(agent);
 	}
+	
+	public AgentDetails getAgentById(int agent_id)
+	{
+		return  agentDetailsRespository.findAgentById(agent_id);
+	}
 }

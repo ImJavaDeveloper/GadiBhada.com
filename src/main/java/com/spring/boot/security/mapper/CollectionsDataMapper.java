@@ -27,6 +27,9 @@ public class CollectionsDataMapper implements RowMapper<CollectionFareVO> {
 		collectionFareVO.setAgentMark(rs.getString(++i));
 		collectionFareVO.setAgentDestName(rs.getString(++i));
 		collectionFareVO.setTotFare(rs.getDouble(++i));
+		collectionFareVO.setExtraFare(rs.getDouble(++i));
+		collectionFareVO.setTotPymt(rs.getDouble(++i));
+		collectionFareVO.setTotDebit(rs.getDouble(++i));
 		collectionFareVO.setTotBal(rs.getDouble(++i));	
 		return collectionFareVO;
 	}

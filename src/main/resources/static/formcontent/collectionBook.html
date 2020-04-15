@@ -1,0 +1,97 @@
+<style>
+#fctable table thead tr th {
+  font-size: 12px;
+}
+#fctable table tfoot tr th {
+  font-size: 12px;
+}
+#fctable table tbody tr td {
+  font-size: 12px;
+  
+}
+#allCollectionsModal table thead tr th {
+  font-size: 11px;
+}
+#allCollectionsModal table tbody tr th {
+  font-size: 11px;
+}
+
+</style>
+
+<div id="allCollectionsModal" class="modal fade" role="dialog">
+	
+	<div class="modal-dialog modal-lg" id="modalCollection">
+	
+
+		<!-- Modal content-->
+	
+		<div class="modal-content">
+	
+			<div class="modal-header">
+			
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				
+				<h4 class="modal-title">Collections Entry</h4>
+				
+			</div>
+			
+			<div class="modal-body" id="allCollectionsModalContent">
+				
+				<p>Some text in the modal.</p>
+				
+			</div>
+			
+			<div class="modal-footer">
+			
+				
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="reloadPageCollection()">Close</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<h3>Fare Book</h3>
+<div id="fctable">
+<table id="collectionBookTable" class="table table-striped table-bordered"
+	style="width: 100%; background-color: #E2E2E2">
+	<thead>
+		<tr>
+
+		   <th>Truck No</th>
+			<th>ItemCode</th>
+			<th>AgentName</th>
+			<th>Delivered At</th>
+			<th>Delivery Date</th>
+			<th>Qty</th>	
+			<th>FarePerBox</th>
+			<th>Total Fare</th>	
+			<th>Total Payment</th>	
+			<th>Balance</th>	
+			<th>Action</th>
+
+		</tr>
+	</thead>
+	<tbody id="tableBodyCollectionBook">
+
+	</tbody>
+
+	<tfoot>
+		<tr>
+			 <th>Truck No</th>
+			<th>ItemCode</th>
+			<th>AgentName</th>
+			<th>Delivered At</th>
+			<th>Delivery Date</th>
+			<th>Qty</th>	
+			<th>FarePerBox</th>
+			<th>Total Fare</th>	
+			<th>Total Payment</th>	
+			<th>Balance</th>	
+			<th>Action</th>
+			
+		</tr>
+
+	</tfoot>
+</table>
+</div>

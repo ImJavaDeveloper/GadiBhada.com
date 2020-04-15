@@ -1,5 +1,7 @@
 package com.spring.boot.security.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,4 +14,7 @@ public interface AgentDetailsRespository extends JpaRepository<AgentDetails, Int
 
 	@Query("FROM AgentDetails where agent_name = ?1 and agent_mark = ?2")
 	public AgentDetails findByAgentName(String agent_name,String agent_mark);
+	
+	@Query("FROM AgentDetails where agent_id = ?1")
+	public AgentDetails findAgentById(int agent_id);
 }

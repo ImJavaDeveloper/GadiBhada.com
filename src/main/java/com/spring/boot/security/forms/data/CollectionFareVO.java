@@ -16,7 +16,10 @@ public class CollectionFareVO {
 	private String agentMark;
 	private String agentDestName;
 	private double totBal;
-	
+	private double extraFare;
+	private double totFare;
+	private double totPymt;
+	private double totDebit;
 	
 	public int getFareId() {
 		return fareId;
@@ -92,13 +95,31 @@ public class CollectionFareVO {
 	public void setTotFare(double totFare) {
 		this.totFare = totFare;
 	}
-	private double totFare;
+	
 
 	public double getTotBal() {
 		return totBal;
 	}
 	public void setTotBal(double totBal) {
 		this.totBal = totBal;
+	}
+	public double getExtraFare() {
+		return extraFare;
+	}
+	public void setExtraFare(double extraFare) {
+		this.extraFare = extraFare;
+	}
+	public double getTotPymt() {
+		return totPymt;
+	}
+	public void setTotPymt(double totPymt) {
+		this.totPymt = totPymt;
+	}
+	public double getTotDebit() {
+		return totDebit;
+	}
+	public void setTotDebit(double totDebit) {
+		this.totDebit = totDebit;
 	}
 
 }
