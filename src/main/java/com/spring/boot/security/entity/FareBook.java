@@ -25,9 +25,7 @@ public class FareBook {
 	private double totFare;
 	@Column(name="fare_per_box")
 	private double farePerBox;
-	@Column(name="extra_fare")
-	private double extraFare;
-	
+
 	
 	public int getFareId() {
 		return fareId;
@@ -64,12 +62,6 @@ public class FareBook {
 	}
 	public void setFarePerBox(double farePerBox) {
 		this.farePerBox = farePerBox;
-	}
-	public double getExtraFare() {
-		return extraFare;
-	}
-	public void setExtraFare(double extraFare) {
-		this.extraFare = extraFare;
 	}
 
 }

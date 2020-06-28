@@ -7,11 +7,14 @@ public class DistributionUpdateVO {
 	private int challan_id;
 	private Date  challan_date;
 	private String truck_no;
+	private int source_id;
 	private String source_name;
 	private String destination;
 	private String trader_name;
 	private String trader_mark;
+	private int item_id;
 	private String item_name;
+	private int box_id;
 	private String box_name;
 	private int total_wt;
 	private int total_qty;
@@ -102,6 +105,24 @@ public class DistributionUpdateVO {
 	}
 	public void setTotBal(int totBal) {
 		this.totBal = totBal;
+	}
+	public int getSource_id() {
+		return source_id;
+	}
+	public void setSource_id(int source_id) {
+		this.source_id = source_id;
+	}
+	public int getItem_id() {
+		return item_id;
+	}
+	public void setItem_id(int item_id) {
+		this.item_id = item_id;
+	}
+	public int getBox_id() {
+		return box_id;
+	}
+	public void setBox_id(int box_id) {
+		this.box_id = box_id;
 	}
 
 }

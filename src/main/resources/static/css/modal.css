@@ -1,13 +1,22 @@
 @charset "ISO-8859-1";
 
-.modal-body {
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+     background-color:#FFEFD5;
+}
+/* .modal-body {
  
-    /* 80% of window height */
- overflow-x: auto;
+    80% of window height
+    overflow-x: auto;
+    overflow-y auto;
 
     background-color:#FFEFD5;
  
-}
+} */
 
 #updateDistributionModal label
 {

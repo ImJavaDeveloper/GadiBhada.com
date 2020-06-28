@@ -29,6 +29,7 @@ function callAjaxForFareBook() {
 				
 				tableBody=tableBody+"<tr>"+		
 				"<td><a href=\"#\">"+v.truck_no+"</a></td>"+
+				"<td><a href=\"#\">"+v.sub_lot_id+"</a></td>"+
 				"<td><a href=\"#\">"+v.item_code+"</a></td>"+
 				"<td><a href=\"#\">"+v.agentName+"</a></td>"+
 				"<td><a href=\"#\">"+v.agent_destination_name+"</a></td>"+
@@ -36,8 +37,9 @@ function callAjaxForFareBook() {
 				"<td><a href=\"#\" id=\"totQty"+v.sub_lot_id+"\" >"+v.total_qty+"</a></td>"+
 				"<td><a href=\"#\" id=\"farePerBox"+v.sub_lot_id+"\" data-type=\"text\" data-placement=\"right\" data-pk=\""+v.sub_lot_id+"\" data-name=\"fare_per_box\">"+v.farePerBox+"</a></td>"+
 				"<td><a href=\"#\" id=\"totFare"+v.sub_lot_id+"\" data-type=\"text\" data-placement=\"right\" data-pk=\""+v.sub_lot_id+"\" data-name=\"farePerBox\">"+v.total_fare+"</a></td>"+
-				"<td><a href=\"#\" id=\"extraFare"+v.sub_lot_id+"\" data-type=\"text\" data-placement=\"right\" data-pk=\""+v.sub_lot_id+"\" data-name=\"extra_fare\">"+v.extra_fare+"</a></td>"+
-				"<td><a href=\"#\" id=\"totalFareCalc"+v.sub_lot_id+"\" data-type=\"text\" data-placement=\"right\" >"+(v.total_fare+v.extra_fare)+"</a></td>"+
+				"<td><a href=\"#\" id=\"totalFareCalc"+v.sub_lot_id+"\" data-type=\"text\" data-placement=\"right\" >"+(v.total_fare)+"</a></td>"+
+				"<td><button type=\"button\" class=\"btn btn-danger btn-sm\" " +
+				" onclick=\"DeleteFareEntry()\">Delete</button></td>"+
 				"</tr>"	
 				
 				i++;
@@ -52,7 +54,7 @@ function callAjaxForFareBook() {
 			for(i=0;i<subLotIdArray.length;i++)
 			{
 				
-			$('#farePerBox'+subLotIdArray[i]).editable(   
+			$('#farePerBox'+subLotIdArray[i]).editable(  
 		 		   {
 		         	  url:'/gadibhada/managedata/updateFarePerBox'
 		            });
@@ -64,10 +66,10 @@ function callAjaxForFareBook() {
 			    var totQty=$('#totQty'+subLotId).text();
 			    
 		    	var farePerBox=params.newValue;
-		    	var extraFare=$('#extraFare'+subLotId).text();
+		    	
 		    	
 		    	$('#totFare'+subLotId).text(farePerBox*totQty)
-		    	$('#totalFareCalc'+subLotId).text(farePerBox*totQty+parseFloat(extraFare))
+		    	$('#totalFareCalc'+subLotId).text(farePerBox*totQty)
 		    
 		    	var updatedTotFare=farePerBox*totQty
 		    	
@@ -89,25 +91,7 @@ function callAjaxForFareBook() {
 			
 			for(i=0;i<subLotIdArray.length;i++)
 			{
-		    $('#extraFare'+subLotIdArray[i]).editable(	   
-		  		   {
-		          	  url:'/gadibhada/managedata/updateFareExtraFare'
-		             });
-		    
-		    $('#extraFare'+subLotIdArray[i]).on('save', function(e, params) {
-		    	var id=$(this).attr('id');	
 
-		    	var subLotId=id.substring(9);
-		        //alert("subLotId:"+subLotId)
-			    var totFare=$('#totFare'+subLotId).text();
-			    
-		    	var extraFare=params.newValue;
-			   
-		    	$('#totalFareCalc'+subLotId).text(parseFloat(totFare)+parseFloat(extraFare))
-		    	
-		 
-		       
-			});
 			}
 			$('#fareBookTable').DataTable();
 			waitingDialog.hide();

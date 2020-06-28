@@ -67,6 +67,11 @@ public class FareCollection {
 	public void setDebitAmt(double debitAmt) {
 		this.debitAmt = debitAmt;
 	}
+	@Override
+	public String toString() {
+		return "FareCollection [collectionId=" + collectionId + ", fareId=" + fareId + ", subLotId=" + subLotId
+				+ ", totPayment=" + totPayment + ", pymtDt=" + pymtDt + ", debitAmt=" + debitAmt + "]";
+	}
 	
 	
 }

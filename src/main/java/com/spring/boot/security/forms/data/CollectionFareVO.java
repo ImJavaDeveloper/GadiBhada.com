@@ -16,7 +16,6 @@ public class CollectionFareVO {
 	private String agentMark;
 	private String agentDestName;
 	private double totBal;
-	private double extraFare;
 	private double totFare;
 	private double totPymt;
 	private double totDebit;
@@ -103,12 +102,7 @@ public class CollectionFareVO {
 	public void setTotBal(double totBal) {
 		this.totBal = totBal;
 	}
-	public double getExtraFare() {
-		return extraFare;
-	}
-	public void setExtraFare(double extraFare) {
-		this.extraFare = extraFare;
-	}
+
 	public double getTotPymt() {
 		return totPymt;
 	}

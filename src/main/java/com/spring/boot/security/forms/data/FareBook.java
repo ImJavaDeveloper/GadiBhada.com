@@ -21,7 +21,7 @@ public class FareBook {
 	/*private double tot_payment;
 	private double debit_amt;
 	private String pymt_dt;*/
-	private double extra_fare;
+
 	
 	public String getChallan_id() {
 		return challan_id;
@@ -107,12 +107,7 @@ public class FareBook {
 	public void setTotal_fare(double total_fare) {
 		this.total_fare = total_fare;
 	}
-	public double getExtra_fare() {
-		return extra_fare;
-	}
-	public void setExtra_fare(double extra_fare) {
-		this.extra_fare = extra_fare;
-	}
+	
 	
 
 }

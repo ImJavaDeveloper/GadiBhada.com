@@ -58,36 +58,20 @@ function callAjaxForFareCalcHome()
 function changeTotalFare(subLotId)
 {
 	var farePerBox=$('#farePerBox'+subLotId).val();
-	var extraFare=$('#extraFare'+subLotId).val();
 	
-	
-	if(typeof comment === 'undefined')
-		{
-		extraFare=0;
-		}
 	//console.log(Number.isInteger(farePerBox))
 	var totQty=$('#fareCalcTotQty'+subLotId).text()
 	var totalFare=farePerBox*totQty
-	var calulatedTotal=parseFloat(farePerBox*totQty)+parseFloat(extraFare)
+	var calulatedTotal=parseFloat(farePerBox*totQty)
 	$('#totFare'+subLotId).text(calulatedTotal)
 	
 }
-function changeTotalFareForExtraFare(subLotId)
-{
-	var farePerBox=$('#farePerBox'+subLotId).val();
-	var extraFare=$('#extraFare'+subLotId).val();
-	//console.log(Number.isInteger(farePerBox))
-	var totQty=$('#fareCalcTotQty'+subLotId).text()
-	var totalFare=farePerBox*totQty
-	var calulatedTotal=parseFloat(farePerBox*totQty)+parseFloat(extraFare)
-	$('#totFare'+subLotId).text(calulatedTotal)
-	
-}
+
 function saveFare(subLotId)
 {
 var totFare=$('#totFare'+subLotId).text()
 var farePerBox=$('#farePerBox'+subLotId).val()
-var extraFare=$('#extraFare'+subLotId).val();
+
 
 
 if(isNaN(totFare))
@@ -95,23 +79,16 @@ if(isNaN(totFare))
 	alert("Please Enter Correct Fare");
 	return
 	}
-if(isNaN(extraFare))
-{
-alert("Please Enter Correct Fare");
-return
-}
+
 var answer=window.confirm("Do you want to save fare");
 if(answer){
-	if(typeof comment === 'undefined')
-	{
-	extraFare=0;
-	}
-	saveFareForSubLotId(subLotId,totFare,farePerBox,extraFare);
+	
+	saveFareForSubLotId(subLotId,totFare,farePerBox);
 }
 
 }
 
-function saveFareForSubLotId(subLotId,totFare,farePerBox,extraFare)
+function saveFareForSubLotId(subLotId,totFare,farePerBox)
 {
 	var button=$('#button'+subLotId)
 
@@ -121,8 +98,7 @@ function saveFareForSubLotId(subLotId,totFare,farePerBox,extraFare)
 	    data : {
 	    "subLotId" : subLotId,
 	    "totFare" : totFare,
-	    "farePerBox" : farePerBox,
-	    "extraFare" : extraFare
+	    "farePerBox" : farePerBox
 	    },
 	    success: function(data){
 	    	//alert(data);

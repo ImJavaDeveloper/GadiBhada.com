@@ -14,6 +14,9 @@ $(window).on('load', function() {
       	callAjaxForFareCalcHome();      
       if(activeTab=="#menu4")
     	  callAjaxForCollectionPage();
+      if(activeTab=="#menu6")
+    	  callAjaxForTruckLedger();
+    	  
   }
 
 });

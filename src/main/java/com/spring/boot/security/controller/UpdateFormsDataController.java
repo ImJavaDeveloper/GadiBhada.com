@@ -1,16 +1,11 @@
 package com.spring.boot.security.controller;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.boot.security.constant.TableConstant;
 import com.spring.boot.security.exception.CustomGenericException;
-import com.spring.boot.security.exception.DataBaseException;
 import com.spring.boot.security.helper.DataHelper;
 import com.spring.boot.security.helper.DataValidator;
 import com.spring.boot.security.repository.SubLotBookRepository;
@@ -30,7 +24,7 @@ import com.spring.boot.security.repository.SubLotBookRepository;
 @RequestMapping("/gadibhada")
 public class UpdateFormsDataController {
 	
-	private static final Logger LOGGER=LoggerFactory.getLogger(UpdateFormsDataController.class);
+	//private static final Logger LOGGER=LoggerFactory.getLogger(UpdateFormsDataController.class);
 	
 	@Autowired
 	DataSource datasource;
@@ -147,8 +141,8 @@ public class UpdateFormsDataController {
 					+ " from fare_book where sub_lot_id in(select sub_lot_id "
 					+ "from sub_lot_book where lot_id="+pk+"))";
 			
-			int noOfRowsDeleted2=deleteTableRecords(deleteSubLotFromCollectionBook);
-			int noOfRowsDeleted1=deleteTableRecords(deleteSubLotFromFareBook);
+			deleteTableRecords(deleteSubLotFromCollectionBook);
+			deleteTableRecords(deleteSubLotFromFareBook);
 			
 			return noOfRowsUpdated;
 		
@@ -166,8 +160,8 @@ public class UpdateFormsDataController {
 					+ " from fare_book where sub_lot_id in(select sub_lot_id "
 					+ "from sub_lot_book where lot_id="+pk+"))";
 			
-			int noOfRowsDeleted2=deleteTableRecords(deleteSubLotFromCollectionBook);
-			int noOfRowsDeleted1=deleteTableRecords(deleteSubLotFromFareBook);
+			deleteTableRecords(deleteSubLotFromCollectionBook);
+			deleteTableRecords(deleteSubLotFromFareBook);
 			
 			return noOfRowsUpdated;
 		
@@ -194,10 +188,10 @@ public class UpdateFormsDataController {
 						+ " from fare_book where sub_lot_id in(select sub_lot_id "
 						+ "from sub_lot_book where lot_id="+pk+")))";
 				
-				int noOfRowsDeleted4=deleteTableRecords(deleteSubLotFromDebitBook);
-				int noOfRowsDeleted3=deleteTableRecords(deleteSubLotFromCollectionBook);
-				int noOfRowsDeleted2=deleteTableRecords(deleteSubLotFromFareBook);
-				int noOfRowsDeleted1=deleteTableRecords(deleteSubLotFromLotBook);
+				deleteTableRecords(deleteSubLotFromDebitBook);
+				deleteTableRecords(deleteSubLotFromCollectionBook);
+				deleteTableRecords(deleteSubLotFromFareBook);
+				deleteTableRecords(deleteSubLotFromLotBook);
 					
 			}
 			
@@ -228,9 +222,9 @@ public class UpdateFormsDataController {
 			
 			String deleteRecordsFromDebit="delete from "+TableConstant.FARE_DEBIT_TABLE+" where collection_id in(select collection_id from "+TableConstant.COLLECTION_BOOK_TABLE+" where sub_lot_id="+pk+")";
 			
-			int noOfRowsDeleted4=deleteTableRecords(deleteRecordsFromDebit);
-			int noOfRowsDeleted3=deleteTableRecords(deleteRecordsFromCollection);
-			int noOfRowsDeleted2=deleteTableRecords(deleteRecordsFromFareBook);
+			deleteTableRecords(deleteRecordsFromDebit);
+			deleteTableRecords(deleteRecordsFromCollection);
+			deleteTableRecords(deleteRecordsFromFareBook);
 			
 			return noOfRowsUpdated;
 		
@@ -301,11 +295,20 @@ public class UpdateFormsDataController {
 		
 	}
 	
-	@RequestMapping(value="/managedata/updateFareExtraFare",method=RequestMethod.POST)
+	@RequestMapping(value="/managedata/updateCollection",method=RequestMethod.POST)
 	@ResponseBody
-	public int updateFareCollExtraFare(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
+	public int updateCollection(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
-			int noOfRowsUpdated=updateTable(TableConstant.FARE_BOOK_TABLE,name,value,TableConstant.SUB_LOT_BOOK_PK_Column,pk);			
+			
+		int noOfRowsUpdated=0;
+		if(name.equals("pymt_dt"))
+			{if(!DataHelper.isValidDateFormat(value, "dd/MM/yyyy"))
+	           throw new Exception("Date format is not correct !!");
+		value="'"+DataHelper.formatDate(value, "dd/MM/yyyy", "yyyy-MM-dd")+"'";
+		 
+			}
+		
+		 noOfRowsUpdated=updateTable(TableConstant.COLLECTION_BOOK_TABLE,name,value,TableConstant.COLLECTION_BOOK_TABLE_PK_Column,pk);			
 			
 			return noOfRowsUpdated;
 		

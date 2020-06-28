@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.boot.security.dto.AgentDestinationData;
 import com.spring.boot.security.dto.AgentDetailsData;
 import com.spring.boot.security.dto.BoxDetailsData;
+import com.spring.boot.security.dto.FareRuleData;
 import com.spring.boot.security.dto.ItemDetailsData;
 import com.spring.boot.security.dto.SourceDetailsData;
 import com.spring.boot.security.dto.TraderDetailsData;
@@ -34,6 +35,7 @@ import com.spring.boot.security.forms.data.ItemListVO;
 import com.spring.boot.security.forms.data.SourceListVO;
 import com.spring.boot.security.forms.data.TableQuery;
 import com.spring.boot.security.forms.data.TraderListVO;
+import com.spring.boot.security.repository.FareRuleRepository;
 
 import net.minidev.json.JSONArray;
 
@@ -54,6 +56,8 @@ public class TableDataController {
 	TraderDetailsData traderDetailsData;
 	@Autowired
 	AgentDetailsData agentDetailsData;
+	@Autowired
+	FareRuleData fareRuleData;
 	
 	@RequestMapping(value="/management/getAllSource")
 	@ResponseBody
@@ -267,11 +271,27 @@ public class TableDataController {
 
 	@RequestMapping(value="/management/getAgentAddr")
 	@ResponseBody
-	public String getTraderById(@RequestParam int agentId)
+	public String getAgentAddr(@RequestParam int agentId)
 	{
 		AgentDetails agentDetails=agentDetailsData.getAgentById(agentId);
 		 
 		 return agentDetails.getAgentAddress();
+		
+	}
+	
+	@RequestMapping(value="/management/getAgentDestId")
+	@ResponseBody
+	public int getAgentDestId(@RequestParam String aDestName)
+	{
+	return agentDestinationData.getAgentDestId(aDestName);
+		
+	}
+	
+	@RequestMapping(value="/management/getFarePerBox")
+	@ResponseBody
+	public double getFarePerBox(@RequestParam int sourceId,@RequestParam int aDestId,@RequestParam int itemId,@RequestParam int boxId)
+	{
+		return fareRuleData.getFarePerBox(sourceId, aDestId, itemId, boxId);
 		
 	}
 

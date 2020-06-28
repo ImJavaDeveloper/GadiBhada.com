@@ -44,6 +44,8 @@ function callAjaxForAllDistribution() {
 				"<td><a href=\"#\" id=\"subLotAgentDest"+v.subLotId+"\" data-type=\"text\" data-placement=\"right\" >"+v.agentDestination+"</a></td>"+
 				"<td><a href=\"#\" id=\"subLotTotQty"+v.subLotId+"\" data-type=\"text\" data-placement=\"right\" data-pk=\""+v.subLotId+"\" data-name=\"total_qty\">"+v.totQty+"</a></td>"+
 				"<td><a href=\"#\" id=\"subLotReceivedeDt"+v.subLotId+"\" data-type=\"text\" data-placement=\"right\" data-pk=\""+v.subLotId+"\" data-name=\"receiving_date\">"+v.receivedDate+"</a></td>"+
+				"<td><button type=\"button\" class=\"btn btn-danger btn-sm\" " +
+				" onclick=\"DeleteSubLotFromChallan()\">Delete</button></td>"+
 				"</tr>"	
 				i++;
 			});

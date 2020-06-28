@@ -26,6 +26,7 @@ import com.spring.boot.security.exception.DataBaseException;
 import com.spring.boot.security.forms.data.DistributionUpdateVO;
 import com.spring.boot.security.forms.data.FareCalcVO;
 import com.spring.boot.security.forms.data.TableQuery;
+import com.spring.boot.security.helper.DataHelper;
 import com.spring.boot.security.helper.FormUtils;
 import com.spring.boot.security.repository.AgentDestinationRepository;
 import com.spring.boot.security.repository.FareBookRespository;
@@ -45,7 +46,7 @@ public class FareCalcFormController {
 
 	@RequestMapping(value="/farecalchome" ,method=RequestMethod.GET)
 	@ResponseBody
-	public String fareCalcHome(@RequestParam Integer id) {
+	public String fareCalcHome(@RequestParam Integer id) throws Exception {
 
 		String sql=TableQuery.getFareCalculationQuery();
 		LOGGER.debug(sql);
@@ -70,7 +71,6 @@ public class FareCalcFormController {
 						"                <th>Box Type</th>\r\n" + 
 						"                <th>Qty</th>\r\n" + 
 						"                <th>FarePerBox</th>\r\n" +
-						"                <th>ExtraFare </th>\r\n" +
 						"                <th>Total Fare</th>\r\n"+
 						"                <th>Action</th>\r\n" + 
 						"            </tr>\r\n" + 
@@ -81,19 +81,19 @@ public class FareCalcFormController {
 		for(int i=0;i<list.size();i++) {
 			FareCalcVO fareCalcVO=list.get(i);
 			double totFare=fareCalcVO.getFarePerBox()*fareCalcVO.getTotQty();
+			String agentName=fareCalcVO.getAgentName()==null ? "" :"("+fareCalcVO.getAgentName()+")";
 			Htmlbody.append(
 				
 					"<tbody>\r\n" + 
 					"<tr>\r\n" + 
-		"                <td>"+fareCalcVO.getReceivingDate()+"</td>\r\n" + 
+		"                <td>"+DataHelper.formatDate(fareCalcVO.getReceivingDate(), "yyyy-MM-dd", "dd/MM/yyyy")+"</td>\r\n" + 
 		"                <td>"+fareCalcVO.getTruckNo()+"</td>\r\n" + 
 		"                <td>"+fareCalcVO.getSourceName()+"-"+fareCalcVO.getAgentDestName()+"</td>\r\n" + 
-		"                <td>"+fareCalcVO.getAgentName()+"("+fareCalcVO.getAgentMark()+")</td>\r\n" + 
+		"                <td>"+fareCalcVO.getAgentMark()+agentName+"</td>\r\n" + 
 		"                <td>"+fareCalcVO.getItemName()+"</td>\r\n" +
 		"                <td>"+fareCalcVO.getBoxName()+"-"+fareCalcVO.getBoxWt()+"(Kg)</td>\r\n" +
 		"                <td id=\"fareCalcTotQty"+fareCalcVO.getSubLotId()+"\">"+fareCalcVO.getTotQty()+"</td>\r\n" + 
 		"                <td><input type=\"text\" id=\"farePerBox"+fareCalcVO.getSubLotId()+"\" value=\""+fareCalcVO.getFarePerBox()+"\" oninput=\"changeTotalFare("+fareCalcVO.getSubLotId()+")\"></td>"+
-		"                <td><input type=\"text\" id=\"extraFare"+fareCalcVO.getSubLotId()+"\"  oninput=\"changeTotalFareForExtraFare("+fareCalcVO.getSubLotId()+")\"></td>"+
 		"                <td id=\"totFare"+fareCalcVO.getSubLotId()+"\">"+totFare+"</td>"+
 		"                <td><button type=\"button\" class=\"btn btn-info btn-sm\" " +
 		"                onclick=\"saveFare("+fareCalcVO.getSubLotId()+")\" id=\"button"+fareCalcVO.getSubLotId()+"\" >"+
@@ -110,7 +110,6 @@ public class FareCalcFormController {
 				"                <th>Box Type</th>\r\n" + 
 				"                <th>Qty</th>\r\n" + 
 				"                <th>FarePerBox</th>\r\n" +
-				"                <th>ExtraFare </th>\r\n" +
 				"                <th>Total Fare</th>\r\n"+
 				"                <th>Action</th>\r\n" + 
 				"            </tr>\r\n" +
@@ -142,7 +141,7 @@ public class FareCalcFormController {
 
 	@RequestMapping(value="/savefareforsublotId",method=RequestMethod.GET)
 	@ResponseBody
-	public String saveFareForSubLotId(@RequestParam int subLotId,@RequestParam double totFare,@RequestParam double farePerBox,@RequestParam(required = false) double extraFare,HttpServletRequest request) throws DataBaseException
+	public String saveFareForSubLotId(@RequestParam int subLotId,@RequestParam double totFare,@RequestParam double farePerBox,HttpServletRequest request) throws DataBaseException
 	{
 		HttpSession session=request.getSession(false);
 		String sessionId=session.getId();
@@ -153,7 +152,7 @@ public class FareCalcFormController {
 		fareBook.setCreateTimeStamp(createTimeStamp);
 		fareBook.setSessionId(sessionId);
 		fareBook.setFarePerBox(farePerBox);
-		fareBook.setExtraFare(extraFare);
+
 		FareBook saveFareBook=fareBookRespository.save(fareBook);
 
 		if(saveFareBook==null) {

@@ -22,6 +22,19 @@ public class DataHelper {
 		}
 	}
 	
+	public static String  formatDate(Date date,String sourceFormat,String requiredFormat) throws Exception
+	{
+		if(date==null)
+			return null;
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat(requiredFormat);
+		if(isValidDateFormat(date,sourceFormat))
+		return simpleDateFormat.format(date);
+		else {
+			throw new Exception("Date Format Is Not Correct");
+			
+		}
+	}
+	
 	public static boolean isValidDateFormat(String date,String dateFormat ) 
 	{
 Date dt=null;
@@ -38,6 +51,18 @@ Date dt=null;
 			e.printStackTrace();
 		}
 		return dt!=null;
+		
+	}
+	public static boolean isValidDateFormat(Date date,String dateFormat ) 
+	{
+
+		SimpleDateFormat format=new SimpleDateFormat(dateFormat);
+		String dt=format.format(date);
+		if(dt!=null)
+		{
+			return true;
+		}
+		return false;
 		
 	}
 	

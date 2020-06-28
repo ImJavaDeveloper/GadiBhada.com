@@ -1,11 +1,46 @@
+function calulateTotalFare()
+{
+	var farePerBox = jQuery('input[name="farePerBoxCalc"]').val()
+	var totQtyDistributed = jQuery('input[name="totQtyDistributed"]').val()
+	$('#totalCalcFare').text(parseFloat(farePerBox)*parseInt(totQtyDistributed))
+}
 
 
+function  fetchFarePerBox(aDestId)
+{
+jQuery('input[name="aDestinationId"]').val(aDestId)
+var sourceId = jQuery('input[name="sourceId"]').val()
+var itemId = jQuery('input[name="itemId"]').val()
+var boxId = jQuery('input[name="boxId"]').val()
+
+$.ajax({
+		type : "GET",
+		url : "/management/getFarePerBox",
+		data : {
+			"sourceId" : sourceId,
+			"aDestId"  : aDestId,
+			"itemId"   : itemId,
+			"boxId"    : boxId
+		},
+		success : function(data) {
+			
+            $('#farePerBoxCalc').val(data)
+           var totQtyDistributed = jQuery('input[name="totQtyDistributed"]').val()
+           //alert(parseInt(totQtyDistributed))
+         if (parseInt(totQtyDistributed)> 0) {
+	     calulateTotalFare()
+	     }
+            //$('#totalFare').val(data*totQtyDistributed)
+      
+		}
+});
+}
 function fetchAgentDestination()
 {
 	
 var agentId = $("#agentId").val()
 
-$.ajax({
+var call1=$.ajax({
 		type : "GET",
 		url : "/management/getAgentAddr",
 		data : {
@@ -14,10 +49,30 @@ $.ajax({
 		success : function(data) {
 			
             $('#agentDestination').text(data)
-            $('#aDestId').val(agentId)
+          
       
 		}
 });
+$.when(call1).done(function(o1){
+var aDestName= $('#agentDestination').text()
+$.ajax({
+	type : "GET",
+	url : "/management/getAgentDestId",
+	data : {
+		"aDestName" : aDestName
+	},
+	success : function(data) {
+		console.log("DestId="+data)
+		//$('input[id="aDestinationId"]').val(data);
+		//$('#aDestinationId').attr('value', data);
+		//jQuery('input[name="aDestinationId"]').val(data)
+       // $('#aDestinationId').text(data)
+		fetchFarePerBox(data)
+		}
+});
+});
+
+
 }
 //below function required to load js functions after page is dynamically loaded
 
@@ -65,7 +120,7 @@ $("#distributionTab").on("click", function() {
 
 });
 
-function loadUpdateModal(lotId,challanDate,truckNo,sourceName,destination,traderName,traderMark,itemName,boxName,boxWt) {
+function loadUpdateModal(lotId,challanDate,truckNo,sourceId,sourceName,destination,traderName,traderMark,itemId,itemName,boxId,boxName,boxWt) {
 	//alert("Coming from modal");
 	//alert(lotId);
 	$.ajax({
@@ -75,11 +130,14 @@ function loadUpdateModal(lotId,challanDate,truckNo,sourceName,destination,trader
 			"lotId" : lotId,
 			"challanDate" : challanDate,
 			"truckNo" : truckNo,
+			"sourceId" : sourceId,
 			"sourceName" : sourceName,
 			"destination" : destination,
 			"traderName" : traderName,
 			"traderMark" : traderMark,
+			"itemId" : itemId,
 			"itemName" : itemName,
+			"boxId" : boxId,
 			"boxName" : boxName,
 			"boxWt" : boxWt
 			
@@ -98,13 +156,20 @@ function loadUpdateModal(lotId,challanDate,truckNo,sourceName,destination,trader
 
 function saveUpdateModal() {
 
+	var modalLotId=jQuery('input[name="modalLotId"]').val()
 	var modalqtyAvl = jQuery('input[name="modalqtyAvl"]').val()
 	var totQtyDistributed = jQuery('input[name="totQtyDistributed"]').val()
+	var aDestId=jQuery('input[name="aDestinationId"]').val()
 	var agentId = $("#agentId").val()
 	var agentDestination = $('#agentDestination').text()
 	var challanDate = $('#modalChallnDate').text()
-	
+	var receivingDateLbl =$('#receivingDate').text()
 	var receivingDate = jQuery('input[name="receivingDate"]').val()
+	if(typeof receivingDate === "undefined")
+	receivingDate=receivingDateLbl
+	var farePerBoxCalc = jQuery('input[name="farePerBoxCalc"]').val()
+	var totalCalcFare = $('#totalCalcFare').text() 
+	var localDriver = jQuery('input[name="localDriver"]').val()
 	
 	var cdt=new Date(challanDate)
 	var rdt=new Date(receivingDate)
@@ -128,8 +193,7 @@ function saveUpdateModal() {
 	if(confirmation==false)
 		return;
 	}
-	alert("At THe End")
-    
+	
 	//alert(documnet.getElementById("totQty"))
 	//alert(d)
 
@@ -153,8 +217,17 @@ function saveUpdateModal() {
 		alert("Please Enter Recieving Date");
 		return 10;
 	}
+	if (parseInt(farePerBoxCalc.length) <= 0) {
+		alert("Fare Per Box Should Not Be Empty");
+		return 10;
 
-	if (totQtyDistributed == 0 || modalqtyAvl < totQtyDistributed) {
+	}
+	if (parseInt(totalCalcFare.length) <= 0) {
+		alert("Total Fare Must Be calculated");
+		return 10;
+
+	}
+	if (parseInt(totQtyDistributed) == 0 || parseInt(modalqtyAvl) < parseInt(totQtyDistributed)) {
 		alert("You Entered More Than Available");
 		return 10;
 	} else {
@@ -162,9 +235,19 @@ function saveUpdateModal() {
 
 		userJson = $("form").serializeArray();
 		$.ajax({
-			type : "GET",
+			type : "POST",
 			url : "/saveUpdateModal",
-			data : userJson,
+			data : {
+				"modalLotId" : modalLotId,
+				"agentId" : agentId,
+				"aDestId" : aDestId,
+				"totQtyDistributed" : totQtyDistributed,
+				"receivingDate" : receivingDate,
+				"farePerBoxCalc" : farePerBoxCalc,
+				"totalCalcFare" : totalCalcFare,
+				"localDriver" : localDriver
+		
+			},
 			success : function(data) {
 
 				if (data === "success") {

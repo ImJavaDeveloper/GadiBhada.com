@@ -1,6 +1,7 @@
 package com.spring.boot.security.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +14,9 @@ public interface SubLotBookRepository extends JpaRepository<SubLotBook, Integer>
 	
 	@Query(value="select total_qty from sub_lot_book where sub_lot_id=?1",nativeQuery = true)
 	public Integer extractTotalQtyValForLotId(int sub_lot_id);
+	
+	@Modifying
+	@Query(value="delete from sub_lot_book where lot_id=?1",nativeQuery = true)
+	public Integer deletebyLotId(int lot_id);
 
 }

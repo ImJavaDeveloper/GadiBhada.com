@@ -35,7 +35,7 @@ public class FareBookMapper implements RowMapper<FareBook> {
 		mapper.setTotal_qty(rs.getInt(++i));
 		mapper.setFarePerBox(rs.getDouble(++i));
 		mapper.setTotal_fare(rs.getDouble(++i));
-		mapper.setExtra_fare(rs.getDouble(++i));
+	
 		
 		
 		return mapper;

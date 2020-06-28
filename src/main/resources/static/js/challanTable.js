@@ -17,7 +17,7 @@ $(document).ready(function(){
 					
 					 $.each(result, function(k, v) {
 						
-					 traderList=traderList+"<option value=\""+ v.trader_id +"\">"+v.trader_name+"("+v.trader_mark+")</option>";
+					 traderList=traderList+"<option value=\""+ v.trader_id +"\">"+v.trader_mark+"("+v.trader_name+")</option>";
 				
 					 });
 					 }

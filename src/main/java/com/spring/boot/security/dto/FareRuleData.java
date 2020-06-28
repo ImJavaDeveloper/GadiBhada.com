@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spring.boot.security.entity.FareRule;
 import com.spring.boot.security.repository.FareRuleRepository;
@@ -28,6 +29,15 @@ public class FareRuleData {
 	public FareRule saveBoxDetails(FareRule fareRule)
 	{
 		return  fareRuleRepository.save(fareRule);
+	}
+	
+	public double getFarePerBox(int sourceId, int aDestId, int itemId, int boxId)
+	{
+		FareRule fareRule=fareRuleRepository.getFarePerBox(sourceId, aDestId, itemId, boxId);
+		if(fareRule!=null)
+		return  fareRule.getFare();
+		else
+			return 0;
 	}
 
 }

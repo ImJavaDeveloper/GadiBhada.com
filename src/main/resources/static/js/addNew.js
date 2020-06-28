@@ -175,23 +175,28 @@ function saveTrader() {
 	var traderAdd = jQuery('input[name="traderAdd"]').val()
 	var traderMob = jQuery('input[name="traderMob"]').val()
 
-	if (traderName.trim().length == 0) {
+	/*if (traderName.trim().length == 0) {
+		$("#traderModal").modal('show');
+		$('#tradermodelcontent').html("  Error!! Enter Trader Name ");
+		return;
+	}*/
+
+	if (traderAdd.trim().length == 0) {
 		$("#traderModal").modal('show');
 		$('#tradermodelcontent').html("  Error!! Enter Trader Name ");
 		return;
 	}
-
 	if (tradeMark.trim().length == 0) {
 		$("#traderModal").modal('show');
 		$('#tradermodelcontent').html("  Error!! Enter Trade Mark ");
 		return;
 	}
 
-	if (traderMob.trim().length == 0) {
+	/*if (traderMob.trim().length == 0) {
 		$("#traderModal").modal('show');
 		$('#tradermodelcontent').html("  Error!! Enter Trader Mobile ");
 		return;
-	}
+	}*/
 	$.ajax({
 		type : "GET",
 		url : "/management/addnew/savetrader",
@@ -224,14 +229,14 @@ function saveAgent() {
 	var agentName = jQuery('input[name="agentName"]').val()
 	var agentMark = jQuery('input[name="agentMark"]').val()
 	//var agentAdd = $("#agentdestination").val().text()
-	var agentAdd=$("#agentdestination option:selected").text();
+	var agentAdd=$("#agentdestination option:selected").val();
 	var agentMob = jQuery('input[name="agentMob"]').val()
 
-	if (agentName.trim().length == 0) {
+	/*if (agentName.trim().length == 0) {
 		$("#agentModal").modal('show');
 		$('#agentmodelcontent').html("  Error!! Enter Agent Name ");
 		return;
-	}
+	}*/
 
 	if (agentMark.trim().length == 0) {
 		$("#agentModal").modal('show');
@@ -239,17 +244,16 @@ function saveAgent() {
 		return;
 	}
 	
-	
 	if (agentAdd.trim().length == 0) {
 		$("#agentModal").modal('show');
-		$("#agentmodelcontent").html("  Error!! Select Source ");
+		$("#agentmodelcontent").html("  Error!! Select Destination ");
 		return;
 	}
-	if (agentMob.trim().length == 0) {
+	/*if (agentMob.trim().length == 0) {
 		$("#agentModal").modal('show');
 		$('#agentmodelcontent').html("  Error!! Enter Agent Mobile ");
 		return;
-	}
+	}*/
 	
 	$.ajax({
 		type : "GET",

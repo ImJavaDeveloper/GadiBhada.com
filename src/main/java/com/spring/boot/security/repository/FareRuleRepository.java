@@ -12,5 +12,8 @@ public interface FareRuleRepository extends JpaRepository<FareRule, Integer>  {
 	
 	@Query("FROM FareRule where source_id = ?1 and agent_destination_id=?2 and box_id=?3 and item_id=?4")
 	public FareRule findDuplicateFareRule(int source_id,int agent_destination_id,int box_id,int item_id);
+	
+	@Query("FROM FareRule where source_id = ?1 and agent_destination_id=?2  and item_id=?3 and box_id=?4")
+	public FareRule getFarePerBox(int source_id,int agent_destination_id,int item_id,int box_id);
 
 }

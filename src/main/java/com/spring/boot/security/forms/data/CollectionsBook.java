@@ -14,11 +14,11 @@ public class CollectionsBook {
 	private int total_qty;
 	private double fare_per_box;
 	private double fare;
-	private double extra_fare ;
 	private double tot_fare;
 	private double totPymt;
 	private double totDebit;
 	private double tot_bal_amt;
+    private String pymt_dt;
 	
 	public int getFare_id() {
 		return fare_id;
@@ -75,12 +75,7 @@ public class CollectionsBook {
 	public void setFare(double fare) {
 		this.fare = fare;
 	}
-	public double getExtra_fare() {
-		return extra_fare;
-	}
-	public void setExtra_fare(double extra_fare) {
-		this.extra_fare = extra_fare;
-	}
+
 	public double getTot_fare() {
 		return tot_fare;
 	}
@@ -110,6 +105,12 @@ public class CollectionsBook {
 	}
 	public void setAdest_name(String adest_name) {
 		this.adest_name = adest_name;
+	}
+	public String getPymt_dt() {
+		return pymt_dt;
+	}
+	public void setPymt_dt(String pymt_dt) {
+		this.pymt_dt = pymt_dt;
 	}
 	
 

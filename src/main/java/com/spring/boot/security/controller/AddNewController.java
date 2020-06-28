@@ -133,15 +133,15 @@ public class AddNewController {
 
 	@RequestMapping(value = "/management/addnew/savetrader", method = RequestMethod.GET)
 	@ResponseBody
-	public String saveTradeDetails(@RequestParam String traderName, @RequestParam String tradeMark,
-			@RequestParam(required = false) String traderAdd, @RequestParam String traderMob) throws DataBaseException {
+	public String saveTradeDetails(@RequestParam(required = false)  String traderName, @RequestParam String tradeMark,
+			@RequestParam String traderAdd, @RequestParam(required = false)  String traderMob) throws DataBaseException {
 		String message = null;
 
-		if (!DataValidator.isValidMobileNumer(traderMob)) {
+		if (traderMob.length()>0 && !DataValidator.isValidMobileNumer(traderMob)) {
 			message = traderMob + " Mobile no Must have only digit";
 			return message;
 		}
-		if (DataValidator.checkStringLenght(traderMob) != 10) {
+		if (traderMob.length()>0 && DataValidator.checkStringLenght(traderMob) != 10) {
 			message = traderMob + ";Mobile no must contain 10 digit";
 			return message;
 		}
@@ -172,15 +172,15 @@ public class AddNewController {
 
 	@RequestMapping(value = "/management/addnew/saveagent", method = RequestMethod.GET)
 	@ResponseBody
-	public String saveAgentDetails(@RequestParam String agentName, @RequestParam String agentMark,
-			@RequestParam String agentAdd, @RequestParam String agentMob) throws DataBaseException {
+	public String saveAgentDetails(@RequestParam(required = false)  String agentName, @RequestParam String agentMark,
+			@RequestParam String agentAdd, @RequestParam(required = false)  String agentMob) throws DataBaseException {
 		String message = null;
 
-		if (!DataValidator.isValidMobileNumer(agentMob)) {
+		if (agentMob.length()>0 && !DataValidator.isValidMobileNumer(agentMob)) {
 			message = agentMob + " Mobile no Must have only digit";
 			return message;
 		}
-		if (DataValidator.checkStringLenght(agentMob) != 10) {
+		if (agentMob.length()>0 && DataValidator.checkStringLenght(agentMob) != 10) {
 			message = agentMob + ";Mobile no must contain 10 digit";
 			return message;
 		}

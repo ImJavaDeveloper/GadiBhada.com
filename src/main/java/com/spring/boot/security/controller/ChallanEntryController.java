@@ -20,11 +20,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.boot.security.dto.ChallanBookData;
 import com.spring.boot.security.entity.ChallanBook;
 import com.spring.boot.security.entity.LotBook;
+import com.spring.boot.security.entity.TruckLedger;
 import com.spring.boot.security.exception.AppHttpException;
 import com.spring.boot.security.exception.DataBaseException;
+import com.spring.boot.security.helper.DataValidator;
 import com.spring.boot.security.helper.FormUtils;
 import com.spring.boot.security.repository.BoxDetailsRepository;
 import com.spring.boot.security.repository.LotBookRepository;
+import com.spring.boot.security.repository.TruckLedgerRespository;
 
 @Controller
 @RequestMapping("/gadibhada/dataentry")
@@ -41,14 +44,23 @@ public class ChallanEntryController {
 	@Autowired
 	LotBookRepository lotBookRepository;
 	
+	@Autowired
+	TruckLedgerRespository truckLedgerRepository;
+	
 	
 	@RequestMapping(value="/savechallanentry" ,method=RequestMethod.POST)
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = DataBaseException.class)
 	public String saveChallanBookData(@RequestParam Date date,@RequestParam Integer sourceId, @RequestParam Integer destinationId,@RequestParam String truckNo, @RequestParam(required = false) String driverName,
-			@RequestParam(required = false) String driverMobile,@RequestParam Integer[] traderId,@RequestParam Integer[] itemId,
+			@RequestParam String advancePymt,@RequestParam(required = false) String driverMobile,@RequestParam Integer[] traderId,@RequestParam Integer[] itemId,
 			@RequestParam Integer[] boxId,@RequestParam Integer[] totalQty,@RequestParam(required = false) String[] receiver,RedirectAttributes redirectAttributes,HttpServletRequest request) throws DataBaseException, AppHttpException 
 	{
 		
+		if(advancePymt!=null && !DataValidator.isNumber(advancePymt)) {
+			
+			redirectAttributes.addFlashAttribute("message", "Failed");
+			redirectAttributes.addFlashAttribute("exception", "Please Enter Correct Payment");
+			return "redirect:/gadibhada/dataentry";
+		}
 		
 		HttpSession session=request.getSession(false);
 		if(session == null) {
@@ -101,6 +113,22 @@ public class ChallanEntryController {
 			LotBook savedLotBook=lotBookRepository.save(lotBook);
 			
 			if(savedLotBook==null) {
+				
+					throw new DataBaseException("Exception found while saving data into Lot Book ","management");
+				
+			}
+			
+			LOGGER.info("Saving Truck Data.....");
+			TruckLedger truckData=new TruckLedger();
+			truckData.setTruckNo(truckNo);
+			truckData.setTruckStratDt(date);
+			truckData.setSource_id(sourceId);
+			truckData.setDestinationId(destinationId);
+			truckData.setAdvFare(FormUtils.getDouble(advancePymt));
+			
+			TruckLedger truckLedger=truckLedgerRepository.save(truckData);
+
+			if(truckLedger==null) {
 				
 					throw new DataBaseException("Exception found while saving data into Lot Book ","management");
 				

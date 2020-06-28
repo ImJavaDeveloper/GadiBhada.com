@@ -104,11 +104,6 @@ function saveCollectionsData() {
          if(totalDebit.trim().length<=0)
         	 totalDebit=0;
          
-        /* alert("totFare:"+totFare+",extraFare:"+extraFare+",totalDebit:"+totalDebit+",totalPymt:"+totalPymt)
-         alert(parseFloat(totFare)+parseFloat(extraFare))
-         alert(parseFloat(totalPymt)+parseFloat(totalDebit))
-         */
-         
          if(parseFloat(totPayable) <parseFloat(totalPymt))
         	 {
         	 $('#collectionModelmMessage').html("<strong style=\"color:red\">Failure!</strong> Total Payment Is Greater Than Actual Fare:");

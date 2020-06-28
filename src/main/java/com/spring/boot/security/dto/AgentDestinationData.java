@@ -31,5 +31,12 @@ public class AgentDestinationData {
 		
 		return agentDestination;
 	}
+	
+	public int getAgentDestId(String agentDest)
+	{
+		
+           return agentDestinationRepository.findByAgentDestName(agentDest).getAgentDestinationId();
+		
+	}
 
 }

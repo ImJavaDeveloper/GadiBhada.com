@@ -17,11 +17,14 @@ public class DistributionUpdateRowMapper implements RowMapper<DistributionUpdate
 		distributionUpdateVO.setChallan_id(rs.getInt(++i));
 		distributionUpdateVO.setChallan_date(rs.getDate(++i));
 		distributionUpdateVO.setTruck_no(rs.getString(++i));
+		distributionUpdateVO.setSource_id(rs.getInt(++i));
 		distributionUpdateVO.setSource_name(rs.getString(++i));
 		distributionUpdateVO.setDestination(rs.getString(++i));
 		distributionUpdateVO.setTrader_name(rs.getString(++i));
 		distributionUpdateVO.setTrader_mark(rs.getString(++i));
+		distributionUpdateVO.setItem_id(rs.getInt(++i));
 		distributionUpdateVO.setItem_name(rs.getString(++i));
+		distributionUpdateVO.setBox_id(rs.getInt(++i));
 		distributionUpdateVO.setBox_name(rs.getString(++i));
 		distributionUpdateVO.setTotal_wt(rs.getInt(++i));
 		distributionUpdateVO.setTotal_qty(rs.getInt(++i));

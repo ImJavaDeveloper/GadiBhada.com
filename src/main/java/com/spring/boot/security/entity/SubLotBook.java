@@ -32,6 +32,8 @@ public class SubLotBook {
 	private int agentId;
 	@Column(name="receiving_date")
 	private Date receivingDate;
+	@Column(name="local_driver")
+	private String localDriver;
 	
 	public int getSubLotId() {
 		return subLotId;
@@ -80,6 +82,12 @@ public class SubLotBook {
 	}
 	public void setReceivingDate(Date receivingDate) {
 		this.receivingDate = receivingDate;
+	}
+	public String getLocalDriver() {
+		return localDriver;
+	}
+	public void setLocalDriver(String localDriver) {
+		this.localDriver = localDriver;
 	}
 	
 	

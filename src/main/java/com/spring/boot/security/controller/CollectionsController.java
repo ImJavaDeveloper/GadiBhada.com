@@ -20,6 +20,7 @@ import com.spring.boot.security.entity.FareCollection;
 import com.spring.boot.security.exception.DataBaseException;
 import com.spring.boot.security.forms.data.CollectionFareVO;
 import com.spring.boot.security.forms.data.TableQuery;
+import com.spring.boot.security.helper.DataHelper;
 import com.spring.boot.security.helper.DataValidator;
 import com.spring.boot.security.helper.FormUtils;
 import com.spring.boot.security.mapper.CollectionsDataMapper;
@@ -38,7 +39,7 @@ public class CollectionsController {
 
 	@RequestMapping(value="/management/getcollections",method=RequestMethod.GET)
 	@ResponseBody
-	public String getCollectionPage()
+	public String getCollectionPage() throws Exception
 	{
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
 		List<CollectionFareVO> collectionFareVOList=jdbcTemplate.query(TableQuery.getCollectionDataQuery(), new CollectionsDataMapper());
@@ -60,7 +61,6 @@ public class CollectionsController {
 				"			<th>Delivered To</th>\r\n" + 
 				"			<th>Qty</th>\r\n" + 
 				"			<th>Total Fare</th>\r\n" + 
-				"			<th>Extra Fare</th>\r\n" + 
 				"			<th>Total Payment</th>\r\n" + 
 				"			<th>Total Debit</th>\r\n" + 
 				"			<th>Balance</th>\r\n" + 
@@ -71,18 +71,18 @@ public class CollectionsController {
 		StringBuilder Htmlbody=new StringBuilder();
 		
 		for(int i=0;i<collectionFareVOList.size();i++) {
-			CollectionFareVO collectionFareVO=collectionFareVOList.get(i);		
+			CollectionFareVO collectionFareVO=collectionFareVOList.get(i);
+			String agentName=collectionFareVO.getAgentName()==null ? "":"-"+collectionFareVO.getAgentName();
 			Htmlbody.append(
 
 					"            <tr>\r\n" + 
 							"                <td>"+collectionFareVO.getTruckNo()+"</td>\r\n" + 
-							"                <td>"+collectionFareVO.getRecievedDt()+"</td>\r\n" + 
+							"                <td>"+DataHelper.formatDate(collectionFareVO.getRecievedDt(), "yyyy-MM-dd", "dd/MM/yyyy")+"</td>\r\n" + 
 							"                <td>"+collectionFareVO.getItemName().toUpperCase()+"-"+collectionFareVO.getBoxName().toUpperCase()+"-"+collectionFareVO.getBoxWt()+"</td>\r\n" + 
-							"                <td>"+collectionFareVO.getAgentName()+"-"+collectionFareVO.getAgentMark()+"</td>\r\n" +
+							"                <td>"+collectionFareVO.getAgentMark()+agentName+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getAgentDestName()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotQty()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotFare()+"</td>\r\n" +
-							"                <td>"+collectionFareVO.getExtraFare()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotPymt()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotDebit()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotBal()+"</td>\r\n" + 
@@ -99,7 +99,6 @@ public class CollectionsController {
 				"			<th>Delivered To</th>\r\n" + 
 				"			<th>Qty</th>\r\n" + 
 				"			<th>Total Fare</th>\r\n" + 
-				"			<th>Extra Fare</th>\r\n" + 
 				"			<th>Total Payment</th>\r\n" + 
 				"			<th>Total Debit</th>\r\n" + 
 				"			<th>Balance</th>\r\n" + 
@@ -134,7 +133,7 @@ public class CollectionsController {
 
 	@RequestMapping(value="/management/loadCollectionsModal" ,method=RequestMethod.GET)
 	@ResponseBody
-	public String loadCollectionsModal(@RequestParam Integer subLotId) {
+	public String loadCollectionsModal(@RequestParam Integer subLotId) throws Exception {
 		LOGGER.info(TableQuery.getCollectionDataQuery(subLotId));
 		CollectionFareVO collectionVO;
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
@@ -159,7 +158,6 @@ public class CollectionsController {
 						+"			<th>Delivered To</th>\r\n"  
 						+"			<th>Qty</th>\r\n"  
 						+"			<th>Total Fare</th>\r\n"  
-						+"			<th>Extra Fare</th>\r\n" 
 						+"			<th>Total Bal</th>\r\n" 
 						+"		</tr>\r\n" 
 						+"	</thead>\r\n" 
@@ -169,13 +167,12 @@ public class CollectionsController {
 						+ "<input type=\"hidden\" name=\"fareIdC\" value=\""+collectionVO.getFareId()+"\">"
 
 				+"<td><label for=\"Truck No\" >"+collectionVO.getTruckNo()+"</label></td>"
-				+"<td><label for=\"receivedDt\">"+collectionVO.getRecievedDt()+"</label></td>"
+				+"<td><label for=\"receivedDt\">"+DataHelper.formatDate(collectionVO.getRecievedDt(), "yyyy-MM-dd", "dd/MM/yyyy")+"</label></td>"
 				+"<td><label for=\"itemCode\">"+collectionVO.getItemName()+"-"+collectionVO.getBoxName()+"-"+collectionVO.getBoxWt()+"</label></td>"
 				+"<td><label for=\"agentName\">"+collectionVO.getAgentName()+"-"+collectionVO.getAgentMark()+"</label></td>"
 				+"<td><label for=\"deliveryLoc\">"+collectionVO.getAgentDestName()+"</td>"
 				+"<td><label for=\"totQty\">"+collectionVO.getTotQty()+"</label></td>"
 				+"<td><label for=\"totFare\">"+collectionVO.getTotFare()+"</label></td>"
-				+"<td><label for=\"totFare\">"+collectionVO.getExtraFare()+"</label></td>"
 				+"<td><label for=\"totFare\">"+collectionVO.getTotBal()+"</label></td>"
 				
 				+ "<input type=\"hidden\" name=\"totPayable\" value=\""+collectionVO.getTotBal()+"\">"
@@ -190,8 +187,6 @@ public class CollectionsController {
 
 						+"<thead style=\"background-color: #E2E2E2\">"
 						+"<tr>"
-						+"<td><label for=\"extraFareAmt\">Tot Payment</label></td>"
-						+"<td><label for=\"extraFareAmt\">Tot Debit</label></td>"
 						+"<td><label for=\"totaPymt\">Payable Amt</label></td>"
 						+"<td><label for=\"totDebit\">Total Debit</label></td>"
 						+"<td><label for=\"pymtDt\">Payment Date</label></td>"

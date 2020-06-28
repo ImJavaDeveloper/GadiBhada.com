@@ -96,13 +96,14 @@ body {
 
 		<!-- Main component for a Tab-->
 		<ul class="nav nav-tabs" id="menuTab" style="width: 100%;background-color: #610D0D;color:black">
-			<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+			<li class="active"><a data-toggle="tab" href="#home" id="dataEntryHome">Home</a></li>
 			<li><a data-toggle="tab" href="#menu1">Challan Entry</a></li>
 			<li><a data-toggle="tab" href="#menu2" id="distributionTab">Distribution</a></li>
 			<li><a data-toggle="tab" href="#menu3" id="fareCalcTab">Fare Calculation</a></li>
 			<li><a data-toggle="tab" href="#menu4" id="farecollectionTab">Collections</a></li>
-			<li><a data-toggle="tab" href="#menu5" id="addNewTab">Add
-					New</a></li>
+			<li><a data-toggle="tab" href="#menu5" id="addNewTab">Add New</a></li>			
+			<li><a data-toggle="tab" href="#menu7" id="dailyLedgerTab">Daily Ledger</a></li>
+			<li><a data-toggle="tab" href="#menu6" id="truckLedgerTab">Truck Ledger</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -153,7 +154,10 @@ body {
 											placeholder='Driver Name' class="form-control" /></td>
 										<td><input type="text" name='driverMobile'
 											placeholder='Driver Mobile' class="form-control" required /></td>
-
+									</tr>
+									<tr>
+									<td><input type="text" name='advancePymt'
+											placeholder='Advance Payment' class="form-control" required /></td>
 									</tr>
 								</tbody>
 							</table>
@@ -181,7 +185,7 @@ body {
 												<option value="">Select Trader</option>
 												<option th:each="trader : ${traders}"
 													th:value="${trader.trader_id}"
-													th:text="${trader.trader_name +'('+ trader.trader_mark+')'}"></option>
+													th:text="${trader.trader_mark +'('+ trader.trader_name+')'}"></option>
 										</select></td>
 										<td><select class="form-control" id="items" name="itemId"
 											required>
@@ -243,6 +247,15 @@ body {
 					<div class="panel-body" id="panelBody"></div>
 				</div>
 			</div>
+			<div id="menu7" class="tab-pane fade">
+				<!-- This section is dynamically loaded via ajax -->
+
+			</div>
+			<div id="menu6" class="tab-pane fade">
+				<!-- This section is dynamically loaded via ajax -->
+
+			</div>
+			
 		</div>
 		<!-- End Main component for a Tab-->
 
@@ -260,7 +273,10 @@ body {
 	<script src="/js/commonUtils.js"></script>
 	<script src="/js/farecollection.js"></script>
 	<script src="/js/addNew.js"></script>
+	<script src="/js/truckLedger.js"></script>
+	<script src="/js/dailyLedger.js"></script>
 	<script src="/js/helper.js"></script>
+	<script src="/js/dataentry/datentrystats.js"></script>
 
 
 	<!-- 

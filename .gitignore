@@ -1,4 +1,4 @@
-HELP.md
+
 .gradle
 build/
 bin/
@@ -6,7 +6,8 @@ bin/
 !**/src/main/**
 !**/src/test/**
 .log
-logs
+logs/
+Database/
 ### STS ###
 .apt_generated
 .classpath
