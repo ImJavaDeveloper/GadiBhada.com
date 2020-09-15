@@ -22,6 +22,16 @@ public class DataHelper {
 		}
 	}
 	
+	public static Date  stringToDate(String date) throws Exception
+	{
+		if(date==null || date.trim().length()==0)
+			return null;
+		
+		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+		return format.parse(date);
+	}
+	
+	
 	public static String  formatDate(Date date,String sourceFormat,String requiredFormat) throws Exception
 	{
 		if(date==null)

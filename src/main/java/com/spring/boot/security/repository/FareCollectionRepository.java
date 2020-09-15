@@ -1,5 +1,6 @@
 package com.spring.boot.security.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,6 @@ public interface FareCollectionRepository extends JpaRepository<FareCollection, 
 	
 	@Query("From FareCollection where sub_lot_id=?1")
 	public List<FareCollection> getFareCollectionBySubLotId(int sub_lot_id);
+	
 
 }

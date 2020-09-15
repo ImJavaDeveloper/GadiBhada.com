@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+
 	var i=1;     
      $("#add_row").click(function(){
     	
@@ -17,7 +17,7 @@ $(document).ready(function(){
 					
 					 $.each(result, function(k, v) {
 						
-					 traderList=traderList+"<option value=\""+ v.trader_id +"\">"+v.trader_mark+"("+v.trader_name+")</option>";
+					 traderList=traderList+"<option value=\""+ v.trader_id +"\">"+v.trader_mark+(v.trader_name !="" ? "("+v.trader_name+")" : "")+"</option>";
 				
 					 });
 					 }
@@ -66,7 +66,7 @@ $(document).ready(function(){
            boxTypesList
            +"</select> </td>" +
            
-    		"<td><input  name='totalQty' type='text' placeholder='Total Quantity'  class='form-control input-md' required onclick='getTotalWt()'></td>"+
+    		"<td><input  name='totalQty' type='number' placeholder='Total Quantity'  class='form-control input-md' required ></td>"+
     		"<td><input  name='receiver' type='text' placeholder='Receiver'  class='form-control input-md' ></td>"
     		);
 
@@ -84,3 +84,35 @@ $(document).ready(function(){
 	 });
 
 });
+
+ function validateChallanFormData()
+{
+
+	var challanDate=jQuery('input[name="date"]').val()
+	var truckNo=jQuery('input[name="truckNo"]').val()
+	$.ajax({
+				type : "POST",
+				url : '/gadibhada/dataentry/findIfChallanBookExist',
+				data : {
+					"date" : challanDate,
+					"truckNo" : truckNo
+				},
+				success : function(data) {
+					if(data === "True"){
+						
+						$('#formMessage').html("Error: Can't save data as Challan Book already exist with same date-"+challanDate+" and truck no-"+truckNo)
+						
+						return false
+					}
+						else
+							{
+							
+							return true;
+							}
+					
+				 }
+		});
+	
+
+}
+ 

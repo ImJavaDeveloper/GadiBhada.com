@@ -9,13 +9,15 @@ $(window).on('load', function() {
       $('#menuTab a[href="' + activeTab + '"]').tab('show');
      // alert(activeTab)
       if(activeTab=="#menu2")
-      	callAjaxForUpdateDistribution();
-      if(activeTab=="#menu3")
-      	callAjaxForFareCalcHome();      
+    	  callAjaxForDistribution();
       if(activeTab=="#menu4")
     	  callAjaxForCollectionPage();
       if(activeTab=="#menu6")
-    	  callAjaxForTruckLedger();
+    	  {
+    	  loadPageTruckLedger();
+    	  }
+      if(activeTab=="#menu7")
+    	  loadDailyLedger();
     	  
   }
 

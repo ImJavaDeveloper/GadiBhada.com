@@ -27,6 +27,8 @@ public class FareCollection {
 	private Date pymtDt;
 	@Column(name="debit_amt")
 	private double debitAmt;
+	@Column(name="ledger_dt")
+	private Date ledgerDt;
 	
 	
 	
@@ -71,6 +73,12 @@ public class FareCollection {
 	public String toString() {
 		return "FareCollection [collectionId=" + collectionId + ", fareId=" + fareId + ", subLotId=" + subLotId
 				+ ", totPayment=" + totPayment + ", pymtDt=" + pymtDt + ", debitAmt=" + debitAmt + "]";
+	}
+	public Date getLedgerDt() {
+		return ledgerDt;
+	}
+	public void setLedgerDt(Date ledgerDt) {
+		this.ledgerDt = ledgerDt;
 	}
 	
 	

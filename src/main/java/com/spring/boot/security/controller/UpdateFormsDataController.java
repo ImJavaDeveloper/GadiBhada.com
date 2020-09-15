@@ -1,11 +1,16 @@
 package com.spring.boot.security.controller;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.boot.security.constant.TableConstant;
 import com.spring.boot.security.exception.CustomGenericException;
+import com.spring.boot.security.exception.DataBaseException;
+import com.spring.boot.security.forms.data.CollectionPymtPerLedgerDt;
+import com.spring.boot.security.forms.data.LocalFareEntryVO;
 import com.spring.boot.security.helper.DataHelper;
 import com.spring.boot.security.helper.DataValidator;
 import com.spring.boot.security.repository.SubLotBookRepository;
@@ -24,38 +32,55 @@ import com.spring.boot.security.repository.SubLotBookRepository;
 @RequestMapping("/gadibhada")
 public class UpdateFormsDataController {
 	
-	//private static final Logger LOGGER=LoggerFactory.getLogger(UpdateFormsDataController.class);
+	private static final Logger LOGGER=LoggerFactory.getLogger(UpdateFormsDataController.class);
 	
 	@Autowired
 	DataSource datasource;
 	@Autowired
 	SubLotBookRepository subLotBookRepository;
 	
+	
 	@RequestMapping(value="/managedata/updateChallanDate",method=RequestMethod.POST)
 	@ResponseBody
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = DataBaseException.class)
 	public String updateChallanDate(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
-			if(!DataHelper.isValidDateFormat(value, "dd/MM/yyyy"))
+			if(!DataHelper.isValidDateFormat(value, "dd/MM/yyyy")) {
+			       LOGGER.error("Date format is not correct !!");
 		           throw new Exception("Date format is not correct !!");
+		    }
 			
 			JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+			String sql1="update truck_ledger set truck_start_dt='"+DataHelper.formatDate(value, "dd/MM/yyyy", "yyyy-MM-dd")+"' where truck_no=(select truck_no from challan_book where challan_id="+pk+")"
+					+ " And truck_start_dt=(select challan_date from challan_book where challan_id="+pk+")";
 			String sql="update challan_book set "+name+"='"+DataHelper.formatDate(value, "dd/MM/yyyy", "yyyy-MM-dd")+"' where challan_id="+pk;
-			int noOfRowsUpdated=jdbcTemplate.update(sql);
-			System.out.println(noOfRowsUpdated);
+			
+			int noOfRowsUpdated1=jdbcTemplate.update(sql1);
+			int noOfRowsUpdated2=jdbcTemplate.update(sql);
+			
+			LOGGER.info("Challan Date and Truck Start Date Has Been Updated for Challan Id-"+pk);
 			return value;
 		
 	}
 	@RequestMapping(value="/managedata/updateChallanTruck",method=RequestMethod.POST)
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = DataBaseException.class)
 	@ResponseBody
 	public String updateChallanTruck(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
-			if(value.trim().length()==0 ||value.trim().length()<8 )
-				throw new CustomGenericException("Truck no must not be empty And must have proper");
+			if(value.trim().length()==0 ||value.trim().length()<8 ) {
+				LOGGER.error("Truck no must not be empty And must have length 8 char");
+				throw new CustomGenericException("Truck no must not be empty And must have length 8 char");
+			}
 			
 			JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+			String sql1="update truck_ledger set truck_no='"+value+"' where truck_no=(select truck_no from challan_book where challan_id="+pk+")"
+					+ " And truck_start_dt=(select challan_date from challan_book where challan_id="+pk+")";
 			String sql="update challan_book set "+name+"='"+value+"' where challan_id="+pk;
+			int noOfRowsUpdated1=jdbcTemplate.update(sql1);
 			int noOfRowsUpdated=jdbcTemplate.update(sql);
-			System.out.println(noOfRowsUpdated);
+
+			LOGGER.info("Truck No For Challan Boon And Truck Ledger Has Been Updated for Challan Id-"+pk);
+			
 			return value;
 		
 	}
@@ -65,28 +90,65 @@ public class UpdateFormsDataController {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
 	public String updateChallanSource(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
-			
+	
 		try {	
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
-			String updateChallanBooksql="update challan_book set "+name+"='"+value+"' where challan_id="+pk;
+		LOGGER.info("Updating challan source and respective tables ");
+		    String updateChallanBooksql="update challan_book set "+name+"='"+value+"' where challan_id="+pk;
+		    String updateTruckLedger="update truck_ledger set "+name+"='"+value+"'where truck_no=(select truck_no from challan_book where challan_id="+pk+")" + 
+		    		" And truck_start_dt=(select challan_date from challan_book where challan_id="+pk+")";
 			//String deleteSubLotFromFareBook="delete from fare_book where sub_lot_id in(select sub_lot_id from sub_lot_book where lot_id in(select lot_id from lot_book where challan_id="
 			
-			String deleteSubLotFromFareBook="delete from fare_book where sub_lot_id in(select sub_lot_id "
+		  //Fetching amount collected for each subLotId and adjusting total amount from each ledger by date
+			String sql="select sub_lot_id,ledger_dt,sum(tot_payment) from fare_collection where sub_lot_id in(select sub_lot_id "
+					+ "from sub_lot_book where lot_id in(select lot_id from lot_book where challan_id="+pk+")) group by 1,2";
+			
+			List<CollectionPymtPerLedgerDt> collection=jdbcTemplate.query(sql, new RowMapper<CollectionPymtPerLedgerDt>()
+					
+					{
+
+						@Override
+						public CollectionPymtPerLedgerDt mapRow(ResultSet rs, int rowNum) throws SQLException {
+							int i=0;
+							CollectionPymtPerLedgerDt coll=new CollectionPymtPerLedgerDt();
+							coll.setSubLotId(rs.getInt(++i));
+							coll.setLedgerDt(rs.getDate(++i));
+							coll.setTotAmt(rs.getDouble(++i));
+							return coll;
+						}
+				
+					}
+					);
+				if(collection != null && collection.size()>0)
+				{ 
+					for(int i=0;i<collection.size();i++) {
+					String updateDailyLedger="update daily_ledger_book set tot_collections=tot_collections-"+collection.get(i).getTotAmt()+" where ledger_dt='"+collection.get(i).getLedgerDt()+"'";
+					String updateDailyLedger2="update daily_ledger_book set tot_ledger_bal=tot_ledger_bal-"+collection.get(i).getTotAmt()+" where ledger_dt>='"+collection.get(i).getLedgerDt()+"'";
+					
+					jdbcTemplate.update(updateDailyLedger);
+					jdbcTemplate.update(updateDailyLedger2);
+					}
+					}
+				
+		    String deleteSubLotFromFareBook="delete from fare_book where sub_lot_id in(select sub_lot_id "
 					+ "from sub_lot_book where lot_id in(select lot_id from lot_book where challan_id="+pk+"))";
 			String deleteSubLotFromCollectionBook="delete from fare_collection where fare_id in(select fare_id "
 					+ " from fare_book where sub_lot_id in(select sub_lot_id "
 					+ "from sub_lot_book where lot_id in(select lot_id from lot_book where challan_id="+pk+")))";
+			
+			
+					
 			int noOfRowsUpdated=jdbcTemplate.update(updateChallanBooksql);
 			int noOfRowsDeleted2=jdbcTemplate.update(deleteSubLotFromCollectionBook);
 			int noOfRowsDeleted1=jdbcTemplate.update(deleteSubLotFromFareBook);
-			
+			int updateTruckLedgerCnt=jdbcTemplate.update(updateTruckLedger);
 			System.out.println("noOfRowsUpdated:"+noOfRowsUpdated);
 			System.out.println("noOfRowsDeleted1:"+noOfRowsDeleted1);
 			System.out.println("noOfRowsDeleted2:"+noOfRowsDeleted2);
 		}
 			catch(Exception e)
 			{
-				
+				LOGGER.error("Exception occured while updating source ");
 			}
 			return value;
 		
@@ -96,7 +158,10 @@ public class UpdateFormsDataController {
 	@ResponseBody
 	public int updateChallanDestination(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
-			
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+		String updateTruckLedger="update truck_ledger set "+name+"='"+value+"'where truck_no=(select truck_no from challan_book where challan_id="+pk+")" + 
+	    		" And truck_start_dt=(select challan_date from challan_book where challan_id="+pk+")";
+		jdbcTemplate.update(updateTruckLedger);
 		return updateTable(TableConstant.CHALLAN_BOOK_TABLE,name,value,TableConstant.CHALLAN_BOOK_PK_Column,pk);	
 		
 	}
@@ -106,6 +171,8 @@ public class UpdateFormsDataController {
 	public int updateChallanDriverName(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
 		int noOfRowsUpdate= updateTable2(TableConstant.CHALLAN_BOOK_TABLE,name,value,TableConstant.CHALLAN_BOOK_PK_Column,pk);				
+		
+		
 		return noOfRowsUpdate;
 	}
 	
@@ -184,11 +251,11 @@ public class UpdateFormsDataController {
 						+ " from fare_book where sub_lot_id in(select sub_lot_id "
 						+ "from sub_lot_book where lot_id="+pk+"))";
 				
-				String deleteSubLotFromDebitBook="delete from fare_debit where collection_id in(select collection_id from fare_collection where fare_id in(select fare_id "
+				/*String deleteSubLotFromDebitBook="delete from fare_debit where collection_id in(select collection_id from fare_collection where fare_id in(select fare_id "
 						+ " from fare_book where sub_lot_id in(select sub_lot_id "
 						+ "from sub_lot_book where lot_id="+pk+")))";
-				
-				deleteTableRecords(deleteSubLotFromDebitBook);
+				*/
+				//deleteTableRecords(deleteSubLotFromDebitBook);
 				deleteTableRecords(deleteSubLotFromCollectionBook);
 				deleteTableRecords(deleteSubLotFromFareBook);
 				deleteTableRecords(deleteSubLotFromLotBook);
@@ -213,16 +280,19 @@ public class UpdateFormsDataController {
 	
 	@RequestMapping(value="/managedata/updateSubLotReceiver",method=RequestMethod.POST)
 	@ResponseBody
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor = DataBaseException.class)
 	public int updateSubLotReceiver(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
 	{
 			int noOfRowsUpdated=updateTable2(TableConstant.SUB_LOT_BOOK_TABLE,name,value,TableConstant.SUB_LOT_BOOK_PK_Column,pk);			
 			
+			//Update below fare book instead of deleting
 			String deleteRecordsFromFareBook="delete from "+TableConstant.FARE_BOOK_TABLE+" where sub_lot_id="+pk;
+			
 			String deleteRecordsFromCollection="delete from "+TableConstant.COLLECTION_BOOK_TABLE+" where sub_lot_id="+pk;
 			
-			String deleteRecordsFromDebit="delete from "+TableConstant.FARE_DEBIT_TABLE+" where collection_id in(select collection_id from "+TableConstant.COLLECTION_BOOK_TABLE+" where sub_lot_id="+pk+")";
+			//String deleteRecordsFromDebit="delete from "+TableConstant.FARE_DEBIT_TABLE+" where collection_id in(select collection_id from "+TableConstant.COLLECTION_BOOK_TABLE+" where sub_lot_id="+pk+")";
 			
-			deleteTableRecords(deleteRecordsFromDebit);
+			//deleteTableRecords(deleteRecordsFromDebit);
 			deleteTableRecords(deleteRecordsFromCollection);
 			deleteTableRecords(deleteRecordsFromFareBook);
 			
@@ -295,6 +365,8 @@ public class UpdateFormsDataController {
 		
 	}
 	
+	
+	
 	@RequestMapping(value="/managedata/updateCollection",method=RequestMethod.POST)
 	@ResponseBody
 	public int updateCollection(@RequestParam String name,@RequestParam int pk,@RequestParam String value) throws Exception
@@ -313,8 +385,6 @@ public class UpdateFormsDataController {
 			return noOfRowsUpdated;
 		
 	}
-	
-	
 	
 	
 	

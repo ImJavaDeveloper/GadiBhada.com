@@ -1,3 +1,5 @@
+
+
 <style>
 #fctable table thead tr th {
   font-size: 11px;
@@ -19,36 +21,21 @@
 </style>
 
 <div id="truckLedgerModal" class="modal fade" role="dialog">
-	
-	<div class="modal-dialog modal-lg" id="modalTruckLedger">
-	
-
-		<!-- Modal content-->
-	
-		<div class="modal-content">
-	
-			<div class="modal-header">
-			
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				
-				<h4 class="modal-title">Truck Ledger</h4>
-				
-			</div>
-			
-			<div class="modal-body" id="truckLedgerModalContent">
-				
-				<p>Some text in the modal.</p>
-				
-			</div>
-			
-			<div class="modal-footer">
-			
-				
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="reloadPageTruckLedger()">Close</button>
-				
-			</div>
-		</div>
-	</div>
+	   <div class="modal-dialog modal-lg" id="modalTruckLedger">
+             <div class="modal-content">
+                 <div class="modal-header">
+               	<button type="button" class="close" data-dismiss="modal">&times;</button>
+         		<h4 class="modal-title">Truck Data</h4>
+			     </div>
+		      <div class="modal-body" id="truckLedgerModalContent">
+				           
+			   </div>
+			          <div class="modal-footer">
+			           <button id="save" class="btn btn-primary btn-width bkgrnd-cyan save-details" type="button" name="save-details" onclick="saveTruckLedgerData()" data-toggle="modal"  >Save</button>
+			        	<button type="button" class="btn btn-default" data-dismiss="modal" onclick="fetchTruckLedger()">Close</button>
+			       </div>
+		        </div>
+	         </div>
 </div>
 
 <h3>Truck Ledger</h3>
@@ -59,9 +46,9 @@
 		<tr>
 
 		   <th>TruckNo</th>
-		    <th>Date</th>
+		    <th>Start Date</th>
 			<th>From-Where</th>
-			<th>DeliveryDate</th>
+			<th>End Date</th>
 			<th>Adv Fare</th>	
 			<th>Prize Fare</th>
 			<th>Total Fare</th>
@@ -78,10 +65,11 @@
 	<tfoot>
 		<tr>
 		
+		   
 		   <th>TruckNo</th>
-		    <th>Date</th>
-		    <th>From-Where</th>
-			<th>DeliveryDate</th>
+		    <th>Start Date</th>
+			<th>From-Where</th>
+			<th>End Date</th>
 			<th>Adv Fare</th>	
 			<th>Prize Fare</th>
 			<th>Total Fare</th>

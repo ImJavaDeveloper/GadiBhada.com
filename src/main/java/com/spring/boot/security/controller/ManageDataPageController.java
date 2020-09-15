@@ -78,8 +78,8 @@ public class ManageDataPageController {
 	{
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
 		List<AllChallanData> allChallanData=jdbcTemplate.query(TableQuery.getAllChallansQuery(), new AllChallanDataMapper());
-		 String challanBookJsonArray = JSONArray.toJSONString(allChallanData);		
-		 return challanBookJsonArray;
+		String challanBookJsonArray = JSONArray.toJSONString(allChallanData);		
+		return challanBookJsonArray;
 		
 	}
 	

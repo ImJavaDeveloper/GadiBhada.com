@@ -4,8 +4,11 @@ $(document).ready(function() {
 
 function warning()
 {
-alert("Warining !! Changing source will delete the fare book as well as collection book for all lot distributed for this challan\n"+"You have to re-enter fare and collection data under data entry section manullay ");
-return;
+alert("Warining !! Changing source will delete the fare book as well as collection book for all lot distributed for this challan\n"+"You have to re-enter fare and collection data under data entry section manullay \n Collected amount will also adjusted from daily ledger automatically");
+$("#edtiFareAndCollectionModal").modal('show');
+$("#allChallansModal").modal('hide');
+
+//return;
 }
 
 function warningForItemChange()
@@ -162,7 +165,7 @@ function callAjaxForViewChallanById(challanId,challanDate,truckNo,sourceId,sourc
 				viewChallanModalFormTable2=viewChallanModalFormTable2+"<tr>"+
 				"<td>"+v.lotId+"</td>"+
 				//"<td>"+v.traderName+"</td>"+
-				"<td><a href=\"#\" id=\"tradername"+v.lotId+"\" data-type=\"select\" data-placement=\"right\">"+v.traderMark+"("+v.traderName+")</a></td>"+
+				"<td><a href=\"#\" id=\"tradername"+v.lotId+"\" data-type=\"select\" data-placement=\"right\">"+v.traderMark+(v.traderName !="" ? "("+v.traderName+")" : "")+"</a></td>"+
 				"<td onchange=\"warningForItemChange()\"><a href=\"#\" id=\"itemName"+v.lotId+"\" data-type=\"select\" data-placement=\"right\">"+v.itemName+"</a></td>"+
 				"<td onchange=\"warningForBoxChange()\"><a href=\"#\" id=\"boxName"+v.lotId+"\" data-type=\"select\" data-placement=\"right\">"+v.boxName+"-"+v.boxWt+"</a></td>"+
 				"<td onchange=\"warningForQtyChange()\"><a href=\"#\" id=\"totQty"+v.lotId+"\"  data-type=\"text\" data-placement=\"right\" data-pk=\""+v.lotId+"\" data-name=\"total_qty\">"+v.totQty+"</a></td>"+

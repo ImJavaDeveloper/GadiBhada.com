@@ -1,4 +1,4 @@
-//Calling Ajax to load the updated distribution page dynamically
+/*//Calling Ajax to load the updated distribution page dynamically
 $("#farecollectionTab").on("click", function() {
 
 	waitingDialog.show()
@@ -8,18 +8,19 @@ $("#farecollectionTab").on("click", function() {
 
 	//$('#updateTable').DataTable();
 
-});
+});*/
 
-function callAjaxForCollectionPage() {
+function callAjaxForCollectionPage(ledgerDt) {
+	
 	waitingDialog.show();
 	$.ajax({
 		type : "GET",
 		url : "/management/getcollections",
 		data : {
-			"id" : 1
+			"ledgerDt" : ledgerDt
 		},
 		success : function(data) {
-			$('#menu4').html(data);
+			$('#todayCollectionsModalContent').html(data);
 			//loadjs("/js/dataTable.js");
 			$('#collectionTable').DataTable();
 			waitingDialog.hide();
@@ -45,13 +46,14 @@ function callAjaxForCollectionPage() {
 	});
 }
 
-function loadCollectionsModal(subLotId) {
-
+function loadCollectionsModal(subLotId,ledgerDt) {
+	$("#todayCollectionsModal").modal('hide');
 	$.ajax({
 		type : "GET",
 		url : "/management/loadCollectionsModal",
 		data : {
-			"subLotId" : subLotId
+			"subLotId" : subLotId,
+			"ledgerDt" : ledgerDt
 		},
 		success : function(data) {
 
@@ -87,6 +89,7 @@ function saveCollectionsData() {
 	var totalPymt = jQuery('input[name="totalPymt"]').val()
 	var totalDebit = jQuery('input[name="totalDebit"]').val()
     var paymentDate = jQuery('input[name="paymentDate"]').val()
+    var ledgerDt = jQuery('input[name="ledgerDt"]').val()
     
     
 	if (parseInt(totalPymt.length) <= 0) {
@@ -124,7 +127,8 @@ function saveCollectionsData() {
 				"fareIdC":fareIdC,
 				"totalPymt":totalPymt,
 				"totalDebit":totalDebit,
-				"paymentDate":paymentDate
+				"paymentDate":paymentDate,
+				"ledgerDt":ledgerDt
 				
 			},			
 			success : function(data) {
@@ -132,7 +136,11 @@ function saveCollectionsData() {
 				if (data === "success") {
 					alert("Data is saved successfully");
 					$("#collectionsModal").modal('hide');
-					window.location.reload();
+					$("#todayCollectionsModal").modal('show');
+					waitingDialog.show();
+					callAjaxForCollectionPage(ledgerDt);
+					waitingDialog.hide();
+					//window.location.reload();
 					//callAjaxForUpdateDistribution();
 				} else
 					$('#collectionModelmMessage').html("<strong style=\"color:red\">Failure!</strong> Record is not saved !! Error:"+data);

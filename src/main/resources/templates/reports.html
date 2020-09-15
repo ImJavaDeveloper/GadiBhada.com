@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" type="image/png"
+	th:href="@{/images/gaadi.png}" />
+
+<title>Reports & Other Datat</title>
+
+<link href="/webjars/bootstrap/css/bootstrap.css" rel="stylesheet"></link>
+<link href="/css/dataTable.css" rel="stylesheet"></link>
+<link href="/css/modal.css" rel="stylesheet"></link>
+<link href="/css/bootstrap-editable.css" rel="stylesheet"></link>
+
+<style type="text/css">
+body {
+	background-color: linen;
+	background-image: url("/images/adminbg.JPG");
+  background-size: cover;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.nav-tabs > li.active > a {
+  color: #3c5a78;
+  font-size: 14px;
+}
+.nav-tabs > li > a {
+  color: #800000;
+}
+.navbar-nav-custom> li.active > a {
+  color: #3c5a78;
+  font-size: 14px;
+}
+
+
+</style>
+<script th:inline="javascript">
+
+</script>
+
+</head>
+<body>
+	<div class="container">
+		<!-- Static navbar -->
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+						aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<img src="/images/img_avatar.png" alt="Avatar" class="avatar">
+					
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="/gadibhada/home/">Home</a></li>
+						<li><a href="/gadibhada/dataentry">Data Entry</a></li>
+						<li><a href="/gadibhada/managedata">Manage Data</a></li>
+						<li><a href="/gadibhada/reports">Reports </a></li>
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown" role="button" aria-haspopup="true"
+							aria-expanded="false">Settings <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Add User</a></li>
+								<li><a href="#">Delete User</a></li>
+								<li><a href="#">Grant Access</a></li>
+								<li role="separator" class="divider"></li>
+								<li class="dropdown-header">Nav header</li>
+								<li><a href="#">Separated link</a></li>
+								<li><a href="#">One more separated link</a></li>
+							</ul></li>
+					</ul>
+					<form class="navbar-form navbar-left" action="/action_page.php">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search">
+							<div class="input-group-btn">
+								<button class="btn btn-default" type="submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active"><a class="navbar-brand" href="#" th:text="${firstName}">User
+						Name</a></li>
+						<li><a href="#">Profile</a></li>
+						<li><a href="/logout">Sign Out<span
+								class="glyphicon glyphicon-log-out"></span></a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+			<!--/.container-fluid -->
+		</nav>
+		<!-- Main component for a primary marketing message or call to action -->
+
+		<!-- Main component for a Tab-->
+		
+
+		<ul class="nav nav-tabs" id="reportsTab" style="width: 100%;background-color: #F0E68C;color:black">
+			<li class="active"><a data-toggle="tab" href="#" >Home</a></li>
+			<li><a data-toggle="tab" href="#dailyChallanDiv" id="dailyChallan">Daily Challan</a></li>
+			<li><a data-toggle="tab" href="#distributionDataDiv" id="distributionData">Distribution Data</a></li>
+			<li><a data-toggle="tab" href="#fareAndCollectionDiv" id="fareAndCollection">Fare & Collection</a></li>
+			<li><a data-toggle="tab" href="#truckLedgerDiv" id="truckLedger">Truck Ledger Book</a></li>
+			<li><a data-toggle="tab" href="#dailyLedgerBookDiv" id="dailyLedgerBook">Daily Ledger Book</a></li>
+		</ul>
+
+		<div class="tab-content">
+
+			<div id="" class="tab-pane fade in active">
+				<h3>Home</h3>
+				<!-- This section is dynamically loaded via ajax -->
+			</div>
+            <div id="dailyChallanDiv" class="tab-pane fade" >
+			<h3>Daily Challan</h3>	
+			</div>
+			<div id="distributionDataDiv" class="tab-pane fade" >
+				<h3>Distribution Data</h3>
+			</div>
+			<div id="fareAndCollectionDiv" class="tab-pane fade">
+				<h3>Fare And Collection</h3>
+				 	<div class="panel panel-default" style="background:#FFF8DC;">
+					<div class="panel-heading">
+						<a href="#" class="btn btn-md btn-hover btn-info" id="FareAndColl_Areawise">Area Wise Fare & Collection</a>
+						<a href="#" class="btn btn-md btn-hover btn-info" id="FareAndColl_Partywise">Party Wise Fare & Collection</a> 
+
+
+					</div>
+					<div class="panel-body" id="panelBodyFareAndColl"></div>
+				</div>
+			</div>
+			<div id="truckLedgerDiv" class="tab-pane fade">
+			<h3>Truck Ledger Book</h3>
+				<!-- This section is dynamically loaded via ajax -->
+			</div>
+			<div id="dailyLedgerBookDiv" class="tab-pane fade">
+			<h3>Daily Ledger Book</h3>
+				<!-- This section is dynamically loaded via ajax -->
+      
+		</div>
+		<!-- End Main component for a Tab-->
+
+	</div>
+	<!-- Bootstrap core JavaScript
+================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+	<script src="/js/dataTable.js"></script>
+	<script src="/js/helper.js"></script>
+	<script src="/js/reports/fareAndCollectionReport.js"></script>
+
+	<script src="/js/bootstrap-editable.js"></script>
+	
+	
+
+
+	<!-- 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
+ -->
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+</body>
+</html>

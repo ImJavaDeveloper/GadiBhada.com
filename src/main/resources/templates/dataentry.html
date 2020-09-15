@@ -56,7 +56,7 @@ body {
 						<li class="active"><a href="/gadibhada/home/">Home</a></li>
 						<li><a href="/gadibhada/dataentry">Data Entry</a></li>
 						<li><a href="/gadibhada/managedata">Manage Data</a></li>
-						<li><a href="#">Reports </a></li>
+						<li><a href="/gadibhada/reports">Reports </a></li>
 						<li class="dropdown"><a href="#" class="dropdown-toggle"
 							data-toggle="dropdown" role="button" aria-haspopup="true"
 							aria-expanded="false">Settings <span class="caret"></span></a>
@@ -70,7 +70,7 @@ body {
 								<li><a href="#">One more separated link</a></li>
 							</ul></li>
 					</ul>
-					<form class="navbar-form navbar-left" action="/action_page.php">
+					<form class="navbar-form navbar-left" action="#">
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="Search">
 							<div class="input-group-btn">
@@ -99,11 +99,11 @@ body {
 			<li class="active"><a data-toggle="tab" href="#home" id="dataEntryHome">Home</a></li>
 			<li><a data-toggle="tab" href="#menu1">Challan Entry</a></li>
 			<li><a data-toggle="tab" href="#menu2" id="distributionTab">Distribution</a></li>
-			<li><a data-toggle="tab" href="#menu3" id="fareCalcTab">Fare Calculation</a></li>
-			<li><a data-toggle="tab" href="#menu4" id="farecollectionTab">Collections</a></li>
-			<li><a data-toggle="tab" href="#menu5" id="addNewTab">Add New</a></li>			
+			<!-- <li><a data-toggle="tab" href="#menu4" id="farecollectionTab">Collections</a></li> -->
+			<li><a data-toggle="tab" href="#menu5" id="addNewTab">Add New</a></li>		
+			<li><a data-toggle="tab" href="#menu6" id="truckLedgerTab">Truck Ledger</a></li>	
 			<li><a data-toggle="tab" href="#menu7" id="dailyLedgerTab">Daily Ledger</a></li>
-			<li><a data-toggle="tab" href="#menu6" id="truckLedgerTab">Truck Ledger</a></li>
+
 		</ul>
 
 		<div class="tab-content">
@@ -115,7 +115,9 @@ body {
 
 			<div id="menu1" class="tab-pane fade" >
 				<h3>Challan Entry</h3>
-				<div th:switch="${message}">
+				<div id="formMessage"  style="color:red">
+				</div>
+				<div id ="message" th:switch="${message}">
 					<div th:case="'Success'" class="alert alert-success">
 						<strong>Success!</strong> Challan Data Is Saved successfully.
 					</div>
@@ -124,40 +126,32 @@ body {
 						<p th:text="${exception}">Exception</p>
 					</div>
 				</div>
-				<form class="form-inline" th:object="${challanBookForm}"
-					action="/gadibhada/dataentry/savechallanentry" method="post" name="challanForm"
-					data-toggle="validator">
+				<form class="form-inline" th:object="${challanBookForm}" action="/gadibhada/dataentry/savechallanentry" method="post" name="challanForm"
+					data-toggle="validator" role="form" onsubmit="return validateChallanFormData()">
 					<div class="row clearfix">
 						<div class="col-md-12 column">
 							<table class="table table-bordered table-hover" id="challanTab" style="background-color: #E2E2E2">
 								<tbody>
 									<tr>
-										<td><input type="date" id="date" name="date"
-											class="form-control" required></td>
-										<td><select class="form-control" id="source"
-											name="sourceId" required>
+										<td><input type="date" id="date" name="date" class="form-control" required></td>
+										<td><select class="form-control" id="source" name="sourceId" required>
 												<option value="">Select Source</option>
 												<option th:each="source : ${sources}"
 													th:value="${source.sourceId}"
 													th:text="${source.sourceName}"></option>
 										</select></td>
-										<td><select class="form-control" id="destination"
-											name="destinationId" required>
+										<td><select class="form-control" id="destination" name="destinationId" required>
 												<option value="">Select Destination</option>
 												<option th:each="destination : ${destinations}"
 													th:value="${destination.destinationId}"
 													th:text="${destination.destination}"></option>
 										</select></td>
-										<td><input type="text" name='truckNo'
-											placeholder='Truck No' class="form-control" required /></td>
-										<td><input type="text" name='driverName'
-											placeholder='Driver Name' class="form-control" /></td>
-										<td><input type="text" name='driverMobile'
-											placeholder='Driver Mobile' class="form-control" required /></td>
+										<td><input type="text" name='truckNo' placeholder='Truck No' class="form-control" required  /></td>
+										<td><input type="text" name='driverName' placeholder='Driver Name' class="form-control" /></td>
+										<td><input type="text" name='driverMobile' placeholder='Driver Mobile' maxlength="10"  class="form-control" required /></td>
 									</tr>
 									<tr>
-									<td><input type="text" name='advancePymt'
-											placeholder='Advance Payment' class="form-control" required /></td>
+									<td><input type="number" name='advancePymt' placeholder='Advance Payment' class="form-control" required /></td>
 									</tr>
 								</tbody>
 							</table>
@@ -185,7 +179,7 @@ body {
 												<option value="">Select Trader</option>
 												<option th:each="trader : ${traders}"
 													th:value="${trader.trader_id}"
-													th:text="${trader.trader_mark +'('+ trader.trader_name+')'}"></option>
+													th:text="${trader.trader_mark +(trader.trader_name !='' ? '('+ trader.trader_name+')':'')}"></option>
 										</select></td>
 										<td><select class="form-control" id="items" name="itemId"
 											required>
@@ -200,10 +194,8 @@ body {
 													th:value="${boxType.box_id}"
 													th:text="${boxType.box_name+'-'+boxType.total_wt }"></option>
 										</select></td>
-										<td><input type="text" name='totalQty'
-											placeholder='Total Quantity' class="form-control" required /></td>
-										<td><input type="text" name='receiver'
-											placeholder='Receiver' class="form-control" /></td>
+										<td><input type="number" name='totalQty' placeholder='Total Quantity' class="form-control" required /></td>
+										<td><input type="text" name='receiver' placeholder='Receiver' class="form-control" /></td>
 
 									</tr>
 									<tr id='addr1'></tr>
@@ -211,50 +203,46 @@ body {
 							</table>
 						</div>
 					</div>
-					<a id="add_row" class="btn btn-default pull-left">Add Row</a> <a
-						id='delete_row' class="btn btn-default pull-right">Delete Row</a>
-					<button type="submit" class="btn btn-info center-block">Save
-					</button>
+					<a id="add_row" class="btn btn-default pull-left">Add Row</a>
+					 <a id='delete_row' class="btn btn-default pull-right">Delete Row</a>
+					<button type="submit" class="btn btn-info center-block" >Save</button>
+					
 				</form>
 			</div>
 			<div id="menu2" class="tab-pane fade">
 				<h3>Distribution</h3>
-				<!-- This section is dynamically loaded via ajax -->
+				<!-- Distribution Tab -->
 			</div>
-			<div id="menu3" class="tab-pane fade">
-				<!-- This section is dynamically loaded via ajax -->
-			</div>
-			<div id="menu4" class="tab-pane fade">
-				<!-- This section is dynamically loaded via ajax -->
+			
+			<!-- <div id="menu4" class="tab-pane fade">
+				Collection Tab
 
-			</div>
+			</div> -->
 			<div id="menu5" class="tab-pane fade">
-				<div class="panel panel-info" style="background:#FFF8DC;">
+			<h3>Add New Record</h3>
+				<div class="panel panel-danger" style="background:#FFF8DC;">
 					<div class="panel-heading">
-						<a href="#" class="btn btn-md btn-hover btn-primary"
-							id="addSource">Add Source</a> <a href="#"
-							class="btn btn-md btn-hover btn-primary" id="addDest">Add
-							Destination</a> <a href="#" class="btn btn-md btn-hover btn-primary"
-							id="addTrader">Add Trader</a> <a href="#"
-							class="btn btn-md btn-hover btn-primary" id="addAgent">Add
-							Agent</a> <a href="#" class="btn btn-md btn-hover btn-primary"
-							id="addItem">Add Item</a> <a href="#"
-							class="btn btn-md btn-hover btn-primary" id="addBoxType">Add
-							Box Type</a> <a href="#" class="btn btn-md btn-hover btn-primary"
-							id="addFare">Add Fare</a>
+						<a href="#" class="btn btn-md btn-hover btn-success" id="addSource">Add Source</a>
+						<a href="#" class="btn btn-md btn-hover btn-success" id="addDest">Add Destination</a>
+						<a href="#" class="btn btn-md btn-hover btn-success" id="addTrader">Add Trader</a> 
+						<a href="#" class="btn btn-md btn-hover btn-success" id="addAgent">Add Agent</a> 
+						<a href="#" class="btn btn-md btn-hover btn-success" id="addItem">Add Item</a> 
+						<a href="#" class="btn btn-md btn-hover btn-success" id="addBoxType">Add Box Type</a>
+						<a href="#" class="btn btn-md btn-hover btn-success" id="addFare">Add Fare</a>
 
 					</div>
 					<div class="panel-body" id="panelBody"></div>
 				</div>
 			</div>
+						<div id="menu6" class="tab-pane fade">
+				<!-- This section is dynamically loaded via ajax -->
+
+			</div>
 			<div id="menu7" class="tab-pane fade">
 				<!-- This section is dynamically loaded via ajax -->
 
 			</div>
-			<div id="menu6" class="tab-pane fade">
-				<!-- This section is dynamically loaded via ajax -->
 
-			</div>
 			
 		</div>
 		<!-- End Main component for a Tab-->
@@ -268,7 +256,6 @@ body {
 	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/js/challanTable.js"></script>
 	<script src="/js/distribution.js"></script>
-	<script src="/js/farecalculation.js"></script>
 	<script src="/js/dataTable.js"></script>
 	<script src="/js/commonUtils.js"></script>
 	<script src="/js/farecollection.js"></script>
@@ -277,7 +264,6 @@ body {
 	<script src="/js/dailyLedger.js"></script>
 	<script src="/js/helper.js"></script>
 	<script src="/js/dataentry/datentrystats.js"></script>
-
 
 	<!-- 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

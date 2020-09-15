@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.boot.security.dto.ChallanBookData;
@@ -56,14 +57,23 @@ public class ChallanEntryController {
 	{
 		
 		if(advancePymt!=null && !DataValidator.isNumber(advancePymt)) {
-			
+			LOGGER.error("Error: Advance payement Is Not Correct format");
 			redirectAttributes.addFlashAttribute("message", "Failed");
-			redirectAttributes.addFlashAttribute("exception", "Please Enter Correct Payment");
+			redirectAttributes.addFlashAttribute("exception", "Please Enter Correct Advance Payment");
 			return "redirect:/gadibhada/dataentry";
 		}
-		
+		/*if(challanBookData.findIfChallanBookExist(date, truckNo))
+		{
+			LOGGER.error("Error: Can't save data as Challan Book already exist with same date and truck no");
+			redirectAttributes.addFlashAttribute("message","Failed");
+			redirectAttributes.addFlashAttribute("exception", "Challan Book already exist with same date-"+date+" and truck no-"+truckNo);
+			return "redirect:/gadibhada/dataentry";
+			//return to form
+			
+		}*/
 		HttpSession session=request.getSession(false);
 		if(session == null) {
+			LOGGER.error("Error: Invalid Session !! Please Login Again");
 			throw new AppHttpException("Invalid Session !! Please Login Again");
 		}
 		
@@ -72,9 +82,9 @@ public class ChallanEntryController {
 		String currentDate=sdf.format(dt);
 		
 		String sessionId=session.getId();
-		LOGGER.info("session Id:"+session.getId());
-		LOGGER.info("User Id:"+session.getAttribute("username"));
-		LOGGER.info("Starting Saving Challan Data.....");
+		//LOGGER.info("session Id:"+session.getId());
+		//LOGGER.info("User Id:"+session.getAttribute("username"));
+		LOGGER.info("Info: Recording Challan Book Data For Truck:"+truckNo+" And Date:"+date);
 		
 		ChallanBook challanBook=new ChallanBook();
 		challanBook.setDate(date);
@@ -86,13 +96,13 @@ public class ChallanEntryController {
 		challanBook.setCreateTimeStamp(currentDate);
 		challanBook.setSourceId(sourceId);
 		ChallanBook savedChallanBook=challanBookData.saveChallanData(challanBook);
-		LOGGER.info("Saving Challan Data.....");
 		
 		if(savedChallanBook==null) {
-			
+			    LOGGER.error("Error: Exception found while saving data into Challan Book for Truck:"+truckNo+"And Date:"+date);
 				throw new DataBaseException("Exception found while saving data into Challan Book ","management");
 			
 		}
+		LOGGER.info("Info: Saving Lot Book Data for Truck:"+truckNo+" And Date:"+date);
 		for(int i=0;i<traderId.length;i++)
 		{
 			LotBook lotBook=new LotBook();
@@ -109,16 +119,15 @@ public class ChallanEntryController {
 			if(receiver.length!=0)
 			lotBook.setReceiver(FormUtils.nullToEmpty(receiver[i]));
 			
-			LOGGER.info("Saving Lot Data.....");
 			LotBook savedLotBook=lotBookRepository.save(lotBook);
 			
 			if(savedLotBook==null) {
-				
+				    LOGGER.error("Error: Exception found while saving data into Lot Book for Truck:"+truckNo+"And Date:"+date);
 					throw new DataBaseException("Exception found while saving data into Lot Book ","management");
 				
 			}
 			
-			LOGGER.info("Saving Truck Data.....");
+			LOGGER.info("Info: Saving Truck Ledger Data for Truck:"+truckNo+" And Date:"+date);
 			TruckLedger truckData=new TruckLedger();
 			truckData.setTruckNo(truckNo);
 			truckData.setTruckStratDt(date);
@@ -129,8 +138,8 @@ public class ChallanEntryController {
 			TruckLedger truckLedger=truckLedgerRepository.save(truckData);
 
 			if(truckLedger==null) {
-				
-					throw new DataBaseException("Exception found while saving data into Lot Book ","management");
+				    LOGGER.error("Error: Exception found while saving data into Truck Ledger for Truck:"+truckNo+"And Date:"+date);
+					throw new DataBaseException("Exception found while saving data into Truck Ledger ","management");
 				
 			}
 			
@@ -139,6 +148,23 @@ public class ChallanEntryController {
 		return "redirect:/gadibhada/dataentry";
 		
 		
+	}
+	
+	@RequestMapping(value="/findIfChallanBookExist" ,method=RequestMethod.POST)
+    @ResponseBody
+	public String findIfChallanBookExist(@RequestParam Date date,@RequestParam String truckNo) throws DataBaseException, AppHttpException 
+	{
+		LOGGER.info("Checking If Challan Data Is Already Present");
+	if(challanBookData.findIfChallanBookExist(date, truckNo))
+	{
+		LOGGER.error("Error: Can't save data as Challan Book already exist with same date and truck no");
+		
+		return "True";
+		//return to form
+		
+	}
+	else
+		return "False";
 	}
 	
 }

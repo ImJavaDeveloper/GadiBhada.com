@@ -54,50 +54,54 @@ $("#addBoxType").on("click", function() {
 $("#addFare").on(
 		"click",
 		function() {
-
-			$('#panelBody').load('/formcontent/addFare.html');
 			
-			$.ajax({
-				type : "GET",
-				url : '/management/getAllSource',
-				success : function(data) {
-					// alert(data);
-					Source.buildSourceDropdown(jQuery.parseJSON(data),
-							$('#allsource'), 'Select an option');
-				}
-			});
-			// Calling Ajax to pop up destination
-			$.ajax({
-				type : "GET",
-				url : '/management/getAllDestination',
-				success : function(data) {
-					// alert(data);
-					Dest.buildDestDropdown(jQuery.parseJSON(data),
-							$('#alldestination'), 'Select an option');
-				}
-			});
+			$('#panelBody').load('/formcontent/addFare.html',function()
+					{
+				$.ajax({
+					type : "GET",
+					url : '/management/getAllSource',
+					success : function(data) {
+						// alert(data);
+						Source.buildSourceDropdown(jQuery.parseJSON(data),
+								$('#allsource'), 'Select an option');
+					}
+				});
+				// Calling Ajax to pop up destination
+				$.ajax({
+					type : "GET",
+					url : '/management/getAllDestination',
+					success : function(data) {
+						// alert(data);
+						Dest.buildDestDropdown(jQuery.parseJSON(data),
+								$('#alldestination'), 'Select an option');
+					}
+				});
 
-			// Calling Ajax to pop List
-			$.ajax({
-				type : "GET",
-				url : '/management/getAllItems',
-				success : function(data) {
-					// alert(data);
-					Items.buildItemsDropdown(jQuery.parseJSON(data),
-							$('#allitem'), 'Select an option');
-				}
-			});
+				// Calling Ajax to pop List
+				$.ajax({
+					type : "GET",
+					url : '/management/getAllItems',
+					success : function(data) {
+						// alert(data);
+						Items.buildItemsDropdown(jQuery.parseJSON(data),
+								$('#allitem'), 'Select an option');
+					}
+				});
 
-			// Calling Ajax to pop Box Type
-			$.ajax({
-				type : "GET",
-				url : '/management/getAllBoxType',
-				success : function(data) {
-					// alert(data);
-					BoxType.buildBoxTypeDropdown(jQuery.parseJSON(data),
-							$('#boxType'), 'Select an option');
-				}
-			});
+				// Calling Ajax to pop Box Type
+				$.ajax({
+					type : "GET",
+					url : '/management/getAllBoxType',
+					success : function(data) {
+						// alert(data);
+						BoxType.buildBoxTypeDropdown(jQuery.parseJSON(data),
+								$('#boxType'), 'Select an option');
+					}
+				});
+				
+					});
+			
+			
 
 		});
 
@@ -183,7 +187,7 @@ function saveTrader() {
 
 	if (traderAdd.trim().length == 0) {
 		$("#traderModal").modal('show');
-		$('#tradermodelcontent').html("  Error!! Enter Trader Name ");
+		$('#tradermodelcontent').html("  Error!! Enter Trader Address ");
 		return;
 	}
 	if (tradeMark.trim().length == 0) {
@@ -229,9 +233,10 @@ function saveAgent() {
 	var agentName = jQuery('input[name="agentName"]').val()
 	var agentMark = jQuery('input[name="agentMark"]').val()
 	//var agentAdd = $("#agentdestination").val().text()
-	var agentAdd=$("#agentdestination option:selected").val();
+	var agentAdd=$("#agentdestination option:selected").text();
 	var agentMob = jQuery('input[name="agentMob"]').val()
-
+	alert(agentAdd)
+    return
 	/*if (agentName.trim().length == 0) {
 		$("#agentModal").modal('show');
 		$('#agentmodelcontent').html("  Error!! Enter Agent Name ");

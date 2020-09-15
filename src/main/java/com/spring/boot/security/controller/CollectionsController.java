@@ -39,8 +39,9 @@ public class CollectionsController {
 
 	@RequestMapping(value="/management/getcollections",method=RequestMethod.GET)
 	@ResponseBody
-	public String getCollectionPage() throws Exception
+	public String getCollectionPage(@RequestParam Date ledgerDt) throws Exception
 	{
+		
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
 		List<CollectionFareVO> collectionFareVOList=jdbcTemplate.query(TableQuery.getCollectionDataQuery(), new CollectionsDataMapper());
 		
@@ -54,15 +55,15 @@ public class CollectionsController {
 				"<table id=\"collectionTable\" class=\"table table-striped table-bordered\" style=\"width: 100%;background-color: #E2E2E2\">\r\n" + 
 				"	<thead>\r\n" + 
 				"		<tr>\r\n" + 
-				"			<th>Truck No</th>\r\n" + 
-				"			<th>Recieved On</th>\r\n" + 
-				"			<th>Item Code</th>\r\n" + 
-				"			<th>Agent Name</th>\r\n" + 
-				"			<th>Delivered To</th>\r\n" + 
+				"			<th>TruckNo</th>\r\n" + 
+				"			<th>RecievedOn</th>\r\n" + 
+				"			<th>ItemCode</th>\r\n" + 
+				"			<th>AgentName</th>\r\n" + 
+				"			<th>Address</th>\r\n" + 
 				"			<th>Qty</th>\r\n" + 
-				"			<th>Total Fare</th>\r\n" + 
-				"			<th>Total Payment</th>\r\n" + 
-				"			<th>Total Debit</th>\r\n" + 
+				"			<th>TotalFare</th>\r\n" + 
+				"			<th>TotalPayment</th>\r\n" + 
+				"			<th>TotalDebit</th>\r\n" + 
 				"			<th>Balance</th>\r\n" + 
 				"            <th>Action</th>\r\n" + 
 				"		</tr>\r\n" + 
@@ -86,28 +87,28 @@ public class CollectionsController {
 							"                <td>"+collectionFareVO.getTotPymt()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotDebit()+"</td>\r\n" +
 							"                <td>"+collectionFareVO.getTotBal()+"</td>\r\n" + 
-							"                <td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#collectionsModal\" onclick=\"loadCollectionsModal("+collectionFareVO.getSubLotId()+")\">Collect</button></td>"+
+							"                <td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#collectionsModal\" onclick=\"loadCollectionsModal("+collectionFareVO.getSubLotId()+",'"+ledgerDt+"')\">Collect</button></td>"+
 					"            </tr>\r\n" );
 		}
 		StringBuilder htmlFooter=new StringBuilder(		"        </tbody>\r\n" + 
 				"        <tfoot>\r\n" + 
 				"		<tr>\r\n" + 
-				"			<th>Truck No</th>\r\n" + 
-				"			<th>Recieved On</th>\r\n" + 
-				"			<th>Item Code</th>\r\n" + 
-				"			<th>Agent Name</th>\r\n" + 
-				"			<th>Delivered To</th>\r\n" + 
+				"			<th>TruckNo</th>\r\n" + 
+				"			<th>RecievedOn</th>\r\n" + 
+				"			<th>ItemCode</th>\r\n" + 
+				"			<th>AgentName</th>\r\n" + 
+				"			<th>Address</th>\r\n" + 
 				"			<th>Qty</th>\r\n" + 
-				"			<th>Total Fare</th>\r\n" + 
-				"			<th>Total Payment</th>\r\n" + 
-				"			<th>Total Debit</th>\r\n" + 
+				"			<th>TotalFare</th>\r\n" + 
+				"			<th>TotalPayment</th>\r\n" + 
+				"			<th>TotalDebit</th>\r\n" + 
 				"			<th>Balance</th>\r\n" + 
 				"            <th>Action</th>\r\n" + 
 				"		</tr>\r\n" +
 				"        </tfoot>\r\n" + 
 				"    </table>");
 		StringBuilder modalContent=new StringBuilder();
-		modalContent.append(
+		/*modalContent.append(
 				" <div id=\"collectionsModal\" class=\"modal fade\" role=\"dialog\">"
 						+"<div class=\"modal-dialog modal-lg\" >"
 
@@ -122,18 +123,18 @@ public class CollectionsController {
 				    +"</div>"
 				    +"<div class=\"modal-footer\">"
 				    +"<button id=\"save\" class=\"btn btn-primary btn-width bkgrnd-cyan save-details\" type=\"button\" name=\"save-details\" onclick=\"saveCollectionsData()\" data-toggle=\"modal\"  >Save</button>"
-				    +" <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>"
+				    +" <button type=\"button\" class=\"btn btn-default\" onclick=\"closeCollectionPopUp()\">Close</button>"
 				    + " </div> </div> </div> </div>"
 
 
-				);
+				);*/
 		return htmlHeader+Htmlbody.toString()+htmlFooter.toString()+modalContent.toString();
 
 	}
 
 	@RequestMapping(value="/management/loadCollectionsModal" ,method=RequestMethod.GET)
 	@ResponseBody
-	public String loadCollectionsModal(@RequestParam Integer subLotId) throws Exception {
+	public String loadCollectionsModal(@RequestParam Integer subLotId,@RequestParam String ledgerDt) throws Exception {
 		LOGGER.info(TableQuery.getCollectionDataQuery(subLotId));
 		CollectionFareVO collectionVO;
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
@@ -165,6 +166,7 @@ public class CollectionsController {
 						+"<tr  >"
 						+ "<input type=\"hidden\" name=\"subLotId\" value=\""+collectionVO.getSubLotId()+"\">"
 						+ "<input type=\"hidden\" name=\"fareIdC\" value=\""+collectionVO.getFareId()+"\">"
+						+ "<input type=\"hidden\" name=\"ledgerDt\" value=\""+ledgerDt+"\">"
 
 				+"<td><label for=\"Truck No\" >"+collectionVO.getTruckNo()+"</label></td>"
 				+"<td><label for=\"receivedDt\">"+DataHelper.formatDate(collectionVO.getRecievedDt(), "yyyy-MM-dd", "dd/MM/yyyy")+"</label></td>"
@@ -187,9 +189,12 @@ public class CollectionsController {
 
 						+"<thead style=\"background-color: #E2E2E2\">"
 						+"<tr>"
+						+"<td><label for=\"extraFareAmt\">Tot Payment</label></td>"
+						+"<td><label for=\"extraFareAmt\">Tot Debit</label></td>"
 						+"<td><label for=\"totaPymt\">Payable Amt</label></td>"
 						+"<td><label for=\"totDebit\">Total Debit</label></td>"
 						+"<td><label for=\"pymtDt\">Payment Date</label></td>"
+						
 						+ "</tr>"
 						+"</thead>"
 
@@ -220,7 +225,7 @@ public class CollectionsController {
 	@RequestMapping(value="/management/savecollection" ,method=RequestMethod.GET)
 	@ResponseBody
 	public String saveCollection(@RequestParam Integer subLotId,@RequestParam Integer fareIdC,@RequestParam String totalPymt
-			,@RequestParam(required=false) String totalDebit,@RequestParam Date paymentDate) throws DataBaseException {
+			,@RequestParam(required=false) String totalDebit,@RequestParam Date paymentDate ,@RequestParam Date ledgerDt) throws DataBaseException {
 
 		String message=null; 
 		if(totalPymt!=null && !DataValidator.isNumber(totalPymt))
@@ -235,6 +240,7 @@ public class CollectionsController {
 			fareCollection.setTotPayment(FormUtils.getDouble(totalPymt));
 			fareCollection.setDebitAmt(FormUtils.getDouble(totalDebit));
 			fareCollection.setPymtDt(paymentDate);
+			fareCollection.setLedgerDt(ledgerDt);
 			FareCollection savedFareCollection=fareCollectionData.saveFareCollectionData(fareCollection);
 			if(savedFareCollection==null) {
 

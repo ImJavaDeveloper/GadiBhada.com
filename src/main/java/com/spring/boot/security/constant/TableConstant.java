@@ -19,5 +19,7 @@ public class TableConstant {
 	public static final String COLLECTION_BOOK_TABLE_PK_Column="collection_id";
 	public static final String FARE_DEBIT_TABLE="fare_debit";
 	
+	public static final String TRUCK_LEDGER_TABLE="truck_ledger";
+	
 
 }

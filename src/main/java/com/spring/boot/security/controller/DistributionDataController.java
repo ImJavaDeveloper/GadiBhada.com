@@ -1,8 +1,6 @@
 package com.spring.boot.security.controller;
 
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,14 +18,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.boot.security.mapper.AllChallanDataMapper;
 import com.spring.boot.security.mapper.DistributionUpdateRowMapper;
+import com.spring.boot.security.dto.LocalFareData;
 import com.spring.boot.security.dto.SubLotBookData;
 import com.spring.boot.security.mapper.UpdateModalMapper;
-import com.spring.boot.security.entity.AgentDestination;
 import com.spring.boot.security.entity.SubLotBook;
 import com.spring.boot.security.entity.AgentDetails;
 import com.spring.boot.security.entity.FareBook;
+import com.spring.boot.security.entity.LocalFareTrack;
 import com.spring.boot.security.exception.DataBaseException;
+import com.spring.boot.security.forms.data.AllChallanData;
 import com.spring.boot.security.forms.data.DistributionUpdateVO;
 import com.spring.boot.security.forms.data.TableQuery;
 import com.spring.boot.security.forms.data.UpdateModalVO;
@@ -37,8 +36,12 @@ import com.spring.boot.security.helper.DataHelper;
 import com.spring.boot.security.helper.FormUtils;
 import com.spring.boot.security.repository.AgentDestinationRepository;
 import com.spring.boot.security.repository.LotBookRepository;
+
+import net.minidev.json.JSONArray;
+
 import com.spring.boot.security.repository.AgentDetailsRespository;
 import com.spring.boot.security.repository.FareBookRespository;
+import com.spring.boot.security.repository.LocalFareTrackRespository;
 
 @Controller
 public class DistributionDataController {
@@ -54,35 +57,57 @@ public class DistributionDataController {
 	AgentDetailsRespository traderAgentRespository;
 	@Autowired
 	AgentDestinationRepository agentDestinationRepository;
-
-	@Autowired
+    @Autowired
 	SubLotBookData subLotBookData;
 	@Autowired
 	FareBookRespository fareBookRespository;
+	@Autowired
+	DataSource datasource;
+	@Autowired
+	LocalFareTrackRespository lfareRepo;
+	@Autowired
+	LocalFareData localFareData1;
+	
+	
+	@RequestMapping(value="/allChallanList" ,method=RequestMethod.GET)
+	@ResponseBody
+	public String getChallanList() {
+		
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(datasource);
+		List<AllChallanData> allChallanData=jdbcTemplate.query(TableQuery.getAllActiveChallansQuery(true), new AllChallanDataMapper());
+		String challanBookJsonArray = JSONArray.toJSONString(allChallanData);		
+		return challanBookJsonArray;
+			
+	}
 	
 	@RequestMapping(value="/updateDistribution" ,method=RequestMethod.GET)
 	@ResponseBody
-	public String updateDistribution(@RequestParam Integer id) throws Exception {
+	public String updateDistribution(@RequestParam Integer challanId) throws Exception {
 
-		String sql=TableQuery.getUpdateDistributionQuery();
+		String sql=TableQuery.getUpdateDistributionQuery(challanId);
 		LOGGER.debug(sql);
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
 		List<DistributionUpdateVO> list =jdbcTemplate.query(sql, new DistributionUpdateRowMapper());
 
-		StringBuilder htmlHeader=new StringBuilder(" <h3>Distribution Page </h3> "
-				+ "<table id=\"distributionTable\" class=\"table table-striped table-bordered\" style=\"width:100%;background-color: #E2E2E2\">\r\n" + 
+		StringBuilder htmlHeader=new StringBuilder( 
+				"<style>"+
+						"table thead tr th {font-size: 11px;}"+
+						"table tfoot tr th {font-size: 11px;}"+
+						"table tbody tr td { font-size: 12px;}"+
+						"</style>"+
+				"<table id=\"distributionTable\" class=\"table table-striped table-bordered\" style=\"width:100%;background-color: #E2E2E2\">\r\n" + 
 				"        <thead>\r\n" + 
 				"            <tr>\r\n" + 
-				"                <th>Challan Id</th>\r\n" + 
+				"                <th>ChallanId</th>\r\n" + 
 				"                <th>Date</th>\r\n" + 
-				"                <th>Lot Id</th>\r\n" + 
-				"                <th>Truck No</th>\r\n" + 
-				"                <th>From-To-Where</th>\r\n" + 
+				"                <th>LotId</th>\r\n" + 
+				"                <th>TruckNo</th>\r\n" + 
+				"                <th>STD</th>\r\n" + 
 				"                <th>Sender</th>\r\n" + 
 				"                 <th>Item</th>\r\n"+
 				"                 <th>Box Type</th>\r\n"+
 				"                 <th>Qty</th>\r\n"+
-				"                 <th>Total Balance</th>\r\n"+
+				"                 <th>TotalBal</th>\r\n"+
 				"                <th>Action</th>\r\n" + 
 				"            </tr>\r\n" + 
 				"        </thead>\r\n" + 
@@ -95,8 +120,8 @@ public class DistributionDataController {
 		    String Sender=distrUpdtVO.getTrader_name()==null || distrUpdtVO.getTrader_name().length()==0  ? "": "("+distrUpdtVO.getTrader_name()+")";
 			Htmlbody.append(
 					"            <tr>\r\n" + 
-							"                <td>"+distrUpdtVO.getChallan_id()+"</td>\r\n" + 
-							"                <td>"+DataHelper.formatDate(distrUpdtVO.getChallan_date(), "yyyy-MM-dd", "dd/MM/yyyy")+"</td>\r\n" + 
+							"                <td id=\"lotChallanId\">"+distrUpdtVO.getChallan_id()+"</td>\r\n" + 
+							"                <td >"+DataHelper.formatDate(distrUpdtVO.getChallan_date(), "yyyy-MM-dd", "dd/MM/yyyy")+"</td>\r\n" + 
 							"                <td>"+distrUpdtVO.getLot_id()+"</td>\r\n" + 
 							"                <td>"+distrUpdtVO.getTruck_no()+"</td>\r\n" + 
 							"                <td>"+distrUpdtVO.getSource_name()+"-"+distrUpdtVO.getDestination()+"</td>\r\n" + 
@@ -109,32 +134,19 @@ public class DistributionDataController {
 							"                 onclick=\"loadUpdateModal("+distrUpdtVO.getLot_id()+",'"+distrUpdtVO.getChallan_date()+"','"+distrUpdtVO.getTruck_no()+"','"+distrUpdtVO.getSource_id()+"','"+distrUpdtVO.getSource_name()+"','"+
 							distrUpdtVO.getDestination()+"','"+distrUpdtVO.getTrader_name()+"','"+distrUpdtVO.getTrader_mark()+"','"+distrUpdtVO.getItem_id()+"','"+distrUpdtVO.getItem_name()+"','"+distrUpdtVO.getBox_id()+"','"+
 							distrUpdtVO.getBox_name()+"',"+distrUpdtVO.getTotal_wt()+")\">Distribute</button></td>"+
-					"            </tr>\r\n" );
+					        " </tr>\r\n"
+					         );
 		}
-		StringBuilder htmlFooter=new StringBuilder(		"        </tbody>\r\n" + 
-				"        <tfoot>\r\n" + 
-				"            <tr>\r\n" + 
-				"                <th>Challan Id</th>\r\n" + 
-				"                <th>Date</th>\r\n" + 
-				"                <th>Truck No</th>\r\n" + 
-				"                <th>From-To-Where</th>\r\n" + 
-				"                <th>Sender</th>\r\n" + 
-				"                 <th>Item</th>\r\n"+
-				"                 <th>Box Type</th>\r\n"+
-				"                 <th>Qty</th>\r\n"+
-				"                <th>Action</th>\r\n" +
-				"            </tr>\r\n" + 
-				"        </tfoot>\r\n" + 
-				"    </table>");
-		StringBuilder modalContent=new StringBuilder();
-		modalContent.append(
-				" <div id=\"updateDistributionModal\" class=\"modal fade\" role=\"dialog\">"
+		
+		   StringBuilder Htmlfooter=new StringBuilder();
+		   Htmlfooter.append("</tbody> </table>");
+				
+			/*+" <div id=\"updateDistributionModal\" class=\"modal fade\" role=\"dialog\">"
 						+"<div class=\"modal-dialog modal-lg\" >"
-
 		    +"<!-- Modal content-->"
 		    +"<div class=\"modal-content\">"
 		    +"<div class=\"modal-header\">"
-		    +"<button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>"
+		   // +"<button type=\"button\" class=\"close\" >&times;</button>"
 		    +"<h4 class=\"modal-title\">Distribution</h4>"
 		    +" </div>"
 		    +"<div class=\"modal-body\" id=\"modalContent\">"
@@ -142,12 +154,12 @@ public class DistributionDataController {
 		    +"</div>"
 		    +"<div class=\"modal-footer\">"
 		    +"<button id=\"save\" class=\"btn btn-width bkgrnd-cyan save-details\" type=\"button\" name=\"save-details\" onclick=\"saveUpdateModal()\" data-toggle=\"modal\"  >Save</button>"
-		    +" <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>"
-		    + " </div> </div> </div> </div>"
+		    +" <button type=\"button\" class=\"btn btn-default\" onclick=\"closeUpdateModal()\">Close</button>"
+		    + " </div> </div> </div> </div>"*/
 
 
-				);
-		return htmlHeader+Htmlbody.toString()+htmlFooter.toString()+modalContent.toString();
+				
+		return htmlHeader+Htmlbody.toString();
 
 	}
 
@@ -164,7 +176,7 @@ public class DistributionDataController {
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
 		LOGGER.debug(TableQuery.getUpdateModalQuery());
 		UpdateModalVO updateModalVO=jdbcTemplate.queryForObject(TableQuery.getUpdateModalQuery(),new Object[] {lotId}, new UpdateModalMapper());
-        String receivedDate=jdbcTemplate.query(TableQuery.getReceivingDtQuery(lotId), new ResultSetExtractor<String>() {
+       /* String receivedDate=jdbcTemplate.query(TableQuery.getReceivingDtQuery(lotId), new ResultSetExtractor<String>() {
 
 			@Override
 			public String extractData(ResultSet rs) throws SQLException {
@@ -172,13 +184,14 @@ public class DistributionDataController {
 				
 				return rs.next()?rs.getString(2):null;
 			}
-		});
+		});*/
         //System.out.println("receivedDate:"+receivedDate);
 		StringBuilder updatemodalForm=new StringBuilder(
 
 				"<font size=\"2\">"
 				+ "<form class=\"form-inline\"  action=\"#\" method=\"post\" name=\"updateModalForm\" data-toggle=\"validator\">"
-
+				+"<div id=\"errorMsgDisMdl\" style=\"color:red\"></div>" 
+				+"<div id=\"goodRespnsMsgDisMdl\" style=\"color:green\"></div>" 
 				+"<div class=\"row clearfix\">"
 				+"<div class=\"col-md-12 column\">"
 				+"<table class=\"table table-bordered table-hover\" id=\"updateModalFormTab1\">"
@@ -203,7 +216,7 @@ public class DistributionDataController {
 						+"<td><label for=\"challandId\">"+updateModalVO.getChallanId()+"</label></td>"
 						+"<td id=\"modalChallnDate\"><label for=\"challnDate\">"+DataHelper.formatDate(challanDate, "yyyy-MM-dd", "dd/MM/yyyy")+"</label></td>"
 						+"<td><label for=\"lotId\">"+updateModalVO.getLotId()+"</label></td>"
-						+"<td><label for=\"truckNo\">"+truckNo+"</label></td>"
+						+"<td id=\"modalChallanTruck\"><label for=\"truckNo\">"+truckNo+"</label></td>"
 						+"<td><label for=\"FromWhere\">"+sourceName+"-"+destination+"</label></td>"
 						+"<td><label for=\"trader\">"+trader+"</label></td>"
 						+"<td><label for=\"itemCode\">"+itemName+"("+boxName+"-"+boxWt+")</label></td>"
@@ -252,19 +265,20 @@ public class DistributionDataController {
 		
 		updatemodalForm.append( " </select></td> "
 				+"<td id=\"agentDestination\"></td>"
-				+"<td><input type=\"text\" name=\"totQtyDistributed\" placeholder='Distribute Qty' class=\"form-control\" required oninput=\"calulateTotalFare()\"></td>"
+				+"<td><input type=\"number\" name=\"totQtyDistributed\" placeholder='Distribute Qty' class=\"form-control\" required oninput=\"calulateTotalFare()\"></td>"
 				);
-		if(receivedDate!=null)
+		/*if(receivedDate!=null)
 		{
 			updatemodalForm.append("<td id=\"receivingDate\">"
 					+  	receivedDate
 					+"</td>");
-		}
-		else {updatemodalForm.append( 
-				"<td> <input type=\"date\" id=\"receivingDate\" name=\"receivingDate\" class=\"form-control\" required></td>"
+		}*/
+		//else {
+			updatemodalForm.append( 
+				"<td> <input type=\"date\" id=\"receivingDate\" name=\"receivingDate\" class=\"form-control\" required onchange=\"checkAvailablity()\"></td>"
 				);
 				
-		}
+		//}
 		updatemodalForm.append(
 		
 				        "</tr>"
@@ -287,9 +301,9 @@ public class DistributionDataController {
 						+"</thead>"
 						+"<tbody>"
 						+"<tr>"
-						+"<td><input type=\"text\" name=\"farePerBoxCalc\" id=\"farePerBoxCalc\"  class=\"form-control\" required oninput=\"calulateTotalFare()\"></td>"				
+						+"<td><input type=\"number\" name=\"farePerBoxCalc\" id=\"farePerBoxCalc\"  class=\"form-control\" required oninput=\"calulateTotalFare()\"></td>"				
 						+"<td id=\"totalCalcFare\"></td>"
-						+"<td><input type=\"text\" name=\"localDriver\" class=\"form-control\"></td>"
+						+"<td><input type=\"text\" name=\"localDriver\" class=\"form-control\" onchange=\"checkDriverAvailablity()\"></td>"
 						+"<tr>"
 						+"</tbody>"
 						+"</table>"
@@ -317,7 +331,7 @@ public class DistributionDataController {
 		SubLotBook subLotBook=new SubLotBook();
 		subLotBook.setLotId(modalLotId);
 		subLotBook.setTotalQty(totQtyDistributed);
-		subLotBook.setAgentDestinationId(agentId);
+		subLotBook.setAgentDestinationId(aDestId);
 		subLotBook.setAgentId(agentId);
 		subLotBook.setCreateTimeStamp(createTimeStamp);
 		subLotBook.setSessionId(sessionId);
@@ -333,16 +347,26 @@ public class DistributionDataController {
 		fareBook.setSessionId(sessionId);
 		fareBook.setFarePerBox(farePerBoxCalc);
 		FareBook saveFareBook=fareBookRespository.save(fareBook);
-		
+		if(localDriver!=null && localDriver.length()>0)
+		{
+			LocalFareTrack lfaretrack=new LocalFareTrack();
+			lfaretrack.setSubLotId(subLotBook.getSubLotId());
+			lfaretrack.setIndicator("N");
+			LocalFareTrack savedLfaretrack=lfareRepo.save(lfaretrack);
+			if(savedLfaretrack==null) {
+
+				throw new DataBaseException("Exception found while saving data into Local Fare Track Table ","management");
+
+			}
+		}
 		if(saveSubLotBook==null || saveFareBook==null) {
 
-			throw new DataBaseException("Exception found while saving data into Challan Book ","management");
+			throw new DataBaseException("Exception found while saving data SubLotBook or FareBook  ","management");
 
 		}
 		else
 			return "success";
 
 	}
-
-
+	
 }

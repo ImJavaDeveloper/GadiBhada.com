@@ -18,9 +18,125 @@
 
 </style>
 
-<div id="localFareCollectionsModal" class="modal fade" role="dialog">
+<div id="localFareDetailModel" class="modal fade" role="dialog">
+	   <div class="modal-dialog modal-lg" id="modalLocalFare">
+             <div class="modal-content">
+                 <div class="modal-header">
+               	<button type="button" class="close" data-dismiss="modal">&times;</button>
+         		<h4 class="modal-title">Local Fare Detail</h4>
+			     </div>
+		      <div class="modal-body" id="localFareDetailsModalContent">
+				           
+			   </div>
+			          <div class="modal-footer">
+			           
+			        	<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeLocalFareDetailsModal()">Close</button>
+			       </div>
+		        </div>
+	         </div>
+</div>
+<div id="truckPaymentModal" class="modal fade" role="dialog">
+	   <div class="modal-dialog modal-lg" id="modalTruckpaymt">
+             <div class="modal-content">
+                 <div class="modal-header">
+               	<button type="button" class="close" data-dismiss="modal">&times;</button>
+         		<h4 class="modal-title">Truck Payment</h4>
+			     </div>
+		      <div class="modal-body" id="truckPaymentModalContent">
+				           
+			   </div>
+			          <div class="modal-footer">
+			            <button id="saveTruckPymtBtn" class="btn btn-primary btn-width bkgrnd-cyan save-details" type="button" name="save-details" onclick="saveTruckPayment()" data-toggle="modal"   >Save</button>
+			        	<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeTruckPaymentModal()">Close</button>
+			       </div>
+		        </div>
+	         </div>
+</div>
+
+ <div id="collectionsModal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg" >
+
+		 <!-- Modal content-->
+		 <div class="modal-content">
+				    <div class="modal-header">
+				    <button type="button" class="close" data-dismiss="modal">&times;</button>
+				    <h4 class="modal-title">Collections Entry</h4>
+				     </div>
+				    <div class="modal-body" id="collectionModelContent">
+				    <p>Some text in the modal.</p>
+				    </div>
+				    <div class="modal-footer">
+				    <button id="save" class="btn btn-primary btn-width bkgrnd-cyan save-details" type="button" name="save-details" onclick="saveCollectionsData()" data-toggle="modal"  >Save</button>
+				     <button type="button" class="btn btn-default" onclick="closeCollectionPopUp()">Close</button>
+				    </div> 
+			</div> 
+	</div> 
+</div>
+
+
+<div id="truckPaymentCollectionsModal" class="modal fade" role="dialog">
 	
-	<div class="modal-dialog modal-lg" id="modallocalFare">
+	<div class="modal-dialog modal-lg" id="modaltruckPayment">
+	
+
+		<!-- Modal content-->
+	
+		<div class="modal-content">
+	
+			<div class="modal-header">
+			
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				
+				<h4 class="modal-title">Truck Ledger Data</h4>
+				
+			</div>
+			
+			<div class="modal-body" id="truckPaymentCollModalContent">
+				
+			</div>
+			  <div class="modal-footer">
+			   <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeTruckPaymentCollModal()">Close</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+<div id="bankTransferModal" class="modal fade" role="dialog">
+	
+	<div class="modal-dialog modal-lg" id="modalbankTransfer">
+	
+
+		<!-- Modal content-->
+	
+		<div class="modal-content">
+	
+			<div class="modal-header">
+			
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				
+				<h4 class="modal-title">Bank Transfer Entry</h4>
+				<input type="hidden" id=totalBnkTrnsfrEntry></input>
+			</div>
+			
+			<div class="modal-body" id="bankTransferModalContent">
+				
+				<p>Some text in the modal.</p>
+				
+			</div>
+			
+			<div class="modal-footer">
+			
+				<button type="button" class="btn btn-success" onclick="saveBankTransfer()">Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="localFareEntryModal" class="modal fade" role="dialog">
+	
+	<div class="modal-dialog modal-lg" id="modallocalFareEntry">
 	
 
 		<!-- Modal content-->
@@ -35,7 +151,7 @@
 				
 			</div>
 			
-			<div class="modal-body" id="localFareCollectionsModalContent">
+			<div class="modal-body" id="localFareEntryModalContent">
 				
 				<p>Some text in the modal.</p>
 				
@@ -44,13 +160,79 @@
 			<div class="modal-footer">
 			
 				
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="saveLocalFare()">Close</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeLocalFareEntryModelPage()" >Close</button>
 				
 			</div>
 		</div>
 	</div>
 </div>
 
+<div id="moneyWithdrawlCollectionsModal" class="modal fade" role="dialog">
+	
+	<div class="modal-dialog modal-lg" id="modalmoneyWithdrawl">
+	
+
+		<!-- Modal content-->
+	
+		<div class="modal-content">
+	
+			<div class="modal-header">
+			
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<input type="hidden" id="totalMnyWithdrwlEntry"></input>
+				<h4 class="modal-title">Money Withdraw Entry</h4>
+				
+			</div>
+			
+			<div class="modal-body" id="moneyWithdrawlModalContent">
+				
+				<p>Some text in the modal.</p>
+				
+			</div>
+			
+			<div class="modal-footer">
+			
+				<button type="button" class="btn btn-success" onclick="saveTotalMoneyWithDraw()">Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeTotalMoneyWithDraw()"  >Close</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="otherExpenseCollectionsModal" class="modal fade" role="dialog">
+	
+	<div class="modal-dialog modal-lg" id="modalotherExpense">
+	
+
+		<!-- Modal content-->
+	
+		<div class="modal-content">
+	
+			<div class="modal-header">
+			
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				
+				<h4 class="modal-title">Other Expense Entry</h4>
+				<input type="hidden" id="totalOthrExpnsEntry"></input>
+				
+			</div>
+			
+			<div class="modal-body" id="otherExpenseModalContent">
+				
+				<p>Some text in the modal.</p>
+				
+			</div>
+			
+			<div class="modal-footer">
+			
+				<button type="button" class="btn btn-success" onclick="saveOtherExpenses()">Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeOtherExpense()"   >Close</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
 <div id="todayCollectionsModal" class="modal fade" role="dialog">
 	
 	<div class="modal-dialog modal-lg" id="modaltodayCollection">
@@ -77,7 +259,7 @@
 			<div class="modal-footer">
 			
 				
-				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="saveTodayCollection()">Close</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeCollectionModelPage()">Close</button>
 				
 			</div>
 		</div>
@@ -85,70 +267,102 @@
 </div>
 
 <h3>Daily Ledger</h3>
-<form>
+<div style="background-color:#FFEFD5;">
+  <div id="formMsgDL" style="color:red"></div>
+  <br>
+
   <div class="form-group row">
-    <label for="ledgerDt" class="col-sm-2 col-form-label">Date</label>
+    <label for="ledgerDt" class="col-sm-2 col-form-label">Ledger Date</label>
     <div class="col-sm-4">
-      <input type="date" class="form-control" id="ledgerDt" placeholder="Enter Date">
-    </div>
-  </div>
-   <div class="form-group row">
-    <label for="TruckPymt" class="col-sm-2 col-form-label">Truck Payment</label>
-    <div class="col-sm-3">
-      <select class="form-control" id="truckStartDt" name="truckStartDt">
-	  <option value="">Select Date</option>
-	</select>
-    </div>
-    <div class="col-sm-3">
-      <select class="form-control" id="truckNumber" name="truckNumber">
-	  <option value="">Truck Number</option>
-	</select>
-    </div>
-    <div class="col-sm-3">
-      <input type="text" class="form-control" id="pymtAmt" placeholder="Enter Payment">
+      <input type="date" class="form-control" id="ledgerDt" name="ledgerDt" placeholder="Enter Date" onchange="fetchDailyLedgerData()" onclick="clearformMsgDL()">
     </div>
   </div>
   
-     <div class="form-group row">
-    <label for="bankTrnsfr" class="col-sm-2 col-form-label">Bank Transfer</label>
-    <div class="col-sm-3">
-      <input type="text" class="form-control" id="trnsfrAmt" placeholder="Total Amount">
+  <div class="form-group row">
+    <label for="ledgerDt" class="col-sm-2 col-form-label">Opening Balance</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="openingBal" name="openingBal" disabled >
     </div>
-    <div class="col-sm-3">
-    <input type="text" class="form-control" id="pymtAmt" placeholder="Bank Name">
+  </div>
+  
+   <div class="form-group row">
+    <label for="truckPayment" class="col-sm-2 col-form-label">Truck Payment</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="truckPymtTot"  disabled>
     </div>
-    <div class="col-sm-3">
-      <input type="text" class="form-control" id="pymtAmt" placeholder="Description">
+     <div class="col-sm-3">
+     
+     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#truckPaymentCollectionsModal" onclick="getTrucksLedger()">Truck Payment Entry</button>
+      </div>
+     <div class="col-sm-3">
+     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#" onclick="ViewTruckLedgerForToday()">View Payment Entry</button>
+    
+     </div>
+  </div>
+  <div class="form-group row">
+    <label for="bankTranfers" class="col-sm-2 col-form-label">Bank Transfers</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="bnkTransferTot" disabled>
     </div>
+     <div class="col-sm-4">
+     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bankTransferModal" onclick="loadBankTransferForm()" >Bank Transfer Entry</button>
+     </div>
   </div>
   
   <div class="form-group row">
     <label for="localFare" class="col-sm-2 col-form-label">Local Fare</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="localFare" placeholder="0" disabled>
+      <input type="text" class="form-control" id="localFareTot"  disabled>
     </div>
      <div class="col-sm-4">
-     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#localFareCollectionsModal" onclick="viewChallanEntry()">Enter Local Fare</button>
+     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#localFareEntryModal" onclick="loadLocalFareEntry()" >Local Fare Entry</button>
+     </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="moneyWithdrawl" class="col-sm-2 col-form-label">Money Withdrawl</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="moneyWithDrawlTot"  disabled>
+    </div>
+     <div class="col-sm-4">
+     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#moneyWithdrawlCollectionsModal" onclick="loadMoneyWithdrawlForm()" >Money Withdraw Entry</button>
+     </div>
+  </div>
+  
+    <div class="form-group row">
+    <label for="otherExpense" class="col-sm-2 col-form-label">Other Expense</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="otherExpenseTot"  disabled>
+    </div>
+     <div class="col-sm-4">
+     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#otherExpenseCollectionsModal" onclick="loadOtherExpenseForm()">Other Expense Entry</button>
      </div>
   </div>
   
   <div class="form-group row">
     <label for="Thekedari" class="col-sm-2 col-form-label">Thekedari</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="thekedariAmt" placeholder="Thekedari Amount" >
+      <input type="text" class="form-control" id="thekedariAmt" value="0" oninput="getTotalBalForToday()" >
     </div>
      
   </div>
     <div class="form-group row">
     <label for="todayCollection" class="col-sm-2 col-form-label">Today Collection</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="localFare" placeholder="0" disabled>
+      <input type="text" class="form-control" id="todayCollAmt"  disabled>
     </div>
      <div class="col-sm-4">
-     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#todayCollectionsModal" onclick="viewChallanEntry()">Enter Local Fare</button>
+     <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#todayCollectionsModal" onclick="loadCollectionsPage()">Today Collection Entry</button>
      </div>
   </div>
-  
-  
+  <div class="form-group row">
+    <label for="ledgerDt" class="col-sm-2 col-form-label">Today Balance</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="todayBal" name="todayBal" disabled >
+    </div>
+  </div>
+   <div class="form-group row">
+   <button type="button" class="btn btn-info center-block" onclick="saveDailyLedger()">Save</button>
+   </div>
+ </div>
  
-</form>

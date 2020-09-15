@@ -40,7 +40,7 @@ function callAjaxForAllDistribution() {
 				"<td>"+v.lotId+"</td>"+
 				"<td>"+v.itemCode+"</td>"+
 				"<td>"+v.subLotId+"</td>"+
-				"<td><a href=\"#\" id=\"subLotreceiver"+v.subLotId+"\" data-type=\"select\" data-placement=\"right\" >"+v.distrubteTo+"-"+v.agentMark+"</a></td>"+
+				"<td><a href=\"#\" id=\"subLotreceiver"+v.subLotId+"\" data-type=\"select\" data-placement=\"right\" >"+v.agentMark+(v.distrubteTo != "" ? ("-"+v.distrubteTo):"")+"</a></td>"+
 				"<td><a href=\"#\" id=\"subLotAgentDest"+v.subLotId+"\" data-type=\"text\" data-placement=\"right\" >"+v.agentDestination+"</a></td>"+
 				"<td><a href=\"#\" id=\"subLotTotQty"+v.subLotId+"\" data-type=\"text\" data-placement=\"right\" data-pk=\""+v.subLotId+"\" data-name=\"total_qty\">"+v.totQty+"</a></td>"+
 				"<td><a href=\"#\" id=\"subLotReceivedeDt"+v.subLotId+"\" data-type=\"text\" data-placement=\"right\" data-pk=\""+v.subLotId+"\" data-name=\"receiving_date\">"+v.receivedDate+"</a></td>"+

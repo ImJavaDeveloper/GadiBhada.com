@@ -4,49 +4,63 @@ $(document).ready(function(){
 //Calling Ajax to load the page dynamically
 $("#truckLedgerTab").on("click", function() {
 
+
+	loadPageTruckLedger()
+	
+
+});
+function activateTruckLedger(activeTab)
+{
+	//alert(activeTab)
+	$("#updateDistributionModal").modal('hide');
+	$("#distributionModalPage").modal('hide');
+	
+	$('#menuTab a[href="' + activeTab + '"]').tab('show');	
+	 loadPageTruckLedger()
+}
+
+
+
+function loadPageTruckLedger(){
 	$('#menu6').load('/formcontent/truckLedger.html',function()
 			{
 	
-		//callAjaxForCollectionBook();
+		fetchTruckLedger();
 			});
+}
+function reloadPageTruckLedger(){
 
-});
-function reloadPageCollection(){
-
-	callAjaxForCollectionBook();
+	loadPageTruckLedger();
 	 
 }
-function callAjaxForTruckLedger() {
+function fetchTruckLedger() {
 	
 	var tableBody="";
 	var subLotIdArray=[];
 	waitingDialog.show();
 	$.ajax({
 		type : "POST",
-		url : "/gadibhada/managedata/allcollections",
+		url : "/gadibhada/dataentry/truckLedger",
 		
 		success : function(data) {
+		
 			var i=0;
 			var result=jQuery.parseJSON(data);
 			
 			$.each( result,function(k,v){
-				subLotIdArray[i]=v.sub_lot_id;
-
+  
 				tableBody=tableBody+"<tr>"+		
-				"<td><a href=\"#\">"+v.truck_no+"</a></td>"+
-				"<td><a href=\"#\">"+v.sub_lot_id+"</a></td>"+
-				"<td><a href=\"#\">"+v.item_code+"</a></td>"+
-				"<td><a href=\"#\">"+v.agent_name+"</a></td>"+
-				"<td><a href=\"#\">"+v.adest_name+"</a></td>"+
-				"<td><a href=\"#\">"+v.receiving_date+"</a></td>"+
-				"<td><a href=\"#\">"+v.total_qty+"</a></td>"+
-				"<td><a href=\"#\">"+v.fare_per_box+"</a></td>"+
-				"<td><a href=\"#\">"+v.tot_fare+"</a></td>"+
+				"<td><a href=\"#\">"+v.truckNo+"</a></td>"+
+				"<td><a href=\"#\">"+v.stratDt+"</a></td>"+
+				"<td><a href=\"#\">"+v.FromToWhere+"</a></td>"+
+				"<td><a href=\"#\">"+v.endDt+"</a></td>"+
+				"<td><a href=\"#\">"+v.advFare+"</a></td>"+
+				"<td><a href=\"#\">"+v.prizeFare+"</a></td>"+
+				"<td><a href=\"#\">"+v.totFare+"</a></td>"+
 				"<td><a href=\"#\">"+v.totPymt+"</a></td>"+
-				"<td><a href=\"#\">"+v.tot_bal_amt+"</a></td>"+
-				"<td><a href=\"#\">"+v.pymt_dt+"</a></td>"+
-				"<td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#allCollectionsModal\"" +
-				" onclick=\"updateCollection("+v.sub_lot_id+",'"+v.truck_no+"','"+v.item_code+"','"+v.agent_name+"','"+v.adest_name+"','"+v.receiving_date+"','"+v.total_qty+"','"+v.fare_per_box+"','"+v.fare+"','"+v.tot_fare+"','"+v.tot_bal_amt+"')\">Update</button></td>"+
+				"<td><a href=\"#\">"+v.totBal+"</a></td>"+
+				"<td><button type=\"button\" class=\"btn btn-info btn-sm\" data-toggle=\"modal\" data-target=\"#truckLedgerModal\"" +
+				" onclick=\"updateTruckLedger('"+v.truckNo+"','"+v.stratDt+"','"+v.FromToWhere+"','"+v.endDt+"','"+v.advFare+"','"+v.prizeFare+"','"+v.totFare+"')\">Update</button></td>"+
 				
 				"</tr>"	
 				
@@ -79,162 +93,157 @@ function callAjaxForTruckLedger() {
 	});
 }
 
-function updateCollection(subLotId,truckNo,itemCode,agentName,aDestName,receiveDt,totalQty,farePerBox,fare,totalFare,totalBal)
+function updateTruckLedger(truckNo,stratDt,FromToWhere,endDt,advFare,prizeFare,totFare)
 {
-
-$('#allCollectionsModalContent').load('/formcontent/models/viewCollectionsModal.html',function()
+	
+	if(endDt=="")
 		{
-	      callAjaxForCollectionsDataBySubLotId(subLotId,truckNo,itemCode,agentName,aDestName,receiveDt,totalQty,farePerBox,fare,totalFare,totalBal);
-		});
-}
-
-function callAjaxForCollectionsDataBySubLotId(subLotId,truckNo,itemCode,agentName,aDestName,receiveDt,totalQty,farePerBox,fare,totalFare,totalBal) {
-	
-	var viewCollectionModalTab1=""
-	var viewCollectionModalTab2=""
-	var viewCollectionModalTab3=""
-	var collectionIdArray=[];
-	
-	
-	viewCollectionModalTab1="<tr>"+
-	
-	"<td><a href=\"#\" id=\"truckNo\" >"+truckNo+"</a></td>"+
-	"<td><a href=\"#\" id=\"itemCode\" >"+itemCode+"</a></td>"+
-	"<td><a href=\"#\" id=\"agentName\" >"+agentName+"</a></td>"+
-	"<td><a href=\"#\" id=\"aDestName\" >"+aDestName+"</a></td>"+
-	"<td><a href=\"#\" id=\"receiveDt\" >"+receiveDt+"</a></td>"+
-	"<td><a href=\"#\" id=\"totQty\" >"+totalQty+"</a></td>"+
-	"</tr>"	
-	
-	$('#viewCollectionModalTab1').html(viewCollectionModalTab1);
-     viewCollectionModalTab2="<tr>"+
-    
-	"<td><a href=\"#\" id=\"farePerBox\" >"+farePerBox+"</a></td>"+
-	"<td><a href=\"#\" id=\"fare\" >"+fare+"</a></td>"+
-	"<td><a href=\"#\" id=\"totalFare\" >"+totalFare+"</a></td>"+
-	"<td><a href=\"#\" id=\"totalBal\" >"+totalBal+"</a></td>"+
-
-	"</tr>"	
-	$('#viewCollectionModalTab2').html(viewCollectionModalTab2);
-	
-	$.ajax({
-		type : "POST",
-		url : "/gadibhada/managedata/collectionsBySubLotId",
-		data : {
-			"subLotId" : subLotId
-		},
-		success : function(data) {
-			var result=jQuery.parseJSON(data);
-			
-			var i=0;
-			var totPaymt=0;
-			var totDebit=0;
-			$.each( result,function(k,v){
-				
-				collectionIdArray[i]=v.collectionId;
-				
-				viewCollectionModalTab3=viewCollectionModalTab3+"<tr>"+
-				
-				"<td><a href=\"#\" id=\"payment"+v.collectionId+"\" data-type=\"text\" data-placement=\"right\"data-pk=\""+v.collectionId+"\" data-name=\"tot_payment\">"+v.paymentAmt+"</a></td>"+
-				"<td><a href=\"#\" id=\"debit"+v.collectionId+"\" data-type=\"text\" data-placement=\"right\"data-pk=\""+v.collectionId+"\" data-name=\"debit_amt\">"+v.debitAmt+"</a></td>"+
-				"<td><a href=\"#\" id=\"paymentDt"+v.collectionId+"\" data-type=\"text\" data-placement=\"right\"data-pk=\""+v.collectionId+"\" data-name=\"pymt_dt\">"+v.pymtDt+"</a></td>"+
-				"</tr>"	;
-				i++;
-				totDebit=totDebit+v.debitAmt
-				totPaymt=totPaymt+v.paymentAmt
-			});
-			viewCollectionModalTab3=viewCollectionModalTab3+"<tr>"+
-			"<td><a href=\"#\" id=\"Totpayment\" >Total Payment:"+totPaymt+"</a></td>"+
-			"<td><a href=\"#\" id=\"TotDebit\" >Total Debit:"+totDebit+"</a></td>"+
-			"<td><a href=\"#\" id=\"Totpayment\" ></a></td>"+
-			"</tr>"	;
-			
-			$('#viewCollectionModalTab3').html(viewCollectionModalTab3);
-			
-			
-			$.fn.editable.defaults.mode = 'popup'; 
-			
-     
-           
-			for(i=0;i<collectionIdArray.length;i++)
-				{
-				
-				 $('#payment'+collectionIdArray[i]).editable({
-					 url: '/gadibhada/managedata/updateCollection',
-				       
-				    });
-				 $('#payment'+collectionIdArray[i]).on('save', function(e, params) {
-				    	var id=$(this).attr('id');	
-
-				    	var collId=id.substring(7);
-				    	
-				    	var oldPymt=$('#payment'+collId).text();
-				    	var oldTotPymt=$('#Totpayment').text().substring(14);
-				    
-				    	var newTotPymt=parseFloat(oldTotPymt)-parseFloat(oldPymt)+parseFloat(params.newValue);
-				
-				    	$('#Totpayment').text('Total Payment:'+newTotPymt)
-				    	
-				    	var totDebit=$('#TotDebit').text().substring(12);
-				    	var totFare=$('#totalFare').text();
-				    	var newBal=parseFloat(totFare)-parseFloat(newTotPymt)-parseFloat(totDebit)
-				    	$('#totalBal').text(newBal)
-				    });
-				}
-			for(i=0;i<collectionIdArray.length;i++)
-			{
-			
-			 $('#debit'+collectionIdArray[i]).editable({
-				 url: '/gadibhada/managedata/updateCollection',
-			       
-			    });
-			 $('#debit'+collectionIdArray[i]).on('save', function(e, params) {
-			    	var id=$(this).attr('id');	
-
-			    	var collId=id.substring(5);
-			    	
-			    	var oldDebit=$('#debit'+collId).text();
-			    	var oldtotDebit=$('#TotDebit').text().substring(12);
-			    	var newTotDebit=parseFloat(oldtotDebit)-parseFloat(oldDebit)+parseFloat(params.newValue);
-			       
-			    	$('#TotDebit').text('Total Debit:'+newTotDebit)
-			    	
-			    	var TotPymt=$('#Totpayment').text().substring(14);
-			    	var totFare=$('#totalFare').text();
-			    	var newBal=parseFloat(totFare)-parseFloat(TotPymt)-parseFloat(newTotDebit)
-			    	$('#totalBal').text(newBal)
-			 });
-			    	
-			    	
-			}
-			for(i=0;i<collectionIdArray.length;i++)
-			{
-			
-			 $('#paymentDt'+collectionIdArray[i]).editable({
-				 url: '/gadibhada/managedata/updateCollection',
-			       
-			    });
-			}
-
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			if (XMLHttpRequest.readyState == 4) {
-				// HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
-				waitingDialog.hide();
-				alert("Error !! Server Is Not Responding Correctly-->\n"
-						+ XMLHttpRequest.responseText
-						+ "+ \nPlease contact server admin");
-			} else if (XMLHttpRequest.readyState == 0) {
-				// Network error (i.e. connection refused, access denied due to CORS, etc.)
-				waitingDialog.hide();
-				alert("Error !! Server Is Down. Please contact server admin");
-			} else {
-				// something weird is happening
-			}
-
-			//some stuff on failure
+		endDt="<input type=\"date\" name=\"truckEndDtLedger\" class=\"form-control\" required oninput=\"clearErrorMsg()\" required pattern=\"\d{2}-\d{2}-\d{4}\" >"
+		//endDt="<date-input date=\"{{date}}\" timezone=\"[[timezone]]\"></date-input>"
 		}
-	});
+	else{
+		endDt = endDt.split("/").reverse().join("-");
+		endDt="<input type=\"date\" name=\"truckEndDtLedger\" class=\"form-control\" required oninput=\"clearErrorMsg()\" value=\""+endDt+"\"  >"
+			
+	}
+	
+		prizeFare="<input type=\"number\" name=\"truckPrizeAmt\" class=\"form-control\" placeholder=\"Prize Fare\" oninput=\"clearErrorMsg()\" value=\""+prizeFare+"\">"
+        totFare="<input type=\"text\" name=\"truckTotFare\" class=\"form-control\" required placeholder=\"Truck Total Fare\"  oninput=\"clearErrorMsg()\" value=\""+totFare+"\">"
+
+	var table="<div id=\"errorMsgTLdgr\" style=\"color:red\"></div>" +
+	"<div id=\"goodRespnsMsg\" style=\"color:green\"></div>" +
+	"<style>"+
+	"table thead tr th {font-size: 11px;}"+
+	"table tfoot tr th {font-size: 11px;}"+
+	"table tbody tr td { font-size: 12px;}"+
+	"</style>"+
+"<table id=\"truckLedgerTable1\" class=\"table table-striped table-bordered\" style=\"width: 100%;background-color: #E2E2E2\">\r\n" + 
+"	<thead>\r\n" + 
+"		<tr>\r\n" + 
+"			<th>Truck No</th>\r\n" + 
+"			<th>Start Date</th>\r\n" + 
+"			<th>From-Where</th>\r\n" + 
+"			<th>Advance Fare</th>\r\n" + 
+
+"		</tr>\r\n" + 
+"	</thead>\r\n" + 
+"	<tbody>"+
+    "<tr>" + 
+    "			<td id=\"truckNoLedger\">"+truckNo+"</td>\r\n" + 
+    "			<td id=\"truckStDtLedger\">"+stratDt+"</td>\r\n" + 
+    "			<td>"+FromToWhere+"</td>\r\n"+ 
+    "			<td>"+advFare+"</td>\r\n" + 
+
+ "	</tr>" +  
+"   </tbody>"+
+"   </table>"+
+ "<table id=\"truckLedgerTable2\" class=\"table table-striped table-bordered\" style=\"width: 100%;background-color: #E2E2E2\">\r\n" + 
+ "	<thead>\r\n" + 
+ "		<tr>\r\n" + 
+ "			<th>Arrival Date(mm/dd/yyyy)</th>\r\n" + 
+ "			<th>Prize Fare</th>\r\n" + 
+ "			<th>Total Fare</th>\r\n" + 
+ "		</tr>\r\n" + 
+ "	</thead>\r\n" + 
+ "	<tbody>"+
+     "<tr>" + 
+     "			<td id=\"truckEndDtLbl\">"+endDt+"</td>\r\n" + 
+     "			<td id=\"truckPrizeFareLbl\">"+prizeFare+"</td>\r\n" + 
+     "			<td id=\"truckTotFareLbl\">"+totFare+"</td>\r\n" + 
+  "	</tr>" +  
+ "   </tbody>"
+ "   </table>"
 		
+	$('#truckLedgerModalContent').html(table);
+	
 }
 
+function clearErrorMsg()
+{
+	$("#errorMsgTLdgr").html(" ");
+}
+function saveTruckLedgerData()
+{
+var truckNoLedger=$("#truckNoLedger").text();
+var truckStDtLedger=$("#truckStDtLedger").text();
+var truckEndDtLedger=jQuery('input[name="truckEndDtLedger"]').val()
+var truckPrizeAmt=jQuery('input[name="truckPrizeAmt"]').val()
+var truckTotFare=jQuery('input[name="truckTotFare"]').val()
+
+var truckStDtFormatted = truckStDtLedger.split("/").reverse().join("-");
+
+var truckEndDtLedgerLbl =$('#truckEndDtLbl').text()
+var truckPrizeFareLbl =$('#truckPrizeFareLbl').text()
+var truckTotFareLbl =$('#truckTotFareLbl').text()
+
+if(typeof truckEndDtLedger === "undefined"){
+	truckEndDtLedger=truckEndDtLedgerLbl	
+	truckEndDtLedger = truckEndDtLedger.split("/").reverse().join("-");
+}
+
+if(typeof truckPrizeAmt === "undefined"){
+		truckPrizeAmt=truckPrizeFareLbl
+}
+
+if(typeof truckTotFare === "undefined"){
+	truckTotFare=truckTotFareLbl
+}
+
+if(truckNoLedger.length<=0){
+	$("#errorMsgTLdgr").html("Truck No Can't Be Empty !!")
+    return
+}
+if(truckStDtLedger.length<=0){
+	$("#errorMsgTLdgr").html("Truck Start Date Can't Be Empty!!")
+    return
+}
+if(truckEndDtLedger.length<=0){
+	$("#errorMsgTLdgr").html("Please Enter Arrival Date !!")
+    return
+}
+if(truckPrizeAmt.length<=0){
+	truckPrizeAmt=0
+	
+}
+if(truckTotFare.length<=0){
+	$("#errorMsgTLdgr").html("Please Enter Total Fare !!")
+	return
+}
+
+$.ajax({
+	type : "POST",
+	url : "/gadibhada/dataentry/updateTruckLedger",
+	data : {
+		"truckNoLedger":truckNoLedger	,
+		"truckStDtLedger":truckStDtFormatted	,
+		"truckEndDtLedger":truckEndDtLedger	,
+		"truckPrizeAmt":truckPrizeAmt	,
+		"truckTotFare":truckTotFare
+	},			
+	success : function(data) {
+       
+       $('#goodRespnsMsg').html(data)
+		
+     },
+	 error: function(XMLHttpRequest, textStatus, errorThrown)
+        {
+	    	if (XMLHttpRequest.readyState == 4) {
+	            // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+	    		alert("Error !! Server Is Not Responding Correctly-->\n"+XMLHttpRequest.responseText+"+ \nPlease contact server admin");
+	        }
+	        else if (XMLHttpRequest.readyState == 0) {
+	            // Network error (i.e. connection refused, access denied due to CORS, etc.)
+	        	
+	        	alert("Error !! Server Is Down. Please contact server admin");
+	        }
+	        else {
+	        	alert("Unknown Error !!")
+	        }
+           
+          //some stuff on failure
+        }
+	    
+});
+
+
+}
